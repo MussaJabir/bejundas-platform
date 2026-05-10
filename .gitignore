@@ -105,6 +105,12 @@ logs/
 *.pid
 .playwright-mcp/
 
+# Viora source folder must NOT be committed at repo root.
+# Only the curated subset in static/viora/ (shared assets) and
+# static/<app>/ (per-app demo CSS + images) is tracked.
+# See CLAUDE.md §14 for the workflow.
+/viora/
+
 # Cpanel artefacts (stay out of repo)
 cpanel.cache
 .cpanel-cache/

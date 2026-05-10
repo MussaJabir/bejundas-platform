@@ -222,12 +222,18 @@ bejundas-platform/
 │       └── tests/
 │
 ├── static/
-│   ├── viora/                      Viora template assets (read-only)
+│   ├── viora/                      Viora SHARED assets only (css, js, fonts, icons, images, favicon)
+│   │                               Copied from ../viora/assets/ during Phase 1. Read-only.
+│   │                               Demo HTML files are NOT copied here — they are ported
+│   │                               into Django templates by hand (see §14).
+│   ├── hub/                        Per-app static (demo-specific CSS override + images)
+│   │   ├── css/                    e.g. corporate.css from viora/demo-corporate/css/
+│   │   └── images/                 e.g. hero shots from viora/demo-corporate/images/
 │   ├── css/
-│   │   └── bejundas.css            Custom overrides
+│   │   └── bejundas.css            Custom global overrides
 │   ├── js/
 │   │   └── bejundas.js
-│   └── images/
+│   └── images/                     Brand logo, favicons, OG images
 │
 ├── templates/
 │   ├── base.html                   Master base
@@ -654,7 +660,71 @@ Append a session entry with: what was built, files changed, decisions, next step
 
 ## 14. Viora Template Mapping
 
-Viora demos vary in completeness. Most are `index.html` only. `demo-corporate`, `demo-agency`, `demo-medical`, `demo-spasalon`, `demo-insurance` ship full page sets.
+### Where the Viora source lives
+
+The Viora HTML5 template lives **outside this repo** at `../viora/` on the dev machine —
+i.e. `/home/j4bir/Dev/BJP/Projects/Web/Bejundas Website/viora/`. It is **never copied
+into the repo wholesale**.
+
+### How Viora is used (the workflow)
+
+Three things happen, in this order:
+
+**1. Shared assets — copied once during Phase 1.**
+
+`viora/assets/` (Bootstrap CSS/JS, animate.css, swiper, magnific-popup, fonts, icomoon icons,
+favicon, shared images) is copied **once** into `static/viora/`. Every Viora-styled page
+references these via `{% load static %}` and `{% static 'viora/css/styles.css' %}`.
+This is the only Viora content that lives in the repo wholesale.
+
+```bash
+mkdir -p static/viora
+cp -r ../viora/assets/* static/viora/
+```
+
+**2. Per-app demo extras — copied when each app is built.**
+
+Each Viora demo has its own small CSS override file (`demo-corporate/css/corporate.css`,
+`demo-insurance/css/insurance.css`, etc.) and a demo-specific `images/` folder.
+When an app is built, copy **only those two things** into the app's static folder.
+Do not copy the demo's HTML files.
+
+Example for hub (uses `demo-corporate`):
+```bash
+mkdir -p static/hub/css static/hub/images
+cp ../viora/demo-corporate/css/corporate.css   static/hub/css/
+cp -r ../viora/demo-corporate/images/*         static/hub/images/
+```
+
+Then in `apps/hub/templates/hub/base_hub.html`:
+```django
+{% load static %}
+<link rel="stylesheet" href="{% static 'viora/css/styles.css' %}">
+<link rel="stylesheet" href="{% static 'hub/css/corporate.css' %}">
+<img src="{% static 'hub/images/hero.jpg' %}" alt="">
+```
+
+**3. HTML files are ported by hand — never copied.**
+
+The actual Viora demo HTML files (`index.html`, `about-us.html`, `services.html`, ...)
+are **reference material**. Each one becomes a Django template by hand:
+
+- Open the source file (e.g. `../viora/demo-corporate/about-us.html`)
+- Copy only the markup inside `<body>` (or the relevant section)
+- Save as a Django template (e.g. `apps/hub/templates/hub/about.html`)
+- Wrap with `{% extends "core/base.html" %}` and `{% block content %}...{% endblock %}`
+- Add `{% load static %}` at the top
+- Rewrite all `href="../assets/css/foo.css"` paths to `href="{% static 'viora/css/foo.css' %}"`
+- Rewrite all demo-specific paths like `href="css/corporate.css"` to `href="{% static 'hub/css/corporate.css' %}"`
+- Replace static content with Django variables: `<h1>About Us</h1>` → `<h1>{{ company.about_headline }}</h1>`
+
+The `viora/` source folder stays at `../viora/` on the dev machine. It is **not committed**
+to git. Only the curated subsets in `static/viora/` and `static/<app>/` are committed.
+
+### Demo selection per subdomain
+
+Viora demos vary in completeness. Most are `index.html` only. `demo-corporate`, `demo-agency`,
+`demo-medical`, `demo-spasalon`, `demo-insurance` ship full page sets.
 
 | Subdomain | Primary demo | Inner pages source | Notes |
 |---|---|---|---|
@@ -666,7 +736,10 @@ Viora demos vary in completeness. Most are `index.html` only. `demo-corporate`, 
 | Investments | `demo-agency` (full) + visual cues from `demo-corporate` | self | Don't use luxury/hospitality demo. Agency template re-skinned to gold/dark works better. |
 | Technologies | n/a | n/a | 301 redirect to `bjptechnologies.co.tz`. Lives in separate repo. |
 
-Viora source assets live in `static/viora/` and must not be modified. Customizations go in `static/css/bejundas.css` and per-app templates.
+Once copied into the repo, the Viora **shared assets** live in `static/viora/` and must not be
+modified. Per-app demo CSS overrides live in `static/<app>/css/`. Custom global tweaks go in
+`static/css/bejundas.css`. The Viora demo HTML files themselves never enter the repo — they
+are read from `../viora/` as reference material when porting templates by hand.
 
 ---
 

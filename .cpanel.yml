@@ -1,0 +1,6 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/bejundas/bejundas_platform
+    - /bin/cp -R . $DEPLOYPATH
+    - cd $DEPLOYPATH && touch tmp/restart.txt

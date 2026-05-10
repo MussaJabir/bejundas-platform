@@ -264,20 +264,55 @@ class LoanApplicationForm(forms.ModelForm):
         return amount
 ```
 
-### Step 8 — Templates
+### Step 8 — Static assets and templates
+
+Two parts: (a) copy the per-app static assets, (b) port the HTML by hand into Django templates.
+The Viora source folder lives **outside this repo** at `../viora/`. Never copy a whole demo
+folder into the repo. See [CLAUDE.md §14](../CLAUDE.md) for the full workflow.
+
+#### 8a. Copy per-app static assets
+
+The shared Viora assets (`static/viora/`) were already copied during Phase 1. For this vertical,
+copy **only** the demo-specific CSS file and the demo's `images/` folder. Do **not** copy any
+HTML files or any other folders from the demo.
+
+```bash
+mkdir -p static/financial/css static/financial/images
+cp    ../viora/demo-insurance/css/insurance.css   static/financial/css/
+cp -r ../viora/demo-insurance/images/*            static/financial/images/
+```
+
+(Adjust filenames to match what's actually in the demo's `css/` folder. The CSS file is usually
+named after the demo, e.g. `corporate.css`, `insurance.css`, `agency.css`.)
+
+#### 8b. Port the HTML by hand into Django templates
 
 Create `apps/financial/templates/financial/`:
 
-- `base_financial.html` — extends `core/base.html`, loads Viora demo-insurance assets, sets brand color
+- `base_financial.html` — extends `core/base.html`, loads the per-app CSS, sets brand color CSS variables
 - `home.html`
 - `products.html`
 - `product_detail.html`
 - `apply.html`
 - `apply_success.html`
 
-Visual reference: **Viora `demo-insurance/`** ships full pages. Copy the HTML structure into the templates above and replace static content with Django template variables.
+For each page template:
 
-For inner pages not in `demo-insurance`, fall back to `demo-corporate` and re-skin with the financial color palette (`#0a2342` primary, `#c9a84c` accent).
+1. Open the matching Viora source file in `../viora/demo-insurance/` (e.g. `about-us.html`)
+2. Copy the markup inside `<body>` into the new Django template
+3. Wrap with `{% extends "financial/base_financial.html" %}` and `{% block content %}...{% endblock %}`
+4. Add `{% load static %}` at the top
+5. Rewrite asset paths:
+   - `../assets/css/styles.css` -> `{% static 'viora/css/styles.css' %}`
+   - `../assets/js/main.js` -> `{% static 'viora/js/main.js' %}`
+   - `css/insurance.css` -> `{% static 'financial/css/insurance.css' %}`
+   - `images/hero.jpg` -> `{% static 'financial/images/hero.jpg' %}`
+6. Replace static content with Django variables: `<h1>About Us</h1>` -> `<h1>{{ company.financial_about_headline }}</h1>`
+
+For inner pages not in `demo-insurance` (rare for insurance which ships a full page set;
+common for `demo-construction`, `demo-solarenergy`, `demo-agriculturefarming` which only
+ship `index.html`), use `demo-corporate` as the structural source and re-skin with the
+vertical's color palette (`#0a2342` primary, `#c9a84c` accent for financial).
 
 Example `apps/financial/templates/financial/base_financial.html`:
 
@@ -286,7 +321,7 @@ Example `apps/financial/templates/financial/base_financial.html`:
 {% load static %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'viora/demo-insurance/css/insurance-theme.css' %}">
+<link rel="stylesheet" href="{% static 'financial/css/insurance.css' %}">
 <style>
     :root {
         --primary: #0a2342;

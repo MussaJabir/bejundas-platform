@@ -1,0 +1,131 @@
+================================================================================
+BEJUNDAS PLATFORM - cPanel Setup Checklist
+================================================================================
+Quick reference. For full context see docs/deployment.md.
+Do these steps once, in order, before the Phase 1 scaffold deploys.
+
+
+--------------------------------------------------------------------------------
+1. MYSQL DATABASE
+--------------------------------------------------------------------------------
+cPanel home  >  MySQL Databases
+
+  [ ] Create database:    bejundas_db
+      (cPanel may prefix with username, e.g. bejundas_bejundas_db --
+       use whatever cPanel actually creates and write it in .env)
+
+  [ ] Create user:        bejundas_dbuser
+
+  [ ] Set a strong password and SAVE IT
+      (Will go in .env on the server as DB_PASS)
+
+  [ ] Add user to database with ALL PRIVILEGES
+
+  [ ] Verify charset:     utf8mb4
+      Verify collation:   utf8mb4_unicode_ci
+
+      To verify, click on the database name in cPanel >
+      OR open phpMyAdmin and run:
+
+        SELECT default_character_set_name, default_collation_name
+        FROM information_schema.SCHEMATA
+        WHERE schema_name = 'bejundas_db';
+
+
+--------------------------------------------------------------------------------
+2. SUBDOMAINS  (do this 6 times)
+--------------------------------------------------------------------------------
+cPanel home  >  Domains  >  Create A New Domain
+
+For EACH of these subdomains:
+    financial.bejundas.co.tz
+    construction.bejundas.co.tz
+    energies.bejundas.co.tz
+    farming.bejundas.co.tz
+    investments.bejundas.co.tz
+    technologies.bejundas.co.tz
+
+  [ ] Domain field:                        type the subdomain
+  [ ] "Share document root with
+       bejundas.co.tz" toggle:             ON  <-- CRITICAL
+  [ ] Click Submit / Create
+
+If "Share document root" is OFF, the subdomain will not route
+through the Django Passenger app and django-hosts will never see it.
+
+
+--------------------------------------------------------------------------------
+3. PYTHON APP  (one app, serves all subdomains)
+--------------------------------------------------------------------------------
+cPanel home  >  Setup Python App  >  Create Application
+
+  [ ] Python version:                      3.11
+  [ ] Application root:                    bejundas_platform
+        (cPanel will create /home/bejundas/bejundas_platform/)
+  [ ] Application URL:                     bejundas.co.tz
+  [ ] Application startup file:            passenger_wsgi.py
+  [ ] Application Entry point:             application
+  [ ] Passenger log file:                  /home/bejundas/logs/passenger.log
+  [ ] Click CREATE
+
+After creation, cPanel shows a 'source virtualenv/...' command.
+COPY THIS COMMAND. You will need it for deploy scripts.
+
+
+--------------------------------------------------------------------------------
+4. SSL / TLS  (free certificates for all 7 hostnames)
+--------------------------------------------------------------------------------
+cPanel home  >  SSL/TLS Status
+
+  [ ] Select all 7 hostnames:
+        bejundas.co.tz
+        www.bejundas.co.tz
+        financial.bejundas.co.tz
+        construction.bejundas.co.tz
+        energies.bejundas.co.tz
+        farming.bejundas.co.tz
+        investments.bejundas.co.tz
+        technologies.bejundas.co.tz
+
+  [ ] Click "Run AutoSSL"
+
+  [ ] Wait 5-10 minutes, then refresh the page
+
+  [ ] Verify each hostname shows a valid certificate
+      (green checkmark or "Certificate Status: Valid")
+
+If a subdomain fails AutoSSL, double-check that DNS for that
+subdomain is pointing to the cPanel server's IP.
+
+
+--------------------------------------------------------------------------------
+5. SKIP FOR NOW
+--------------------------------------------------------------------------------
+The following steps come LATER (not now):
+
+  -  GitHub webhook configuration
+     (Phase 4, after the webhook handler code lands)
+
+  -  Server .env file creation
+     (Phase 4, after settings/production.py is ready)
+
+  -  First Git Version Control clone
+     (Phase 4, after the Django scaffold is pushed)
+
+
+--------------------------------------------------------------------------------
+WHEN ALL DONE
+--------------------------------------------------------------------------------
+You should have:
+
+  [ ] One MySQL database + user with ALL PRIVILEGES, utf8mb4
+  [ ] 6 subdomains created, all with "Share document root" ON
+  [ ] One Python App on bejundas.co.tz, Python 3.11
+  [ ] All 7 hostnames showing valid SSL certificates
+
+Tell Claude "cPanel Phase 0 is done" and Phase 1 (Django scaffold)
+can begin.
+
+For full deployment context including troubleshooting:
+  -> docs/deployment.md
+================================================================================

@@ -1,20 +1,52 @@
 {% load static %}
-<header id="header" class="site-header">
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="/">
+<header class="header style-default header-fixed">
+    <div class="tf-container">
+        <div class="header-inner">
+            <a href="{% url 'hub:home' %}" class="site-logo">
                 {% if company.logo %}
-                    <img src="{{ company.logo.url }}" alt="{{ company.company_name }}" height="40">
+                    <img class="logo_header" alt="{{ company.company_name }}" width="167" height="52" src="{{ company.logo.url }}">
                 {% else %}
-                    {{ company.company_name }}
+                    <span class="h5 fw-7">{{ company.company_name }}</span>
                 {% endif %}
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarMain">
-                {% block nav_links %}{% endblock %}
+
+            <nav class="main-menu">
+                <ul class="navigation">
+                    <li class="text-menu{% if request.resolver_match.url_name == 'home' %} active{% endif %}">
+                        <a href="{% url 'hub:home' %}" class="toggle">Home</a>
+                    </li>
+                    <li class="text-menu{% if request.resolver_match.url_name == 'about' %} active{% endif %}">
+                        <a href="{% url 'hub:about' %}" class="toggle">About</a>
+                    </li>
+                    <li class="text-menu{% if request.resolver_match.url_name == 'services' %} active{% endif %}">
+                        <a href="{% url 'hub:services' %}" class="toggle">Services</a>
+                    </li>
+                    <li class="text-menu{% if 'news' in request.resolver_match.url_name %} active{% endif %}">
+                        <a href="{% url 'hub:news' %}" class="toggle">News</a>
+                    </li>
+                    <li class="text-menu{% if request.resolver_match.url_name == 'team' %} active{% endif %}">
+                        <a href="{% url 'hub:team' %}" class="toggle">Team</a>
+                    </li>
+                    <li class="text-menu{% if request.resolver_match.url_name == 'contact' %} active{% endif %}">
+                        <a href="{% url 'hub:contact' %}" class="toggle">Contact</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="header-right d-flex align-items-center gap_20">
+                <a href="{% url 'hub:contact' %}" class="tf-btn btn-hover-animate-2">
+                    <span>Get In Touch</span>
+                    <span class="bg-effect"></span>
+                </a>
+                <div class="mobile-button d-lg-none" data-bs-toggle="offcanvas"
+                    data-bs-target="#menu-mobile" aria-controls="menu-mobile">
+                    <div class="burger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
             </div>
         </div>
-    </nav>
+    </div>
 </header>

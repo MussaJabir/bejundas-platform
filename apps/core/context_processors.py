@@ -2,7 +2,12 @@ from apps.core.models import SiteSettings
 
 
 def company_info(request):
-    return {"company": SiteSettings.get()}
+    from apps.hub.models import Service
+
+    return {
+        "company": SiteSettings.get(),
+        "footer_services": Service.objects.filter(is_active=True).order_by("order")[:6],
+    }
 
 
 def app_theme(request):

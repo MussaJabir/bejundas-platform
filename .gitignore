@@ -114,3 +114,7 @@ logs/
 # Cpanel artefacts (stay out of repo)
 cpanel.cache
 .cpanel-cache/
+
+# Viora map plugin — contains a Mapbox demo token, not needed at runtime
+static/viora/js/map.js
+static/viora/js/map.min.js

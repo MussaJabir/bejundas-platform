@@ -1,0 +1,116 @@
+@use "../abstracts/index" as *;
+
+.modalDemo {
+    z-index: 9999999;
+    .demo-title {
+        margin-top: 50px;
+        margin-bottom: 44px;
+        text-align: center;
+        color: var(--Text-primary);
+    }
+
+    .modal-dialog {
+        max-width: 1540px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        height: calc(100vh - 16px);
+    }
+
+    .modal-content {
+        padding: 0 50px 40px;
+        background-color: var(--White);
+        width: 100%;
+        border-radius: 20px;
+        margin: 0 30px;
+        max-height: calc(100vh - 60px);
+        border: 0;
+        cursor: default;
+        overflow: hidden;
+    }
+
+    .mega-menu {
+        padding: 0 32px;
+        overscroll-behavior-y: contain;
+        overflow-y: auto;
+
+        &::-webkit-scrollbar {
+            width: 6px;
+
+            &:hover {
+                width: 12px;
+                height: 12px;
+            }
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: var(--Primary);
+            transition: all 0.3s ease;
+        }
+    }
+
+    .header {
+        position: relative;
+
+        .icon-close-popup {
+            position: absolute;
+            top: 18px;
+            right: 0;
+            font-size: 32px;
+            cursor: pointer;
+            @include transition3();
+            &:hover {
+                color: var(--Primary);
+            }
+        }
+    }
+
+    .row-demo {
+        grid-template-columns: repeat(5, 1fr);
+        row-gap: 32px;
+
+        .demo-img {
+            aspect-ratio: 0;
+        }
+    }
+}
+
+.modal {
+    cursor: url(../images/item/cursor-close.svg), auto;
+}
+
+.offcanvas-backdrop {
+    cursor: url(../images/item/cursor-close.svg), auto;
+}
+
+.offcanvas-search {
+    height: max-content !important;
+    z-index: 99999;
+    > .btn-close-search {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        width: 30px;
+        height: 30px;
+        font-size: 22px;
+        @include flex(center, center);
+        border-radius: 50%;
+        z-index: 1;
+    }
+    .offcanvas-body {
+        padding: 60px 0 60px;
+    }
+    .btn-close {
+        position: absolute;
+        font-size: 24px;
+        right: 0;
+        cursor: pointer;
+        @include res(xxl) {
+            top: -50px;
+            right: 30px;
+        }
+        @include res(md) {
+            font-size: 18px;
+            right: 15px;
+        }
+    }
+}

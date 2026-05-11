@@ -1,0 +1,219 @@
+@use "../abstracts/index" as *;
+
+.sw-button {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    @include transition3();
+    @include res(md) {
+        width: 42px;
+        height: 42px;
+    }
+    i{
+        @include transition3();
+    }
+    &.style-1 {
+        background: linear-gradient(
+            103.12deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.01) 100%
+        );
+        border: 1px solid #ffffff1a;
+        font-size: 28px;
+        color: var(--White);
+        &:hover {
+            background-color: var(--White);
+            color: var(--Text-primary);
+        }
+    }
+    &.style-2 {
+        font-size: 32px;
+        background-color: var(--White);
+        color: var(--Text-primary);
+        @include transition3();
+        &:hover {
+            background-color: var(--Primary) !important;
+            border-color: var(--Primary) !important;
+            color: var(--Text-primary);
+        }
+        &.swiper-button-disabled {
+            background-color: transparent;
+            border: 1px solid var(--White);
+            color: var(--White);
+        }
+        @include res(md) {
+            font-size: 22px;
+        }
+    }
+    &.style-3 {
+        background-color: var(--Secondary);
+        border: 1px solid transparent;
+        color: var(--Primary);
+        font-size: 24px;
+        &:hover {
+            background-color: var(--Primary);
+            color: var(--White);
+        }
+        &.swiper-button-disabled {
+            background-color: var(--White);
+            border-color: var(--Line);
+            pointer-events: none;
+        }
+    }
+    &.style-4 {
+        height: 60px;
+        width: 60px;
+        background-color: var(--White);
+        border-radius: 0;
+        color: var(--Text-primary);
+        font-size: 32px;
+        border: 1px solid var(--Line);
+        &:hover {
+            background-color: var(--Primary);
+            color: var(--White);
+            border-color: var(--Primary);
+        }
+    }
+    &.style-5 {
+        background-color: var(--White);
+        color: var(--Text-primary);
+        font-size: 28px;
+        border: 1px solid var(--Line);
+        &:hover {
+            border-color: var(--Text-primary);
+        }
+    }
+    &.style-6 {
+        background-color: var(--Bg-light);
+        color: var(--Text-primary);
+        font-size: 28px;
+        @include res(md) {
+            font-size: 20px;
+        }
+        
+        &:hover {
+            background-color: var(--Secondary);
+            color: var(--White);
+        }
+    }
+    &.style-7 {
+        background-color: var(--White);
+        color: var(--Text-primary);
+        font-size: 28px;
+        @include res(md) {
+            font-size: 20px;
+        }
+        &:hover {
+            background-color: var(--Primary);
+            color: var(--White);
+        }
+    }
+    &.swiper-button-disabled {
+        opacity: 0.1;
+        pointer-events: none;
+    }
+}
+
+.sw-dots {
+    .swiper-pagination-bullet {
+        position: relative;
+        height: 16px;
+        width: 16px;
+        &::after {
+            content: "";
+            position: absolute;
+            height: 8px;
+            width: 8px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            @include transition3();
+            border-radius: 50%;
+            z-index: 1;
+        }
+    }
+    &.style-white {
+        .swiper-pagination-bullet {
+            background-color: transparent;
+            border: 1px solid transparent;
+            opacity: 1;
+            @include transition3();
+            &::after {
+                border: 1px solid var(--White);
+            }
+        }
+        .swiper-pagination-bullet-active {
+            border-color: var(--White);
+            &::after {
+                background-color: var(--White);
+                border: 1px solid var(--White);
+            }
+        }
+    }
+    &.style-1 {
+        .swiper-pagination-bullet {
+            background-color: transparent;
+            border: 1px solid transparent;
+            &::after {
+                background-color: var(--Text-primary);
+            }
+            &.swiper-pagination-bullet-active {
+                border-color: var(--Primary);
+                &::after {
+                    background-color: var(--Primary);
+                }
+            }
+        }
+    }
+    &.style-2 {
+        .swiper-pagination-bullet {
+            background-color: transparent;
+            border: 1px solid transparent;
+            &::after {
+                background-color: var(--Text-primary);
+            }
+        }
+        .swiper-pagination-bullet-active {
+            border-color: var(--Text-primary);
+            &::after {
+                background-color: var(--Text-primary);
+            }
+        }
+    }
+    &.style-3 {
+        .swiper-pagination-bullet {
+            background-color: transparent;
+            border: 1px solid transparent;
+            &::after {
+                background-color: var(--Secondary);
+            }
+        }
+        .swiper-pagination-bullet-active {
+            border-color: var(--Secondary);
+            &::after {
+                background-color: var(--Secondary);
+            }
+        }
+    }
+    &.style-4 {
+        .swiper-pagination-bullet {
+            background-color: transparent;
+            border: 1px solid transparent;
+            opacity: 1;
+            @include transition3();
+            &::after {
+                border: 1px solid var(--Text-muted);
+            }
+        }
+        .swiper-pagination-bullet-active {
+            border-color: var(--Primary);
+            &::after {
+                border-color: var(--Primary);
+                background-color: var(--Primary);
+            }
+        }
+    }
+}

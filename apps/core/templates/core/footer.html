@@ -1,0 +1,26 @@
+{% load static %}
+<footer class="site-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h5>{{ company.company_name }}</h5>
+                <p>{{ company.tagline }}</p>
+            </div>
+            <div class="col-md-4">
+                <h5>Contact</h5>
+                <p>{{ company.phone }}</p>
+                <p>{{ company.email }}</p>
+                <p>{{ company.address }}</p>
+            </div>
+            <div class="col-md-4">
+                <h5>Follow Us</h5>
+                {% if company.facebook_url %}<a href="{{ company.facebook_url }}" target="_blank" rel="noopener">Facebook</a><br>{% endif %}
+                {% if company.twitter_url %}<a href="{{ company.twitter_url }}" target="_blank" rel="noopener">Twitter / X</a><br>{% endif %}
+                {% if company.linkedin_url %}<a href="{{ company.linkedin_url }}" target="_blank" rel="noopener">LinkedIn</a><br>{% endif %}
+                {% if company.instagram_url %}<a href="{{ company.instagram_url }}" target="_blank" rel="noopener">Instagram</a><br>{% endif %}
+            </div>
+        </div>
+        <hr>
+        <p class="text-center">&copy; {% now "Y" %} {{ company.company_name }}. All rights reserved.</p>
+    </div>
+</footer>

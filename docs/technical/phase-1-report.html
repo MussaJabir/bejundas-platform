@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 1 Report — Bejundas Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #1a1a2e;
+    --blue:   #2563eb;
+    --blue-md:#1d4ed8;
+    --blue-lt:#dbeafe;
+    --blue-xs:#eff6ff;
+    --green:  #16a34a;
+    --green-lt:#dcfce7;
+    --amber:  #d97706;
+    --amber-lt:#fef3c7;
+    --text:   #0f172a;
+    --muted:  #475569;
+    --border: #e2e8f0;
+    --bg:     #f8fafc;
+    --white:  #ffffff;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 48px 0 40px;
+  }
+  .header .inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .logo-chip {
+    background: var(--blue);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+  .date-chip {
+    font-size: 13px;
+    color: #94a3b8;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    margin-bottom: 8px;
+  }
+  .header h1 span { color: #60a5fa; }
+  .header p {
+    font-size: 15px;
+    color: #94a3b8;
+    max-width: 520px;
+  }
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 20px;
+    background: var(--green-lt);
+    color: var(--green);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+  }
+  .status-badge::before {
+    content: '';
+    width: 8px; height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+  }
+
+  /* ── Progress bar ── */
+  .progress-bar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+  }
+  .progress-bar .inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .phase-step {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex: 1;
+  }
+  .phase-step:last-child { flex: none; }
+  .step-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 72px;
+  }
+  .step-circle {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .step-circle.done {
+    background: var(--blue);
+    color: var(--white);
+  }
+  .step-circle.active {
+    background: var(--blue);
+    color: var(--white);
+    box-shadow: 0 0 0 4px var(--blue-lt);
+  }
+  .step-circle.pending {
+    background: var(--border);
+    color: var(--muted);
+  }
+  .step-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .step-label.done  { color: var(--blue); }
+  .step-label.active { color: var(--navy); font-weight: 700; }
+  .step-connector {
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    margin-bottom: 18px;
+  }
+  .step-connector.done { background: var(--blue); }
+
+  /* ── Main content ── */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--blue-xs);
+  }
+  .card-icon {
+    width: 36px; height: 36px;
+    background: var(--blue);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .card-icon svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .card-header h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .card-header .section-num {
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--blue);
+    background: var(--blue-lt);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .card-body { padding: 24px; }
+
+  /* ── Built items ── */
+  .built-list { display: flex; flex-direction: column; gap: 12px; }
+  .built-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: border-color 200ms;
+  }
+  .built-item:hover { border-color: var(--blue); }
+  .built-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--blue);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .built-item strong {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .built-item span {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* ── Test results ── */
+  .test-summary {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 20px;
+    background: var(--green-lt);
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  .test-score {
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--green);
+    line-height: 1;
+  }
+  .test-score span { font-size: 16px; font-weight: 500; color: #15803d; }
+  .test-label { font-size: 14px; color: #15803d; font-weight: 500; }
+  .linter-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .linter-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    background: var(--green-lt);
+    color: var(--green);
+    border: 1px solid #bbf7d0;
+  }
+  .linter-badge svg { width: 14px; height: 14px; }
+  .test-list { display: flex; flex-direction: column; gap: 8px; }
+  .test-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+  }
+  .test-item .app-tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: var(--blue-lt);
+    color: var(--blue-md);
+    flex-shrink: 0;
+    min-width: 52px;
+    text-align: center;
+  }
+  .test-item .check {
+    margin-left: auto;
+    color: var(--green);
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  /* ── Running status ── */
+  .status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .status-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .status-item.full { grid-column: 1 / -1; }
+  .status-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+  .status-dot.green  { background: var(--green); }
+  .status-dot.amber  { background: var(--amber); }
+  .status-dot.blue   { background: var(--blue); }
+  .status-item strong {
+    font-size: 13px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .status-item span {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .status-item code {
+    font-size: 12px;
+    background: var(--blue-lt);
+    color: var(--blue-md);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* ── Phase 2 preview ── */
+  .preview-list { display: flex; flex-direction: column; gap: 10px; }
+  .preview-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .preview-num {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--blue-lt);
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px 48px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .footer strong { color: var(--navy); }
+
+  @media (max-width: 600px) {
+    .status-grid { grid-template-columns: 1fr; }
+    .status-item.full { grid-column: 1; }
+    .header h1 { font-size: 24px; }
+    .test-summary { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .progress-bar .inner { gap: 0; overflow-x: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="header">
+  <div class="inner">
+    <div class="header-meta">
+      <span class="logo-chip">Bejundas Platform</span>
+      <span class="date-chip">May 11, 2026</span>
+    </div>
+    <h1>Phase 1 — <span>Django Scaffold</span></h1>
+    <p>Full Django project bootstrapped, tested, and ready for template porting in Phase 2.</p>
+    <div class="status-badge">COMPLETE</div>
+  </div>
+</div>
+
+<!-- ── Phase Progress ── -->
+<div class="progress-bar">
+  <div class="inner">
+    <div class="phase-step">
+      <div class="step-box">
+        <div class="step-circle done">&#10003;</div>
+        <div class="step-label done">Phase 0</div>
+      </div>
+      <div class="step-connector done"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box">
+        <div class="step-circle active">&#10003;</div>
+        <div class="step-label active">Phase 1</div>
+      </div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box">
+        <div class="step-circle pending">2</div>
+        <div class="step-label">Phase 2</div>
+      </div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box">
+        <div class="step-circle pending">3</div>
+        <div class="step-label">Phase 3</div>
+      </div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box">
+        <div class="step-circle pending">4</div>
+        <div class="step-label">Phase 4</div>
+      </div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box">
+        <div class="step-circle pending">5</div>
+        <div class="step-label">Phase 5</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Main ── -->
+<main>
+
+  <!-- Section 1: What Was Built -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      </div>
+      <h2>What Was Built</h2>
+      <span class="section-num">01</span>
+    </div>
+    <div class="card-body">
+      <div class="built-list">
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Django 5.2 Project Structure</strong>
+            <span>Split settings: base, development, production, ci — all environment variables loaded via django-environ</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Subdomain Routing — django-hosts</strong>
+            <span>Hub (root), 5 Coming Soon verticals (financial, construction, energies, farming, investments), technologies 301 redirect</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>apps/core</strong>
+            <span>BaseModel (UUID pk, timestamps), SiteSettings singleton, GitHub webhook handler with HMAC validation, context processors, navbar &amp; footer base templates</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>apps/hub</strong>
+            <span>Service, TeamMember, News models · 7 CBVs (home, about, services, news, news_detail, team, contact) · ContactForm with email · Unfold admin</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>apps/leads</strong>
+            <span>Lead + VerticalPlaceholder models · coming_soon view themed per subdomain · LeadForm · email notification on submit · Unfold admin</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>scripts/deploy.sh</strong>
+            <span>Detached webhook-triggered deploy — git pull, pip install, migrate, collectstatic, touch restart.txt</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Migrations</strong>
+            <span>Initial migrations created and applied for core, hub, and leads apps against local MySQL 8 database</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Test Results -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h2>Test Results</h2>
+      <span class="section-num">02</span>
+    </div>
+    <div class="card-body">
+      <div class="test-summary">
+        <div>
+          <div class="test-score">8<span>/8</span></div>
+          <div class="test-label">Tests passing</div>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:600;color:#15803d;margin-bottom:8px;">All checks clean</div>
+          <div class="linter-row">
+            <div class="linter-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              ruff
+            </div>
+            <div class="linter-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              black
+            </div>
+            <div class="linter-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              django check
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="test-list">
+        <div class="test-item">
+          <span class="app-tag">core</span>
+          SiteSettings singleton creation
+          <span class="check">&#10003;</span>
+        </div>
+        <div class="test-item">
+          <span class="app-tag">core</span>
+          SiteSettings returns same instance
+          <span class="check">&#10003;</span>
+        </div>
+        <div class="test-item">
+          <span class="app-tag">core</span>
+          SiteSettings __str__ returns company name
+          <span class="check">&#10003;</span>
+        </div>
+        <div class="test-item">
+          <span class="app-tag">hub</span>
+          Home view returns HTTP 200
+          <span class="check">&#10003;</span>
+        </div>
+        <div class="test-item">
+          <span class="app-tag">hub</span>
+          Home view uses correct template
+          <span class="check">&#10003;</span>
+        </div>
+        <div class="test-item">
+          <span class="app-tag">leads</span>
+          VerticalPlaceholder __str__ returns display name
+          <span class="check">&#10003;</span>
+        </div>
+        <div class="test-item">
+          <span class="app-tag">leads</span>
+          Unique vertical constraint enforced
+          <span class="check">&#10003;</span>
+        </div>
+        <div class="test-item">
+          <span class="app-tag">leads</span>
+          Lead __str__ returns name + vertical
+          <span class="check">&#10003;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: What's Running -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <h2>What's Running Now</h2>
+      <span class="section-num">03</span>
+    </div>
+    <div class="card-body">
+      <div class="status-grid">
+        <div class="status-item">
+          <div class="status-dot green"></div>
+          <div>
+            <strong>Dev Server</strong>
+            <span>Running at <code>http://127.0.0.1:8000</code></span>
+          </div>
+        </div>
+        <div class="status-item">
+          <div class="status-dot green"></div>
+          <div>
+            <strong>Admin Panel</strong>
+            <span>Accessible at <code>/admin/</code> — Unfold theme active</span>
+          </div>
+        </div>
+        <div class="status-item">
+          <div class="status-dot green"></div>
+          <div>
+            <strong>Database</strong>
+            <span>MySQL 8 · <code>bejundas_db</code> · all migrations applied</span>
+          </div>
+        </div>
+        <div class="status-item">
+          <div class="status-dot amber"></div>
+          <div>
+            <strong>Styling</strong>
+            <span>No CSS yet — Viora assets copy is a Phase 2 task</span>
+          </div>
+        </div>
+        <div class="status-item full">
+          <div class="status-dot blue"></div>
+          <div>
+            <strong>Subdomain Routing</strong>
+            <span>django-hosts configured · test locally via <code>/etc/hosts</code> entries for <code>bejundas.local</code> and subdomains</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: Phase 2 Preview -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+      <h2>Phase 2 — What's Next</h2>
+      <span class="section-num">04</span>
+    </div>
+    <div class="card-body">
+      <div class="preview-list">
+        <div class="preview-item">
+          <div class="preview-num">1</div>
+          Copy Viora <code style="font-size:12px;background:#dbeafe;color:#1d4ed8;padding:1px 6px;border-radius:4px;">demo-corporate</code> shared assets into <code style="font-size:12px;background:#dbeafe;color:#1d4ed8;padding:1px 6px;border-radius:4px;">static/viora/</code> — Bootstrap, fonts, icons, Swiper, jQuery
+        </div>
+        <div class="preview-item">
+          <div class="preview-num">2</div>
+          Port demo-corporate HTML pages into Django templates — home, about, services, news, news_detail, team, contact
+        </div>
+        <div class="preview-item">
+          <div class="preview-num">3</div>
+          Wire <code style="font-size:12px;background:#dbeafe;color:#1d4ed8;padding:1px 6px;border-radius:4px;">SiteSettings</code> fields into all templates via the <code style="font-size:12px;background:#dbeafe;color:#1d4ed8;padding:1px 6px;border-radius:4px;">{{ company }}</code> context variable
+        </div>
+        <div class="preview-item">
+          <div class="preview-num">4</div>
+          Apply hub brand colors — primary <strong>#1a1a2e</strong>, accent <strong>#e94560</strong> — via CSS variables
+        </div>
+        <div class="preview-item">
+          <div class="preview-num">5</div>
+          Mobile-first pass + SEO meta tags (title, description, OG cards) on every page
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="footer">
+  <strong>Bejundas Platform</strong> &nbsp;·&nbsp; Phase 1 complete &nbsp;·&nbsp; Branch: <code style="font-size:11px;background:#e2e8f0;padding:1px 5px;border-radius:3px;">feature/phase-1-django-scaffold</code> &nbsp;·&nbsp; 59 files · 1,221 insertions
+</div>
+
+</body>
+</html>

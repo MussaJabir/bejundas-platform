@@ -1,0 +1,10 @@
+{% extends "core/base.html" %}
+{% block title %}{{ company.company_name }} — {{ company.tagline }}{% endblock %}
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <h1>{{ company.company_name }}</h1>
+        <p class="lead">{{ company.tagline }}</p>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bejundas Group of Companies{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Bejundas Group of Companies — Building Tanzania's Future{% endblock %}">
+
+    <!-- Viora shared assets -->
+    <link rel="stylesheet" href="{% static 'viora/css/styles.css' %}">
+
+    <!-- Global brand overrides -->
+    <link rel="stylesheet" href="{% static 'css/bejundas.css' %}">
+
+    {% block extra_head %}{% endblock %}
+
+    <style>
+        :root {
+            --primary: {{ app_theme.primary }};
+            --accent: {{ app_theme.accent }};
+        }
+    </style>
+</head>
+<body>
+    {% include "core/navbar.html" %}
+
+    {% block content %}{% endblock %}
+
+    {% include "core/footer.html" %}
+
+    <!-- Viora shared JS -->
+    <script src="{% static 'viora/js/jquery.min.js' %}"></script>
+    <script src="{% static 'viora/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'viora/js/plugins.js' %}"></script>
+    <script src="{% static 'viora/js/scripts.js' %}"></script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

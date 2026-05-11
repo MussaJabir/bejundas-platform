@@ -1,0 +1,47 @@
+{% extends "core/base.html" %}
+{% load widget_tweaks %}
+{% block title %}Coming Soon — {{ placeholder.get_vertical_display|default:"Bejundas" }}{% endblock %}
+{% block extra_head %}
+<style>
+    :root {
+        --primary: {{ placeholder.primary_color|default:"#1a1a2e" }};
+        --accent: {{ placeholder.accent_color|default:"#e94560" }};
+    }
+</style>
+{% endblock %}
+{% block content %}
+<section class="py-5 text-center">
+    <div class="container">
+        {% if placeholder %}
+            <h1>{{ placeholder.headline|default:"Coming Soon" }}</h1>
+            <p class="lead">{{ placeholder.subheadline|default:"We are working hard to bring you something great." }}</p>
+        {% else %}
+            <h1>Coming Soon</h1>
+            <p class="lead">We are working hard to bring you something great.</p>
+        {% endif %}
+
+        {% if submitted %}
+            <div class="alert alert-success mt-4">
+                Thank you! We will notify you when we launch.
+            </div>
+        {% else %}
+            <div class="mt-4" style="max-width: 480px; margin: 0 auto;">
+                <p>Be the first to know when we launch. Leave your details below.</p>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3 text-start">
+                            <label class="form-label">{{ field.label }}</label>
+                            {{ field|add_class:"form-control" }}
+                            {% if field.errors %}
+                                <div class="text-danger small">{{ field.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary w-100">Notify Me</button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

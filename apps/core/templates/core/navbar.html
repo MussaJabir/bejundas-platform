@@ -1,0 +1,20 @@
+{% load static %}
+<header id="header" class="site-header">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                {% if company.logo %}
+                    <img src="{{ company.logo.url }}" alt="{{ company.company_name }}" height="40">
+                {% else %}
+                    {{ company.company_name }}
+                {% endif %}
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarMain">
+                {% block nav_links %}{% endblock %}
+            </div>
+        </div>
+    </nav>
+</header>

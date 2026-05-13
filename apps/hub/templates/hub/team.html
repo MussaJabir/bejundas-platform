@@ -1,0 +1,102 @@
+{% extends "hub/base_hub.html" %}
+{% load static %}
+
+{% block title %}Our Team — {{ company.company_name }}{% endblock %}
+{% block meta_description %}Meet the team behind {{ company.company_name }}. Passionate professionals driving innovation and impact.{% endblock %}
+
+{% block content %}
+<div class="main-content">
+
+    <!-- Team Intro Section -->
+    <div class="section-about-team tf-spacing-1">
+        <div class="tf-container position-relative">
+            <div class="heading-section style-default text-center mb_60">
+                <div class="sub text-label text-uppercase lh-16 wow fadeInUp">Our Team</div>
+                <h1 class="title split-text effect-right">Meet The Team Behind Our Success</h1>
+                <p class="desc text-body-default mt_12 split-text split-lines-transform">
+                    At the core of our company is a team of passionate professionals with years of experience across business strategy, operations, and innovation. We believe in collaboration, accountability, and building with purpose.
+                </p>
+            </div>
+            <div class="img-thumb section-triger overflow-hidden">
+                <img class="image-inner" loading="lazy" decoding="async" width="1410" height="680"
+                    src="{% static 'hub/images/about-2.jpg' %}" alt="Bejundas team">
+                <div class="counter-item d-flex flex-column align-items-center justify-content-center bg-1">
+                    <div class="counter h1 text_white mb_6">
+                        <span class="numberCounter" data-count="{{ company.clients_count }}" data-duration="700">0</span><span class="sub-counter">+</span>
+                    </div>
+                    <p class="sub-title text-body-2 text_white">Corporate Clients Served</p>
+                </div>
+                <div class="uncover">
+                    <div class="uncover_slice"></div>
+                    <div class="uncover_slice"></div>
+                    <div class="uncover_slice"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Team Intro Section -->
+
+    <!-- Team Grid Section -->
+    {% if team %}
+    <div class="section-team tf-spacing-1">
+        <div class="tf-container large">
+            <div class="tf-grid-layout lg-col-4 sm-col-2 gap_20">
+                {% for member in team %}
+                <div class="card-team style-1 wow fadeInLeft" data-wow-delay="{{ forloop.counter }}00ms">
+                    <div class="img-style">
+                        {% if member.photo %}
+                            <img loading="lazy" decoding="async" width="428" height="428"
+                                src="{{ member.photo.url }}" alt="{{ member.name }}">
+                        {% else %}
+                            <img loading="lazy" decoding="async" width="428" height="428"
+                                src="{% static 'hub/images/team-1.jpg' %}" alt="{{ member.name }}">
+                        {% endif %}
+                    </div>
+                    <div class="info">
+                        <span class="name text_white h5 font-5 mb_2">{{ member.name }}</span>
+                        <p class="text-caption-1 text_white">{{ member.role }}</p>
+                        {% if member.bio %}
+                        <p class="text-body-default text_muted mt_8">{{ member.bio|truncatechars:100 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="tf-container tf-spacing-1 text-center">
+        <p class="text-body-2 text_secondary">Team information coming soon.</p>
+    </div>
+    {% endif %}
+    <!-- End Team Grid Section -->
+
+    <!-- CTA Section -->
+    <div class="section-cta tf-spacing-1">
+        <div class="tf-container">
+            <div class="content-inner">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="heading">
+                            <h2 class="title split-text split-lines-rotation-x">{{ company.cta_headline }}</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="content">
+                            <p class="text-body-2 mb_30 split-text split-lines-transform">{{ company.cta_body }}</p>
+                            <div class="wrap-btn d-flex gap_20 flex-wrap wow fadeInUp">
+                                <a href="{% url 'hub:contact' %}" class="tf-btn btn-hover-animate-2 btn-bg-secondary">
+                                    <span>Get In Touch</span>
+                                    <span class="bg-effect"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End CTA Section -->
+
+</div>
+{% endblock %}

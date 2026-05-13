@@ -1,40 +1,72 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Bejundas Group of Companies{% endblock %}</title>
-    <meta name="description" content="{% block meta_description %}Bejundas Group of Companies — Building Tanzania's Future{% endblock %}">
+    <meta charset="utf-8">
+    <title>{% block title %}{{ company.company_name }}{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{{ company.tagline }}{% endblock %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <!-- Viora shared assets -->
-    <link rel="stylesheet" href="{% static 'viora/css/styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'viora/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'viora/css/animate.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'viora/css/swiper-bundle.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'viora/css/magnific-popup.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'viora/css/styles.css' %}">
 
-    <!-- Global brand overrides -->
+    {% block demo_css %}{% endblock %}
+
+    <link rel="stylesheet" href="{% static 'viora/font/fonts.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'viora/icons/icomoon/style.css' %}">
+
+    {% if company.favicon %}
+        <link rel="shortcut icon" href="{{ company.favicon.url }}">
+    {% else %}
+        <link rel="shortcut icon" href="{% static 'viora/favicon.svg' %}">
+    {% endif %}
+
     <link rel="stylesheet" href="{% static 'css/bejundas.css' %}">
-
     {% block extra_head %}{% endblock %}
-
-    <style>
-        :root {
-            --primary: {{ app_theme.primary }};
-            --accent: {{ app_theme.accent }};
-        }
-    </style>
 </head>
-<body>
-    {% include "core/navbar.html" %}
 
-    {% block content %}{% endblock %}
+<body class="menu-overlay-enabled">
+<div id="wrapper">
+    <div id="page">
+        <div id="site-content">
 
-    {% include "core/footer.html" %}
+            {% include "core/navbar.html" %}
 
-    <!-- Viora shared JS -->
-    <script src="{% static 'viora/js/jquery.min.js' %}"></script>
-    <script src="{% static 'viora/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'viora/js/plugins.js' %}"></script>
-    <script src="{% static 'viora/js/scripts.js' %}"></script>
+            {% block content %}{% endblock %}
 
-    {% block extra_js %}{% endblock %}
+            {% include "core/footer.html" %}
+
+        </div>
+    </div>
+</div>
+
+{% include "core/mobile_nav.html" %}
+
+<div class="progress-wrap">
+    <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"
+            style="transition: stroke-dashoffset 10ms linear; stroke-dasharray: 307.919, 307.919; stroke-dashoffset: 307.919;"></path>
+    </svg>
+</div>
+
+<script src="{% static 'viora/js/jquery.min.js' %}"></script>
+<script src="{% static 'viora/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'viora/js/swiper-bundle.min.js' %}"></script>
+<script src="{% static 'viora/js/carousel.js' %}"></script>
+<script src="{% static 'viora/js/infinityslide.js' %}"></script>
+<script src="{% static 'viora/js/magnific-popup.min.js' %}"></script>
+<script src="{% static 'viora/js/gsap.min.js' %}"></script>
+<script src="{% static 'viora/js/ScrollSmoother.min.js' %}"></script>
+<script src="{% static 'viora/js/ScrollTrigger.min.js' %}"></script>
+<script src="{% static 'viora/js/SplitText.min.js' %}"></script>
+<script src="{% static 'viora/js/splitting.min.js' %}"></script>
+<script src="{% static 'viora/js/gsapAnimate.js' %}"></script>
+<script src="{% static 'viora/js/wow.min.js' %}"></script>
+<script src="{% static 'viora/js/main.js' %}"></script>
+<script src="{% static 'js/bejundas.js' %}"></script>
+{% block extra_js %}{% endblock %}
 </body>
 </html>

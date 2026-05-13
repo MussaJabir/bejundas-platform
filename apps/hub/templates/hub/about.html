@@ -1,0 +1,182 @@
+{% extends "hub/base_hub.html" %}
+{% load static %}
+
+{% block title %}About Us — {{ company.company_name }}{% endblock %}
+{% block meta_description %}Learn about {{ company.company_name }}. {{ company.about_body|truncatechars:150 }}{% endblock %}
+
+{% block content %}
+<div class="main-content">
+
+    <!-- About Section -->
+    <div class="section-about tf-spacing-1">
+        <div class="tf-container">
+            <div class="box-about">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="heading-section style-default mb_28">
+                            <div class="sub text-label text-uppercase split-text effect-up">About Us</div>
+                            <h2 class="title split-text effect-right">{{ company.about_headline }}</h2>
+                        </div>
+                        <div class="mb_28 wow fadeInUp">
+                            <p class="text-body-default">{{ company.about_body }}</p>
+                        </div>
+                        <a href="{% url 'hub:contact' %}" class="tf-btn btn-hover-animate-2 wow fadeInUp" data-wow-delay="0.4s">
+                            <span>Get in Touch</span>
+                            <span class="bg-effect"></span>
+                        </a>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="wrap-content tf-grid-layout tf-col-2 gap_10">
+                            <div class="counter-item d-flex flex-column align-items-center justify-content-center bg-1">
+                                <div class="counter h1">
+                                    <span class="numberCounter" data-count="{{ company.years_experience }}" data-duration="700">0</span><span class="sub-counter">+</span>
+                                </div>
+                                <p class="sub-title text-body-2">Years of Experience</p>
+                            </div>
+                            <div class="counter-item d-flex flex-column align-items-center justify-content-center bg-2">
+                                <div class="counter h1">
+                                    <span class="numberCounter" data-count="{{ company.clients_count }}" data-duration="700">0</span><span class="sub-counter">+</span>
+                                </div>
+                                <p class="sub-title text-body-2">Corporate Clients</p>
+                            </div>
+                            <div class="img-style">
+                                <img width="308" height="308" src="{% static 'hub/images/about-1.jpg' %}" alt="About {{ company.company_name }}">
+                            </div>
+                            <div class="counter-item d-flex flex-column align-items-center justify-content-center bg-3">
+                                <div class="counter h1 text_white">
+                                    <span class="numberCounter" data-count="{{ company.projects_count }}" data-duration="700">0</span><span class="sub-counter">+</span>
+                                </div>
+                                <p class="sub-title text-body-2 text_white">Successful Projects</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End About Section -->
+
+    <!-- Video / Marquee Section -->
+    {% if company.about_video_url %}
+    <div class="section-video">
+        <div class="widget-video section-triger overflow-hidden">
+            <img class="image-inner" src="{% static 'hub/images/bg-video.jpg' %}" alt="Bejundas Group video">
+            <a href="{{ company.about_video_url }}" class="popup-youtube">
+                <div class="icon"><i class="icon-Play"></i></div>
+            </a>
+            <div class="uncover">
+                <div class="uncover_slice"></div>
+                <div class="uncover_slice"></div>
+                <div class="uncover_slice"></div>
+            </div>
+        </div>
+        <div class="wrap-infiniteslide">
+            <div class="infiniteslide" data-clone="2" data-style="left">
+                <div class="marquee-item"><h3>Work Together</h3></div>
+                <div class="marquee-item"><div class="icon"><i class="icon-icon-1"></i></div></div>
+                <div class="marquee-item"><h3>Start Now</h3></div>
+                <div class="marquee-item"><div class="icon"><i class="icon-icon-1"></i></div></div>
+                <div class="marquee-item"><h3>Grow Faster</h3></div>
+                <div class="marquee-item"><div class="icon"><i class="icon-icon-1"></i></div></div>
+                <div class="marquee-item"><h3>Build Bold</h3></div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <!-- End Video Section -->
+
+    <!-- Mission & Vision -->
+    <div class="section-overview">
+        <div class="wrap-box">
+            <div class="col-content mission wow fadeInUp">
+                <div class="heading">
+                    <h3 class="title mb_7">Our Mission</h3>
+                    <p class="text-body-2 ps-0">{{ company.mission }}</p>
+                </div>
+                <a href="{% url 'hub:contact' %}" class="tf-btn btn-hover-animate-2 btn-bg-white">
+                    <span>Get In Touch</span>
+                    <span class="bg-effect"></span>
+                </a>
+            </div>
+            <div class="col-content vision wow fadeInRight">
+                <div class="thumbs">
+                    <img loading="lazy" decoding="async" width="428" height="630"
+                        src="{% static 'hub/images/overview-2.jpg' %}" alt="Vision">
+                </div>
+                <div class="content">
+                    <h3 class="text_white mb_8">Our Vision</h3>
+                    <p class="text-body-2 text_white">{{ company.vision }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Mission & Vision -->
+
+    {% if team %}
+    <!-- Team Section -->
+    <div class="section-team tf-spacing-1">
+        <div class="tf-container large">
+            <div class="tf-grid-layout lg-col-4 sm-col-2 gap_20 align-items-start">
+                <div class="box">
+                    <div class="heading-section style-default mb_32">
+                        <div class="sub text-label text-uppercase split-text effect-up lh-16">Our Team</div>
+                        <h3 class="title split-text effect-right">Meet Our Leadership Team</h3>
+                    </div>
+                    <a href="{% url 'hub:team' %}" class="tf-btn btn-hover-animate-2 wow fadeInUp">
+                        <span>See Full Team</span>
+                        <span class="bg-effect"></span>
+                    </a>
+                </div>
+                {% for member in team %}
+                <div class="card-team style-1 wow fadeInLeft" data-wow-delay="{{ forloop.counter }}00ms">
+                    <div class="img-style">
+                        {% if member.photo %}
+                            <img loading="lazy" decoding="async" width="428" height="428"
+                                src="{{ member.photo.url }}" alt="{{ member.name }}">
+                        {% else %}
+                            <img loading="lazy" decoding="async" width="428" height="428"
+                                src="{% static 'hub/images/team-1.jpg' %}" alt="{{ member.name }}">
+                        {% endif %}
+                        <a href="{% url 'hub:team' %}" class="overlay-link"></a>
+                    </div>
+                    <div class="info">
+                        <a href="{% url 'hub:team' %}" class="name text_white link h5 font-5 mb_2">{{ member.name }}</a>
+                        <p class="text-caption-1 text_white">{{ member.role }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- End Team Section -->
+    {% endif %}
+
+    <!-- CTA Section -->
+    <div class="section-cta tf-spacing-1">
+        <div class="tf-container">
+            <div class="content-inner">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="heading">
+                            <h2 class="title split-text split-lines-rotation-x">{{ company.cta_headline }}</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="content">
+                            <p class="text-body-2 mb_30 split-text split-lines-transform">{{ company.cta_body }}</p>
+                            <div class="wrap-btn d-flex gap_20 flex-wrap wow fadeInUp">
+                                <a href="{% url 'hub:contact' %}" class="tf-btn btn-hover-animate-2 btn-bg-secondary">
+                                    <span>Get In Touch</span>
+                                    <span class="bg-effect"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End CTA Section -->
+
+</div>
+{% endblock %}

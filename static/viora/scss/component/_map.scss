@@ -1,0 +1,80 @@
+@use "../abstracts/index" as *;
+.map-box {
+    width: 100%;
+    height: 520px;
+    overflow: hidden;
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    .marker {
+        cursor: pointer;
+        position: absolute;
+        height: 60px;
+        width: 60px;
+        &::after {
+            content: "";
+            position: absolute;
+            width: 46px;
+            height: 46px;
+            background: var(--Primary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        &::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 64%;
+            width: 0;
+            height: 0;
+            border-right: 24px solid transparent;
+            border-left: 24px solid transparent;
+            border-top: 28px solid var(--Primary);
+            border-radius: 50%;
+        }
+
+        i {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 33px;
+            width: 33px;
+            border-radius: 50%;
+            background-color: var(--White);
+            color: var(--Primary);
+            font-size: 22px;
+            @include centered();
+            z-index: 1;
+        }
+    }
+    &.v2 {
+        .marker {
+            &::after {
+                background: var(--Secondary);
+            }
+            &::before {
+                border-top: 28px solid var(--Secondary);
+            }
+            i {
+                color: var(--Secondary);
+            }
+        }
+    }
+}
+
+.mapboxgl-ctrl-attrib a,
+.mapboxgl-ctrl-attrib.mapboxgl-compact,
+a.mapboxgl-ctrl-logo {
+    display: none !important;
+}

@@ -1,0 +1,105 @@
+{% extends "hub/base_hub.html" %}
+{% load static %}
+
+{% block title %}Services — {{ company.company_name }}{% endblock %}
+{% block meta_description %}Explore the services offered by {{ company.company_name }}. {{ company.tagline }}{% endblock %}
+
+{% block content %}
+<div class="main-content">
+
+    <!-- Services Section -->
+    <div class="section-service tf-spacing-1">
+        <div class="tf-container">
+            <div class="heading-section style-2 mb_48">
+                <div class="heading d-flex align-items-center justify-content-between gap_16">
+                    <div class="d-grid gap_16">
+                        <div class="sub text-label text-uppercase lh-16 wow fadeInUp">Our Services</div>
+                        <h1 class="title split-text effect-right">Solutions That Drive Real Business Impact</h1>
+                    </div>
+                    <div class="btn_wrapper">
+                        <a href="{% url 'hub:contact' %}" class="tf-btn btn-hover-animate-2 wow fadeInRight btn-item btn-hover">
+                            <span class="h4">Talk To<br>An Expert</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="bot d-flex align-items-center gap_12 wow fadeInUp">
+                    <p class="text-body-2 text_secondary">From strategy to execution, our services are designed to help your organization grow smarter, scale faster, and lead with clarity.</p>
+                </div>
+            </div>
+
+            {% if services %}
+            <div class="stack-element">
+                <div class="stack-content-wrap">
+                    {% for service in services %}
+                    <div class="element">
+                        <div class="service-item style-default hover-image {% if forloop.counter|divisibleby:2 %}ctl{% endif %}">
+                            {% if not forloop.counter|divisibleby:2 %}
+                            <div class="img-style tf-animateCLP-left">
+                                <img width="555" height="555" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" decoding="async"
+                                    src="{% static 'hub/images/service-1.jpg' %}" alt="{{ service.title }}">
+                            </div>
+                            {% endif %}
+                            <div class="content wow fadeIn{% if forloop.counter|divisibleby:2 %}Left{% else %}Right{% endif %}">
+                                <div class="heading">
+                                    <a href="{% url 'hub:services' %}" class="title mb_12 link h2">{{ service.title }}</a>
+                                    <p class="text_secondary text-body-2">{{ service.summary }}</p>
+                                </div>
+                                <a href="{% url 'hub:contact' %}" class="btn_link">
+                                    <i class="icon-ArrowUpRight"></i>
+                                </a>
+                            </div>
+                            {% if forloop.counter|divisibleby:2 %}
+                            <div class="img-style tf-animateCLP-right">
+                                <img width="555" height="555" loading="lazy" decoding="async"
+                                    src="{% static 'hub/images/service-2.jpg' %}" alt="{{ service.title }}">
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <p class="text-body-2 text_secondary">Our services are coming soon. <a href="{% url 'hub:contact' %}" class="link">Contact us</a> to learn more.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <!-- End Services Section -->
+
+    <!-- CTA Section -->
+    <div class="section-cta tf-spacing-1">
+        <div class="tf-container">
+            <div class="content-inner">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="heading">
+                            <h2 class="title split-text split-lines-rotation-x">{{ company.cta_headline }}</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="content">
+                            <p class="text-body-2 mb_30 split-text split-lines-transform">{{ company.cta_body }}</p>
+                            <div class="wrap-btn d-flex gap_20 flex-wrap wow fadeInUp">
+                                <a href="{% url 'hub:contact' %}" class="tf-btn btn-hover-animate-2 btn-bg-secondary">
+                                    <span>Get In Touch</span>
+                                    <span class="bg-effect"></span>
+                                </a>
+                                {% if company.phone %}
+                                <a href="tel:{{ company.phone }}" class="tf-btn btn-hover-animate-border style-border-2">
+                                    <span>Call Us: {{ company.phone }}</span>
+                                    <span class="bg-effect"></span>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End CTA Section -->
+
+</div>
+{% endblock %}

@@ -1,26 +1,84 @@
 {% load static %}
-<footer class="site-footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <h5>{{ company.company_name }}</h5>
-                <p>{{ company.tagline }}</p>
-            </div>
-            <div class="col-md-4">
-                <h5>Contact</h5>
-                <p>{{ company.phone }}</p>
-                <p>{{ company.email }}</p>
-                <p>{{ company.address }}</p>
-            </div>
-            <div class="col-md-4">
-                <h5>Follow Us</h5>
-                {% if company.facebook_url %}<a href="{{ company.facebook_url }}" target="_blank" rel="noopener">Facebook</a><br>{% endif %}
-                {% if company.twitter_url %}<a href="{{ company.twitter_url }}" target="_blank" rel="noopener">Twitter / X</a><br>{% endif %}
-                {% if company.linkedin_url %}<a href="{{ company.linkedin_url }}" target="_blank" rel="noopener">LinkedIn</a><br>{% endif %}
-                {% if company.instagram_url %}<a href="{{ company.instagram_url }}" target="_blank" rel="noopener">Instagram</a><br>{% endif %}
+<footer class="footer style-default">
+    <div class="tf-container medium">
+        <div class="footer-body">
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-about">
+                        <a href="{% url 'hub:home' %}" class="footer-logo site-logo mb_19">
+                            {% if company.logo %}
+                                <img src="{{ company.logo.url }}" alt="{{ company.company_name }}" class="main-logo">
+                            {% else %}
+                                <span class="h5 fw-7 text_white">{{ company.company_name }}</span>
+                            {% endif %}
+                        </a>
+                        {% if company.tagline %}
+                            <p class="text-caption-1 text_white">{{ company.tagline }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-content footer-item d-flex justify-content-between" data-wow-delay="0.2s">
+                        {% if footer_services %}
+                        <div class="footer-col-block company">
+                            <div class="footer-heading footer-heading-mobile text-uppercase text-label fw-5 text_primary-color mb_16">
+                                Services
+                            </div>
+                            <div class="tf-collapse-content">
+                                <ul class="footer-menu-list d-grid gap_12">
+                                    {% for service in footer_services %}
+                                    <li class="text-caption-1 text_white">
+                                        <a href="{% url 'hub:services' %}" class="link">{{ service.title }}</a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="footer-col-block quick-link">
+                            <div class="footer-heading footer-heading-mobile text-uppercase text-label fw-5 text_primary-color mb_16">
+                                Quick Links
+                            </div>
+                            <div class="tf-collapse-content">
+                                <ul class="footer-menu-list d-grid gap_12">
+                                    <li class="text-caption-1 text_white"><a href="{% url 'hub:home' %}" class="link">Home</a></li>
+                                    <li class="text-caption-1 text_white"><a href="{% url 'hub:about' %}" class="link">About Us</a></li>
+                                    <li class="text-caption-1 text_white"><a href="{% url 'hub:services' %}" class="link">Services</a></li>
+                                    <li class="text-caption-1 text_white"><a href="{% url 'hub:news' %}" class="link">News</a></li>
+                                    <li class="text-caption-1 text_white"><a href="{% url 'hub:team' %}" class="link">Our Team</a></li>
+                                    <li class="text-caption-1 text_white"><a href="{% url 'hub:contact' %}" class="link">Contact</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="footer-contact">
+                        <div class="info mb_24">
+                            {% if company.address %}<p class="text-body-default text_white mb_7">{{ company.address }}</p>{% endif %}
+                            {% if company.phone %}<a href="tel:{{ company.phone }}" class="h4 text_white fw-6 link mb_12 d-block">{{ company.phone }}</a>{% endif %}
+                            {% if company.email %}<a href="mailto:{{ company.email }}" class="text-body-default hover-underline-link text_primary-color link">{{ company.email }}</a>{% endif %}
+                        </div>
+                        <div>
+                            <div class="text-label fw-5 text-uppercase text_white mb_12 letter-spacing-1">Follow Us:</div>
+                            <ul class="tf-social">
+                                {% if company.linkedin_url %}<li><a href="{{ company.linkedin_url }}" class="icon-Linkedin" target="_blank" rel="noopener"></a></li>{% endif %}
+                                {% if company.twitter_url %}<li><a href="{{ company.twitter_url }}" class="icon-XLogo-2" target="_blank" rel="noopener"></a></li>{% endif %}
+                                {% if company.instagram_url %}<li><a href="{{ company.instagram_url }}" class="icon-InsLogo-fill" target="_blank" rel="noopener"></a></li>{% endif %}
+                                {% if company.facebook_url %}<li><a href="{{ company.facebook_url }}" class="icon-messenger-logo" target="_blank" rel="noopener"></a></li>{% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <hr>
-        <p class="text-center">&copy; {% now "Y" %} {{ company.company_name }}. All rights reserved.</p>
+    </div>
+    <div class="footer-bottom">
+        <div class="wrap-footer-bottom tf-container medium d-flex align-items-center justify-content-between">
+            <p class="text_white text-caption-1">&copy;{% now "Y" %} <a href="{% url 'hub:home' %}" class="text_white link">{{ company.company_name }}</a>. All Rights Reserved.</p>
+            <ul class="wrap">
+                <li><a href="{% url 'hub:contact' %}" class="text-caption-1 link text_white">Contact Us</a></li>
+            </ul>
+        </div>
     </div>
 </footer>

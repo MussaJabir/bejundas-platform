@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Update — Bejundas Platform | Phase 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #1a1a2e;
+    --blue:    #2563eb;
+    --blue-md: #1d4ed8;
+    --blue-lt: #dbeafe;
+    --blue-xs: #eff6ff;
+    --green:   #16a34a;
+    --green-lt:#dcfce7;
+    --amber:   #d97706;
+    --amber-lt:#fef3c7;
+    --text:    #0f172a;
+    --muted:   #475569;
+    --border:  #e2e8f0;
+    --bg:      #f8fafc;
+    --white:   #ffffff;
+  }
+
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  .header { background: var(--navy); color: var(--white); padding: 52px 0 44px; }
+  .inner { max-width: 800px; margin: 0 auto; padding: 0 32px; }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-dot { width: 10px; height: 10px; background: #60a5fa; border-radius: 50%; }
+  .brand-name { font-size: 14px; font-weight: 600; color: #94a3b8; letter-spacing: .04em; text-transform: uppercase; }
+  .report-date { font-size: 13px; color: #94a3b8; }
+  .header h1 { font-size: 34px; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 12px; }
+  .header h1 span { color: #60a5fa; }
+  .header .subtitle { font-size: 16px; color: #94a3b8; max-width: 500px; margin-bottom: 24px; }
+  .status-pill { display: inline-flex; align-items: center; gap: 8px; background: var(--green-lt); color: var(--green); font-size: 13px; font-weight: 700; padding: 7px 16px; border-radius: 20px; letter-spacing: .03em; }
+  .status-pill::before { content: ''; width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
+
+  .timeline-bar { background: var(--white); border-bottom: 1px solid var(--border); padding: 28px 0; }
+  .timeline { display: flex; align-items: flex-start; }
+  .tl-step { display: flex; align-items: center; flex: 1; }
+  .tl-step:last-child { flex: none; }
+  .tl-node { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .tl-circle { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .tl-circle.done   { background: var(--blue); color: var(--white); }
+  .tl-circle.active { background: var(--blue); color: var(--white); box-shadow: 0 0 0 5px var(--blue-lt); }
+  .tl-circle.soon   { background: var(--border); color: var(--muted); }
+  .tl-label { font-size: 11px; font-weight: 600; white-space: nowrap; text-align: center; color: var(--muted); }
+  .tl-label.done   { color: var(--blue); }
+  .tl-label.active { color: var(--navy); font-weight: 700; }
+  .tl-line { flex: 1; height: 2px; background: var(--border); margin-bottom: 22px; }
+  .tl-line.done { background: var(--blue); }
+
+  main { max-width: 800px; margin: 0 auto; padding: 40px 32px 64px; display: flex; flex-direction: column; gap: 28px; }
+
+  .intro { background: var(--white); border: 1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 24px 28px; font-size: 15px; color: var(--muted); line-height: 1.8; }
+  .intro strong { color: var(--navy); }
+
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .card-header { display: flex; align-items: center; gap: 14px; padding: 20px 28px; border-bottom: 1px solid var(--border); background: var(--blue-xs); }
+  .card-icon { width: 38px; height: 38px; background: var(--blue); border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .card-icon svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .card-header h2 { font-size: 16px; font-weight: 700; color: var(--navy); }
+  .card-header .card-tag { margin-left: auto; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--blue); background: var(--blue-lt); padding: 3px 10px; border-radius: 4px; }
+  .card-body { padding: 28px; }
+
+  /* Vertical cards */
+  .verticals-showcase { display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px; }
+  .vertical-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+  }
+  .vertical-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+  }
+  .vc-financial::before  { background: #c9a84c; }
+  .vc-construction::before { background: #f47920; }
+  .vc-energies::before   { background: #f9c41a; }
+  .vc-farming::before    { background: #8bc34a; }
+  .vc-investments::before { background: #d4af37; }
+  .vc-swatch {
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .vc-info h4 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+  .vc-info p { font-size: 12px; color: var(--muted); }
+  .vc-status { margin-left: auto; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 4px; background: var(--green-lt); color: var(--green); white-space: nowrap; }
+
+  .accomplish-list { display: flex; flex-direction: column; gap: 14px; }
+  .accomplish-item { display: flex; gap: 16px; padding: 18px 20px; border: 1px solid var(--border); border-radius: 10px; transition: border-color 200ms, box-shadow 200ms; }
+  .accomplish-item:hover { border-color: var(--blue); box-shadow: 0 2px 8px rgba(37,99,235,.07); }
+  .accomplish-icon-wrap { width: 42px; height: 42px; background: var(--blue-lt); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .accomplish-icon-wrap svg { width: 20px; height: 20px; stroke: var(--blue); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .accomplish-item h3 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .accomplish-item p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  .progress-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  .prog-card { text-align: center; padding: 20px 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--blue-xs); }
+  .prog-card .num { font-size: 36px; font-weight: 700; color: var(--blue); line-height: 1; margin-bottom: 4px; }
+  .prog-card .lbl { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+
+  .quality-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .quality-item { display: flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; background: var(--green-lt); color: var(--green); border: 1px solid #bbf7d0; }
+  .quality-item svg { width: 15px; height: 15px; stroke: var(--green); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  .snapshot-list { display: flex; flex-direction: column; gap: 10px; }
+  .snapshot-item { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; }
+  .snap-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .snap-dot.green { background: var(--green); }
+  .snap-dot.amber { background: var(--amber); }
+  .snap-dot.blue  { background: var(--blue); }
+  .snapshot-item .snap-label { font-weight: 600; color: var(--navy); min-width: 160px; }
+  .snapshot-item .snap-desc  { font-size: 13px; color: var(--muted); }
+  .snap-status { margin-left: auto; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 4px; text-transform: uppercase; letter-spacing: .05em; white-space: nowrap; }
+  .snap-status.ready  { background: var(--green-lt); color: var(--green); }
+  .snap-status.soon   { background: var(--amber-lt); color: var(--amber); }
+  .snap-status.active { background: var(--blue-lt);  color: var(--blue-md); }
+
+  .next-list { display: flex; flex-direction: column; gap: 12px; }
+  .next-item { display: flex; align-items: flex-start; gap: 14px; padding: 16px 20px; border: 1px dashed var(--border); border-radius: 10px; }
+  .next-num { width: 28px; height: 28px; border-radius: 50%; background: var(--blue-lt); color: var(--blue-md); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .next-item h4 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+  .next-item p  { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  .closing { background: var(--navy); color: var(--white); border-radius: 12px; padding: 32px 28px; text-align: center; }
+  .closing h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+  .closing p  { font-size: 14px; color: #94a3b8; max-width: 480px; margin: 0 auto; line-height: 1.7; }
+
+  .page-footer { max-width: 800px; margin: 0 auto; padding: 20px 32px 48px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); }
+
+  @media print {
+    body { background: white; }
+    .header, .card-header, .prog-card, .quality-item, .closing, .card-icon, .accomplish-icon-wrap, .status-pill, .snap-status, .next-num, .tl-circle, .tl-line, .vc-swatch { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .card { break-inside: avoid; }
+    main { padding: 24px 32px 40px; gap: 20px; }
+    @page { margin: 15mm; size: A4; }
+  }
+
+  @media (max-width: 600px) {
+    .progress-summary { grid-template-columns: 1fr 1fr; }
+    .header h1 { font-size: 26px; }
+    .timeline { overflow-x: auto; }
+    .page-footer { flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="inner">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-dot"></div>
+        <span class="brand-name">Bejundas Group of Companies</span>
+      </div>
+      <span class="report-date">May 13, 2026</span>
+    </div>
+    <h1>All Five Business<br><span>Sub-Sites Are Ready</span></h1>
+    <p class="subtitle">Every Bejundas business address now has its own branded presence online, ready to capture visitor interest.</p>
+    <div class="status-pill">Milestone 3 Complete</div>
+  </div>
+</div>
+
+<div class="timeline-bar">
+  <div class="inner">
+    <div class="timeline">
+      <div class="tl-step">
+        <div class="tl-node"><div class="tl-circle done">&#10003;</div><div class="tl-label done">Setup</div></div>
+        <div class="tl-line done"></div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-node"><div class="tl-circle done">&#10003;</div><div class="tl-label done">Foundation</div></div>
+        <div class="tl-line done"></div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-node"><div class="tl-circle done">&#10003;</div><div class="tl-label done">Design</div></div>
+        <div class="tl-line done"></div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-node"><div class="tl-circle active">&#10003;</div><div class="tl-label active">Sub-Sites</div></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-node"><div class="tl-circle soon">5</div><div class="tl-label">Launch Prep</div></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-node"><div class="tl-circle soon">6</div><div class="tl-label">Live</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <div class="intro">
+    Dear <strong>Bejundas Group</strong> — I am pleased to report that <strong>all five of your business sub-sites are now built and working</strong>. Each one has its own professional look with brand colours that reflect its business identity, and each one is already collecting visitor enquiries for you. The platform is now feature-complete for the MVP — the next milestone is going live on the internet.
+  </div>
+
+  <!-- Section 1: What Was Accomplished -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      </div>
+      <h2>What Was Accomplished</h2>
+      <span class="card-tag">Milestone 3</span>
+    </div>
+    <div class="card-body">
+
+      <div style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;">Five Business Addresses — Each With Its Own Identity</div>
+      <div class="verticals-showcase">
+        <div class="vertical-card vc-financial">
+          <div class="vc-swatch" style="background:#0a2342;"></div>
+          <div class="vc-info">
+            <h4>financial.bejundas.co.tz</h4>
+            <p>Bejundas Financial Services — deep navy &amp; gold</p>
+          </div>
+          <span class="vc-status">Live</span>
+        </div>
+        <div class="vertical-card vc-construction">
+          <div class="vc-swatch" style="background:#2c2c2c;"></div>
+          <div class="vc-info">
+            <h4>construction.bejundas.co.tz</h4>
+            <p>Bejundas Construction — charcoal &amp; orange</p>
+          </div>
+          <span class="vc-status">Live</span>
+        </div>
+        <div class="vertical-card vc-energies">
+          <div class="vc-swatch" style="background:#0d3b2e;"></div>
+          <div class="vc-info">
+            <h4>energies.bejundas.co.tz</h4>
+            <p>Bejundas Energies — dark green &amp; yellow</p>
+          </div>
+          <span class="vc-status">Live</span>
+        </div>
+        <div class="vertical-card vc-farming">
+          <div class="vc-swatch" style="background:#2d5a27;"></div>
+          <div class="vc-info">
+            <h4>farming.bejundas.co.tz</h4>
+            <p>Bejundas Farming — forest green &amp; lime</p>
+          </div>
+          <span class="vc-status">Live</span>
+        </div>
+        <div class="vertical-card vc-investments">
+          <div class="vc-swatch" style="background:#1a0533;"></div>
+          <div class="vc-info">
+            <h4>investments.bejundas.co.tz</h4>
+            <p>Bejundas Investments — deep purple &amp; gold</p>
+          </div>
+          <span class="vc-status">Live</span>
+        </div>
+      </div>
+
+      <div style="margin-top: 24px;">
+        <div class="accomplish-list">
+          <div class="accomplish-item">
+            <div class="accomplish-icon-wrap">
+              <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div>
+              <h3>Every Sub-Site Captures Visitor Enquiries</h3>
+              <p>Each business address has a "Get Notified" form. When a visitor fills in their name and email, their enquiry is recorded in the admin panel and delivered to your inbox by email — with a note showing which business they are interested in.</p>
+            </div>
+          </div>
+          <div class="accomplish-item">
+            <div class="accomplish-icon-wrap">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <div>
+              <h3>Each Business Has Its Own Colour Identity</h3>
+              <p>The colour scheme for each sub-site is stored in the admin panel and can be changed at any time without a developer. Financial uses navy and gold, Construction uses charcoal and orange, and so on — each one looking distinct and appropriate for its industry.</p>
+            </div>
+          </div>
+          <div class="accomplish-item">
+            <div class="accomplish-icon-wrap">
+              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <h3>Secure By Design</h3>
+              <p>When a visitor submits an enquiry from the Financial sub-site, the system records it as a Financial lead — even if someone tried to manipulate the form. The business category is always confirmed from the web address, not from what the visitor types.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Progress at a Glance -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <h2>Progress at a Glance</h2>
+      <span class="card-tag">Overview</span>
+    </div>
+    <div class="card-body">
+      <div class="progress-summary">
+        <div class="prog-card">
+          <div class="num">6</div>
+          <div class="lbl">Pages on Main Site</div>
+        </div>
+        <div class="prog-card">
+          <div class="num">5</div>
+          <div class="lbl">Sub-Sites Built</div>
+        </div>
+        <div class="prog-card">
+          <div class="num">3</div>
+          <div class="lbl">Milestones Done</div>
+        </div>
+      </div>
+      <div class="quality-row">
+        <div class="quality-item">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          All sub-sites collecting enquiries
+        </div>
+        <div class="quality-item">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          All colours admin-manageable
+        </div>
+        <div class="quality-item">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Zero errors found
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Current Status -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <h2>Current Status</h2>
+      <span class="card-tag">Where We Are</span>
+    </div>
+    <div class="card-body">
+      <div class="snapshot-list">
+        <div class="snapshot-item">
+          <div class="snap-dot green"></div>
+          <div class="snap-label">Main Website</div>
+          <div class="snap-desc">All six pages designed and working</div>
+          <div class="snap-status ready">Done</div>
+        </div>
+        <div class="snapshot-item">
+          <div class="snap-dot green"></div>
+          <div class="snap-label">Financial Sub-Site</div>
+          <div class="snap-desc">Branded, live, collecting enquiries</div>
+          <div class="snap-status ready">Done</div>
+        </div>
+        <div class="snapshot-item">
+          <div class="snap-dot green"></div>
+          <div class="snap-label">Construction Sub-Site</div>
+          <div class="snap-desc">Branded, live, collecting enquiries</div>
+          <div class="snap-status ready">Done</div>
+        </div>
+        <div class="snapshot-item">
+          <div class="snap-dot green"></div>
+          <div class="snap-label">Energies Sub-Site</div>
+          <div class="snap-desc">Branded, live, collecting enquiries</div>
+          <div class="snap-status ready">Done</div>
+        </div>
+        <div class="snapshot-item">
+          <div class="snap-dot green"></div>
+          <div class="snap-label">Farming Sub-Site</div>
+          <div class="snap-desc">Branded, live, collecting enquiries</div>
+          <div class="snap-status ready">Done</div>
+        </div>
+        <div class="snapshot-item">
+          <div class="snap-dot green"></div>
+          <div class="snap-label">Investments Sub-Site</div>
+          <div class="snap-desc">Branded, live, collecting enquiries</div>
+          <div class="snap-status ready">Done</div>
+        </div>
+        <div class="snapshot-item">
+          <div class="snap-dot amber"></div>
+          <div class="snap-label">Live on the Internet</div>
+          <div class="snap-desc">Currently running on development only — not yet publicly accessible</div>
+          <div class="snap-status soon">Next</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: What Happens Next -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+      <h2>What Happens Next</h2>
+      <span class="card-tag">Phase 4</span>
+    </div>
+    <div class="card-body">
+      <div class="next-list">
+        <div class="next-item">
+          <div class="next-num">1</div>
+          <div>
+            <h4>The Website Goes Live on the Internet</h4>
+            <p>We will deploy the platform to your hosting account on cPanel. Once live, <strong>bejundas.co.tz</strong> and all five business addresses will be publicly accessible to anyone in the world.</p>
+          </div>
+        </div>
+        <div class="next-item">
+          <div class="next-num">2</div>
+          <div>
+            <h4>Automatic Updates From That Point On</h4>
+            <p>After the first deployment, a system is put in place so that every future update I make goes live within minutes — automatically, without any manual work on the server.</p>
+          </div>
+        </div>
+        <div class="next-item">
+          <div class="next-num">3</div>
+          <div>
+            <h4>All Seven Addresses Verified Live</h4>
+            <p>We will confirm that the main site, all five business sub-sites, and the Technologies redirect to <strong>bjptechnologies.co.tz</strong> all work correctly on the live hosting environment.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="closing">
+    <h3>Three of Six — Ahead of Schedule</h3>
+    <p>The main website and all five business sub-sites were built and completed on the same day. The platform is feature-complete for the MVP launch. The next update will confirm the site is live and publicly accessible.</p>
+  </div>
+
+</main>
+
+<div class="page-footer inner">
+  <span><strong>Bejundas Group of Companies</strong> — Project Update</span>
+  <span>Milestone 3 of 6 &nbsp;·&nbsp; May 13, 2026</span>
+</div>
+
+</body>
+</html>

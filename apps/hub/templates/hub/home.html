@@ -186,7 +186,7 @@
                     </div>
                     <div class="content">
                         <h5 class="mb_12 title">
-                            <a href="{% url 'hub:services' %}" class="mb_12 link text_white">{{ service.title }}</a>
+                            <a href="{% if service.url %}{{ service.url }}{% else %}{% url 'hub:services' %}{% endif %}" class="mb_12 link text_white">{{ service.title }}</a>
                         </h5>
                         <p class="text-body-default text_muted">{{ service.summary }}</p>
                     </div>

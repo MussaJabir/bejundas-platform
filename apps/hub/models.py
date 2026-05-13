@@ -9,6 +9,7 @@ class Service(BaseModel):
     slug = models.SlugField(unique=True, blank=True)
     summary = models.TextField()
     icon = models.CharField(max_length=100, blank=True, default="")
+    url = models.URLField(max_length=300, blank=True, default="")
     order = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
 

@@ -41,10 +41,10 @@
                             {% endif %}
                             <div class="content wow fadeIn{% if forloop.counter|divisibleby:2 %}Left{% else %}Right{% endif %}">
                                 <div class="heading">
-                                    <a href="{% url 'hub:services' %}" class="title mb_12 link h2">{{ service.title }}</a>
+                                    <a href="{% if service.url %}{{ service.url }}{% else %}{% url 'hub:services' %}{% endif %}" class="title mb_12 link h2">{{ service.title }}</a>
                                     <p class="text_secondary text-body-2">{{ service.summary }}</p>
                                 </div>
-                                <a href="{% url 'hub:contact' %}" class="btn_link">
+                                <a href="{% if service.url %}{{ service.url }}{% else %}{% url 'hub:contact' %}{% endif %}" class="btn_link">
                                     <i class="icon-ArrowUpRight"></i>
                                 </a>
                             </div>

@@ -1,0 +1,282 @@
+@use "../abstracts/index" as *;
+
+.accordion-item {
+    .heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
+    .icon {
+        display: block;
+        height: 24px;
+        width: 24px;
+        position: relative;
+        flex-shrink: 0;
+        &::after {
+            position: absolute;
+            content: "";
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 2px;
+            background-color: var(--Text-primary);
+            transition: 0.25s ease-in-out;
+        }
+        &::before {
+            position: absolute;
+            content: "";
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 2px;
+            height: 16px;
+            background-color: var(--Text-primary);
+            transition: 0.25s ease-in-out;
+        }
+    }
+    .accordion-title {
+        width: 100%;
+        &:not(.collapsed) {
+            .icon {
+                &::after {
+                    opacity: 0;
+                }
+                &::before {
+                    transform: translate(-50%, -50%) rotate(90deg);
+                }
+            }
+        }
+    }
+    .accordion-faqs-content {
+        padding-top: 12px;
+    }
+    &.style-1 {
+        padding: 24px 24px 23px;
+        border-bottom: 1px solid var(--Line);
+        @include res(sm) {
+            padding-left: 0;
+            padding-right: 0;
+        }
+        .accordion-title {
+            width: 100%;
+            &:not(.collapsed) {
+                .icon {
+                    &::after {
+                        opacity: 0;
+                    }
+                    &::before {
+                        transform: translate(-50%, -50%) rotate(90deg);
+                    }
+                }
+            }
+        }
+        .heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        &.v2 {
+            padding: 0 0 24px;
+
+            .icon {
+                &::after {
+                    background-color: var(--Primary);
+                }
+                &::before {
+                    background-color: var(--Primary);
+                }
+            }
+        }
+    }
+    &.style-2 {
+        padding: 24px 28px;
+        padding-right: 22px;
+        background-color: var(--White);
+        @include transition3();
+        &.active {
+            background-color: var(--Primary);
+        }
+        @include res(md){
+            padding: 24px 15px;
+        }
+    }
+    &.style-3 {
+        background: linear-gradient(
+            103.12deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.01) 100%
+        );
+        padding: 24px 21px 22px 28px;
+        background: linear-gradient(
+            103.12deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.01) 100%
+        );
+        @include transition3();
+        border: 1px solid #ffffff1a;
+        border-radius: 8px;
+        .icon {
+            &::after,
+            &::before {
+                background-color: var(--Primary);
+            }
+        }
+        .accordion-faqs-content {
+            padding-top: 11px;
+        }
+        &.active {
+            border-color: var(--Primary);
+        }
+        &.v2 {
+            border-color: var(--Line);
+            border-radius: 12px;
+            .icon {
+                &::after,
+                &::before {
+                    background-color: var(--Text-primary);
+                }
+            }
+            .accordion-faqs-content {
+                p {
+                    padding-top: 12px;
+                    border-top: 1px solid var(--Line);
+                }
+            }
+            &.active {
+                border-color: var(--Text-primary);
+            }
+        }
+    }
+    &.style-4 {
+        padding: 24px 28px;
+        background-color: var(--White);
+        border-radius: 20px;
+    }
+    &.style-5 {
+        padding: 23px 28px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        background: linear-gradient(
+            103.12deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.01) 100%
+        );
+        @include res(md) {
+            padding: 23px 15px;
+        }
+        .icon {
+            display: block;
+            height: 24px;
+            width: 24px;
+            position: relative;
+            &::after {
+                background-color: var(--White);
+            }
+            &::before {
+                background-color: var(--White);
+            }
+        }
+    }
+    &.style-6 {
+        background-color: var(--Bg-dark);
+        padding: 28px 35px;
+        border-radius: 20px;
+
+        @include res(md) {
+            padding: 28px 15px;
+        }
+        .accordion-faqs-content {
+            padding-top: 20px;
+        }
+        .img-style {
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 20px;
+
+            img {
+                width: 100%;
+                object-fit: cover;
+                min-height: 356px;
+            }
+        }
+
+        i {
+            color: var(--White);
+            font-size: 40px;
+            @include transition4();
+            @include res(lg) {
+                font-size: 24px;
+            }
+        }
+        .accordion-title {
+            width: 100%;
+            &:not(.collapsed) {
+                i {
+                    transform: rotate(-180deg);
+                }
+            }
+        }
+    }
+    &.style-7 {
+        padding: 24px 0 23px;
+        border-bottom: 1px solid var(--Text-secondary);
+        position: relative;
+        &::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--White);
+            @include transition3();
+        }
+        .title {
+            @include res(lg, min) {
+                padding-left: 12px;
+            }
+        }
+        .icon {
+            display: block;
+            height: 24px;
+            width: 24px;
+            position: relative;
+            &::after,
+            &::before {
+                background-color: var(--White);
+                transition: 0.25s ease-in-out;
+            }
+        }
+        &.active {
+            &::after {
+                width: 100%;
+            }
+        }
+    }
+    &.style-8 {
+        padding: 20px 0;
+ 
+        .icon-2 {
+            font-size: 32px;
+            color: var(--White);
+            @include transition3();
+        }
+        .accordion-title {
+            &:not(.collapsed) {
+                .icon-2 {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+    &.style-border {
+        padding: 23px 28px;
+        border: 1px solid var(--Line);
+        border-radius: 16px;
+        @include res(md) {
+            padding: 23px 15px;
+        }
+    }
+}

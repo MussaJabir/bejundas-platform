@@ -30,6 +30,50 @@ class SiteSettings(BaseModel):
     logo = models.ImageField(upload_to="brand/", blank=True)
     favicon = models.ImageField(upload_to="brand/", blank=True)
 
+    # Hero section
+    hero_headline = models.CharField(
+        max_length=300, blank=True, default="Empowering Tanzania With Business Excellence"
+    )
+    hero_subheadline = models.CharField(
+        max_length=500,
+        blank=True,
+        default="Building scalable, high-impact solutions to help you grow with confidence.",
+    )
+    hero_cta_text = models.CharField(max_length=100, blank=True, default="View Our Services")
+
+    # About section
+    about_headline = models.CharField(
+        max_length=300, blank=True, default="We Turn Vision Into Reality"
+    )
+    about_body = models.TextField(
+        blank=True,
+        default="As a trusted corporate partner, we specialize in delivering strategic solutions, combining business insight and innovation to drive results.",
+    )
+    about_video_url = models.URLField(blank=True, default="")
+    years_experience = models.PositiveIntegerField(default=10)
+    projects_count = models.PositiveIntegerField(default=50)
+    clients_count = models.PositiveIntegerField(default=30)
+    satisfaction_pct = models.PositiveIntegerField(default=98)
+
+    # Mission & Vision
+    mission = models.TextField(
+        blank=True,
+        default="To empower Tanzanian businesses through diversified, innovative, and sustainable solutions.",
+    )
+    vision = models.TextField(
+        blank=True, default="To be Tanzania's most trusted and impactful group of companies."
+    )
+
+    # CTA section
+    cta_headline = models.CharField(
+        max_length=300, blank=True, default="Ready To Take Your Business Further?"
+    )
+    cta_body = models.CharField(
+        max_length=500,
+        blank=True,
+        default="Let's discuss how we can help you achieve your business goals.",
+    )
+
     class Meta:
         verbose_name = "Site Settings"
         verbose_name_plural = "Site Settings"

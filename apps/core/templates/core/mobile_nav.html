@@ -1,0 +1,46 @@
+{% load static %}
+<div class="offcanvas offcanvas-end mobile-nav-wrap" tabindex="-1" id="menu-mobile" aria-labelledby="menu-mobile">
+    <div class="offcanvas-header top-nav-mobile">
+        <div class="offcanvas-title">
+            <a href="{% url 'hub:home' %}" class="site-logo">
+                {% if company.logo %}
+                    <img src="{{ company.logo.url }}" alt="{{ company.company_name }}" class="main-logo" width="193" height="44">
+                {% else %}
+                    <span class="h5 fw-7">{{ company.company_name }}</span>
+                {% endif %}
+            </a>
+        </div>
+        <div data-bs-dismiss="offcanvas" class="btn-close-menu">
+            <i class="icon-Close"></i>
+        </div>
+    </div>
+    <div class="offcanvas-body inner-mobile-nav">
+        <div class="mb-body">
+            <ul id="menu-mobile-menu" class="style-1">
+                <li class="menu-item"><a href="{% url 'hub:home' %}" class="item-menu-mobile">Home</a></li>
+                <li class="menu-item"><a href="{% url 'hub:about' %}" class="item-menu-mobile">About Us</a></li>
+                <li class="menu-item"><a href="{% url 'hub:services' %}" class="item-menu-mobile">Services</a></li>
+                <li class="menu-item"><a href="{% url 'hub:news' %}" class="item-menu-mobile">News</a></li>
+                <li class="menu-item"><a href="{% url 'hub:team' %}" class="item-menu-mobile">Our Team</a></li>
+                <li class="menu-item"><a href="{% url 'hub:contact' %}" class="item-menu-mobile">Contact</a></li>
+            </ul>
+            <div class="support">
+                <ul class="mb-info">
+                    {% if company.phone %}<li>Call Us: <span class="number">{{ company.phone }}</span></li>{% endif %}
+                    {% if company.email %}<li>Email: <a href="mailto:{{ company.email }}" class="link">{{ company.email }}</a></li>{% endif %}
+                    <li>
+                        <div class="wrap-social">
+                            <p>Follow us:</p>
+                            <ul class="social">
+                                {% if company.linkedin_url %}<li><a href="{{ company.linkedin_url }}" class="icon-Linkedin" target="_blank" rel="noopener"></a></li>{% endif %}
+                                {% if company.twitter_url %}<li><a href="{{ company.twitter_url }}" class="icon-XLogo-2" target="_blank" rel="noopener"></a></li>{% endif %}
+                                {% if company.instagram_url %}<li><a href="{{ company.instagram_url }}" class="icon-InsLogo-fill" target="_blank" rel="noopener"></a></li>{% endif %}
+                                {% if company.facebook_url %}<li><a href="{{ company.facebook_url }}" class="icon-messenger-logo" target="_blank" rel="noopener"></a></li>{% endif %}
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

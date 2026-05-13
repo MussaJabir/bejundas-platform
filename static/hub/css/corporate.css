@@ -1,0 +1,38 @@
+:root {
+    /* color */
+    --Primary: #94F3B4;
+    --Secondary: #154040;
+    --font-main2: "Red Hat Display", sans-serif;
+    --font-main3: "Manrope", sans-serif;
+    --font-main4: "Rethink Sans", sans-serif;
+    --font-main5: "IBM Plex Sans", sans-serif;
+    --font-main6: "Urbanist", sans-serif;
+}
+
+.font-2 {
+    font-family: var(--font-main2);
+}
+
+.font-3 {
+    font-family: var(--font-main3);
+}
+
+.font-4 {
+    font-family: var(--font-main4);
+}
+
+.font-5 {
+    font-family: var(--font-main5);
+}
+
+.font-6 {
+    font-family: var(--font-main6);
+}
+
+.main-menu .navigation > li:hover::after {
+    color: var(--Secondary);
+}
+
+.tf-box-icon.style-2 {
+    border-top: 1px solid var(--Line);
+}

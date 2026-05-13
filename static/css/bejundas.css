@@ -19,3 +19,10 @@ body {
     background-color: var(--primary);
     border-color: var(--primary);
 }
+
+/* Override Viora's scroll-reveal hide: show header immediately on all pages */
+.header.header-fixed {
+    transform: none;
+    visibility: visible;
+    pointer-events: all;
+}

@@ -1,10 +1,278 @@
-{% extends "core/base.html" %}
+{% extends "hub/base_hub.html" %}
+{% load static %}
+
 {% block title %}{{ company.company_name }} — {{ company.tagline }}{% endblock %}
+{% block meta_description %}{{ company.tagline }}{% endblock %}
+
 {% block content %}
-<section class="py-5">
-    <div class="container">
-        <h1>{{ company.company_name }}</h1>
-        <p class="lead">{{ company.tagline }}</p>
+<!-- Hero Slider -->
+<div class="tf-slider-1 sw-layout">
+    <div class="swiper effect-content-slide" data-effect="fade" data-autoplay="true">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="hero-banner-1">
+                    <div class="thumbs effect-img-zoom">
+                        <img class="img-zoom" width="1920" height="772" loading="eager" decoding="async"
+                            src="{% static 'hub/images/corporate-hero-1.jpg' %}" alt="Bejundas Group">
+                    </div>
+                    <div class="content">
+                        <div class="tf-container">
+                            <div class="wrap-content">
+                                <div class="box-text">
+                                    <h1 class="text_white title effect-item effect-up delay-1">{{ company.hero_headline }}</h1>
+                                    <p class="text_white text-body-2 effect-item effect-up delay-2">{{ company.hero_subheadline }}</p>
+                                </div>
+                                <div class="btn_wrapper effect-item effect-right delay-3">
+                                    <a href="{% url 'hub:services' %}" class="btn_link btn-item btn-hover h6 text_white">
+                                        {{ company.hero_cta_text }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="hero-banner-1">
+                    <div class="thumbs effect-img-zoom">
+                        <img class="img-zoom" width="1920" height="772" loading="eager" decoding="async"
+                            src="{% static 'hub/images/corporate-hero-2.jpg' %}" alt="Bejundas Group">
+                    </div>
+                    <div class="content">
+                        <div class="tf-container">
+                            <div class="wrap-content">
+                                <div class="box-text">
+                                    <h1 class="text_white title effect-item effect-up delay-1">{{ company.hero_headline }}</h1>
+                                    <p class="text_white text-body-2 effect-item effect-up delay-2">{{ company.hero_subheadline }}</p>
+                                </div>
+                                <div class="btn_wrapper effect-item effect-right delay-3">
+                                    <a href="{% url 'hub:services' %}" class="btn_link btn-item btn-hover h6 text_white">
+                                        {{ company.hero_cta_text }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="hero-banner-1">
+                    <div class="thumbs effect-img-zoom">
+                        <img class="img-zoom" width="1920" height="772" loading="eager" decoding="async"
+                            src="{% static 'hub/images/corporate-hero-3.jpg' %}" alt="Bejundas Group">
+                    </div>
+                    <div class="content">
+                        <div class="tf-container">
+                            <div class="wrap-content">
+                                <div class="box-text">
+                                    <h1 class="text_white title effect-item effect-up delay-1">{{ company.hero_headline }}</h1>
+                                    <p class="text_white text-body-2 effect-item effect-up delay-2">{{ company.hero_subheadline }}</p>
+                                </div>
+                                <div class="btn_wrapper effect-item effect-right delay-3">
+                                    <a href="{% url 'hub:services' %}" class="btn_link btn-item btn-hover h6 text_white">
+                                        {{ company.hero_cta_text }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="wrap-sw-button">
+            <div class="sw-button style-1 nav-prev-layout"><i class="icon-CaretLeft"></i></div>
+            <div class="sw-button style-1 nav-next-layout"><i class="icon-CaretRight"></i></div>
+        </div>
+        <div class="sw-dots style-white sw-pagination-layout text-center"></div>
     </div>
-</section>
+</div>
+<!-- End Hero Slider -->
+
+<div class="main-content">
+
+    <!-- About Section -->
+    <div class="section-about-1 tf-spacing-1">
+        <div class="tf-container">
+            {% if company.about_video_url %}
+            <div class="widget-video overflow-hidden section-triger">
+                <div class="parallax-image">
+                    <img data-speed="0.9" class="image-inner" loading="lazy" decoding="async"
+                        width="1410" height="680" src="{% static 'hub/images/bg-video-2.jpg' %}" alt="About Bejundas">
+                    <div class="uncover">
+                        <div class="uncover_slice"></div>
+                        <div class="uncover_slice"></div>
+                        <div class="uncover_slice"></div>
+                    </div>
+                </div>
+                <a href="{{ company.about_video_url }}" class="popup-youtube">
+                    <div class="icon"><i class="icon-Play"></i></div>
+                </a>
+            </div>
+            {% endif %}
+            <div class="heading-section mb_60">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 d-grid gap_16">
+                        <div class="sub text-label text-uppercase split-text effect-up">About Us</div>
+                        <h2 class="title split-text effect-right">{{ company.about_headline }}</h2>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="right">
+                            <p class="text-body-2 text_secondary mb_24 split-text split-lines-transform">{{ company.about_body }}</p>
+                            <div class="wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="2s">
+                                <a href="{% url 'hub:about' %}" class="tf-btn btn-hover-animate-2">
+                                    <span>About Us</span>
+                                    <span class="bg-effect"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="wrap-counter tf-grid-layout lg-col-4 tf-col-2">
+                <div class="counter-item">
+                    <div class="counter h1 font-2">
+                        <span class="numberCounter" data-count="{{ company.years_experience }}" data-duration="700">0</span><span class="sub-counter">+</span>
+                    </div>
+                    <p class="sub-title text-body-2 text_secondary">Years of Experience</p>
+                </div>
+                <div class="counter-item">
+                    <div class="counter h1 font-2">
+                        <span class="numberCounter" data-count="{{ company.projects_count }}" data-duration="700">0</span><span class="sub-counter">+</span>
+                    </div>
+                    <p class="sub-title text-body-2 text_secondary">Successful Projects</p>
+                </div>
+                <div class="counter-item">
+                    <div class="counter h1 font-2">
+                        <span class="numberCounter" data-count="{{ company.clients_count }}" data-duration="700">0</span><span class="sub-counter">+</span>
+                    </div>
+                    <p class="sub-title text-body-2 text_secondary">Corporate Clients</p>
+                </div>
+                <div class="counter-item">
+                    <div class="counter h1 font-2">
+                        <span class="numberCounter" data-count="{{ company.satisfaction_pct }}" data-duration="700">0</span><span class="sub-counter">%</span>
+                    </div>
+                    <p class="sub-title text-body-2 text_secondary">Client Satisfaction</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End About Section -->
+
+    {% if services %}
+    <!-- Services Section -->
+    <div class="section-service-2 tf-spacing-1">
+        <div class="tf-container">
+            <div class="heading-section style-1 mb_60">
+                <div class="row align-items-center">
+                    <div class="col-lg-7 d-grid gap_16">
+                        <div class="sub text-label text-uppercase text_white split-text effect-up">Our Services</div>
+                        <h2 class="title text_white split-text effect-right">Solutions Built For Your Growth</h2>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="wow fadeInRight" data-wow-duration="2s" data-wow-delay="0.1s">
+                            <a href="{% url 'hub:services' %}" class="tf-btn btn-hover-animate-2 btn-bg-primary-3 ms-lg-auto">
+                                <span>View All Services</span>
+                                <span class="bg-effect"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tf-grid-layout lg-col-4 sm-col-2">
+                {% for service in services %}
+                <div class="tf-box-icon style-2 wow fadeIn hover-effect-icon" data-wow-delay="{{ forloop.counter }}00ms">
+                    <div class="icon">
+                        <i class="{{ service.icon|default:'icon-stars-shapes' }}"></i>
+                    </div>
+                    <div class="content">
+                        <h5 class="mb_12 title">
+                            <a href="{% url 'hub:services' %}" class="mb_12 link text_white">{{ service.title }}</a>
+                        </h5>
+                        <p class="text-body-default text_muted">{{ service.summary }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- End Services Section -->
+    {% endif %}
+
+    <!-- CTA Section -->
+    <div class="section-cta tf-spacing-1">
+        <div class="tf-container">
+            <div class="content-inner">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="heading">
+                            <h2 class="title split-text split-lines-rotation-x">{{ company.cta_headline }}</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="content">
+                            <p class="text-body-2 mb_30 split-text split-lines-transform">{{ company.cta_body }}</p>
+                            <div class="wrap-btn d-flex gap_20 flex-wrap wow fadeInUp">
+                                <a href="{% url 'hub:contact' %}" class="tf-btn btn-hover-animate-2 btn-bg-secondary">
+                                    <span>Get In Touch</span>
+                                    <span class="bg-effect"></span>
+                                </a>
+                                {% if company.phone %}
+                                <a href="tel:{{ company.phone }}" class="tf-btn btn-hover-animate-border style-border-2">
+                                    <span>Call Us: {{ company.phone }}</span>
+                                    <span class="bg-effect"></span>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End CTA Section -->
+
+    {% if news %}
+    <!-- News Section -->
+    <div class="section-insights-1 sw-layout tf-spacing-1 pt-0">
+        <div class="heading-section style-default text-center mb_47">
+            <div class="sub text-label text-uppercase split-text effect-up">News & Insights</div>
+            <h2 class="title split-text effect-right">Latest News & Insights</h2>
+        </div>
+        <div class="swiper" data-preview="3" data-screen-xl="4" data-tablet="2" data-mobile="1"
+            data-mobile-sm="2" data-space-lg="20" data-space-md="20" data-space="15">
+            <div class="swiper-wrapper">
+                {% for article in news %}
+                <div class="swiper-slide wow fadeInLeft" data-wow-delay="{{ forloop.counter }}00ms">
+                    <div class="blog-item style-default hover-image-translate">
+                        <a href="{% url 'hub:news_detail' article.slug %}" class="img-style mb_23">
+                            {% if article.cover %}
+                                <img loading="lazy" decoding="async" width="445" height="334"
+                                    src="{{ article.cover.url }}" alt="{{ article.title }}">
+                            {% else %}
+                                <img loading="lazy" decoding="async" width="445" height="334"
+                                    src="{% static 'hub/images/blog-item-8.jpg' %}" alt="{{ article.title }}">
+                            {% endif %}
+                            {% if article.category %}
+                            <div class="tag text-label">{{ article.category }}</div>
+                            {% endif %}
+                        </a>
+                        <div class="content">
+                            <ul class="meta-post mb_12 font-3">
+                                <li class="text-caption-1">{{ article.published_at|date:"F j, Y" }}</li>
+                            </ul>
+                            <h5 class="title line-clamp-2">
+                                <a href="{% url 'hub:news_detail' article.slug %}" class="link hover-line-text">{{ article.title }}</a>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="sw-dots style-1 sw-pagination-layout text-center mt_24"></div>
+        </div>
+    </div>
+    <!-- End News Section -->
+    {% endif %}
+
+</div>
 {% endblock %}

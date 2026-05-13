@@ -1,0 +1,106 @@
+{% extends "hub/base_hub.html" %}
+{% load static widget_tweaks %}
+
+{% block title %}Contact Us — {{ company.company_name }}{% endblock %}
+{% block meta_description %}Contact {{ company.company_name }}. Reach us by phone, email, or the form below.{% endblock %}
+
+{% block content %}
+<div class="main-content">
+
+    <!-- Contact Section -->
+    <div class="section-contact tf-spacing-1">
+        <div class="tf-container">
+            <div class="heading-title mb_48">
+                <div class="row align-items-end">
+                    <div class="col-lg-6">
+                        <div class="sub text-label text-uppercase split-text effect-up mb_16">Contact Us</div>
+                        <h1 class="title split-text effect-right">Got Questions? We'd Love To Hear From You!</h1>
+                    </div>
+                    <div class="col-lg-6">
+                        <p class="text-body-2 text_secondary">We are committed to providing exceptional support and service. Reach out to us and we will get back to you as soon as possible.</p>
+                    </div>
+                </div>
+            </div>
+
+            {% if sent %}
+            <div class="alert-success mb_40 p-4 wow fadeInUp" style="background: rgba(46, 213, 115, 0.1); border: 1px solid rgba(46, 213, 115, 0.3); border-radius: 8px;">
+                <p class="text-body-2 mb-0"><strong>Message sent successfully!</strong> We will get back to you shortly.</p>
+            </div>
+            {% endif %}
+
+            <div class="box-contact">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="box-info">
+                            <div class="heading mb_24">
+                                <h4 class="mb_6">Reach Out To Us</h4>
+                                <p class="text_secondary text-body-default">We're here to assist with any questions, concerns, or inquiries — contact us today!</p>
+                            </div>
+                            <ul class="info-list d-grid gap_20">
+                                {% if company.address %}
+                                <li>
+                                    <div class="icon"><i class="icon-MapPin"></i></div>
+                                    <div class="content">
+                                        <div class="text-caption-1 text_secondary mb_4">Address:</div>
+                                        <p class="h6">{{ company.address }}</p>
+                                    </div>
+                                </li>
+                                {% endif %}
+                                {% if company.phone %}
+                                <li>
+                                    <div class="icon"><i class="icon-PhoneCall"></i></div>
+                                    <div class="content">
+                                        <div class="text-caption-1 text_secondary mb_4">Phone:</div>
+                                        <a href="tel:{{ company.phone }}" class="h6 link">{{ company.phone }}</a>
+                                    </div>
+                                </li>
+                                {% endif %}
+                                {% if company.email %}
+                                <li>
+                                    <div class="icon"><i class="icon-Alarm"></i></div>
+                                    <div class="content">
+                                        <div class="text-caption-1 text_secondary mb_4">Email:</div>
+                                        <a href="mailto:{{ company.email }}" class="h6 link">{{ company.email }}</a>
+                                    </div>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <form class="form-contact" method="post" action="{% url 'hub:contact' %}">
+                            {% csrf_token %}
+                            <div class="heading mb_24">
+                                <h4 class="mb_5">Get In Touch</h4>
+                                <p class="text-body-default text_secondary">Fill in the form and we'll respond promptly.</p>
+                            </div>
+                            <div class="wrap mb_39">
+                                {% for field in form %}
+                                <div class="mb_20">
+                                    {% if field.errors %}
+                                    <div class="text-caption-1" style="color: #e94560; margin-bottom: 4px;">
+                                        {% for error in field.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                    {% endif %}
+                                    {% if field.widget_type == 'textarea' %}
+                                        {% render_field field class="style-line-bottom" rows="4" placeholder=field.label %}
+                                    {% else %}
+                                        {% render_field field class="style-line-bottom" placeholder=field.label %}
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <button class="tf-btn btn-hover-animate-2 btn-bg-1 btn-px-28 w-full" type="submit">
+                                <span>Send Message</span>
+                                <span class="bg-effect"></span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Contact Section -->
+
+</div>
+{% endblock %}

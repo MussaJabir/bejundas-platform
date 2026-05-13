@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 2 Report — Bejundas Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #1a1a2e;
+    --blue:   #2563eb;
+    --blue-md:#1d4ed8;
+    --blue-lt:#dbeafe;
+    --blue-xs:#eff6ff;
+    --green:  #16a34a;
+    --green-lt:#dcfce7;
+    --amber:  #d97706;
+    --amber-lt:#fef3c7;
+    --red:    #dc2626;
+    --red-lt: #fee2e2;
+    --text:   #0f172a;
+    --muted:  #475569;
+    --border: #e2e8f0;
+    --bg:     #f8fafc;
+    --white:  #ffffff;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 48px 0 40px;
+  }
+  .header .inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .logo-chip {
+    background: var(--blue);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+  .date-chip {
+    font-size: 13px;
+    color: #94a3b8;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    margin-bottom: 8px;
+  }
+  .header h1 span { color: #60a5fa; }
+  .header p {
+    font-size: 15px;
+    color: #94a3b8;
+    max-width: 540px;
+  }
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 20px;
+    background: var(--green-lt);
+    color: var(--green);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+  }
+  .status-badge::before {
+    content: '';
+    width: 8px; height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+  }
+
+  /* ── Progress bar ── */
+  .progress-bar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+  }
+  .progress-bar .inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .phase-step {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex: 1;
+  }
+  .phase-step:last-child { flex: none; }
+  .step-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 72px;
+  }
+  .step-circle {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .step-circle.done {
+    background: var(--blue);
+    color: var(--white);
+  }
+  .step-circle.active {
+    background: var(--blue);
+    color: var(--white);
+    box-shadow: 0 0 0 4px var(--blue-lt);
+  }
+  .step-circle.pending {
+    background: var(--border);
+    color: var(--muted);
+  }
+  .step-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .step-label.done  { color: var(--blue); }
+  .step-label.active { color: var(--navy); font-weight: 700; }
+  .step-connector {
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    margin-bottom: 18px;
+  }
+  .step-connector.done { background: var(--blue); }
+
+  /* ── Main content ── */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--blue-xs);
+  }
+  .card-icon {
+    width: 36px; height: 36px;
+    background: var(--blue);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .card-icon svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .card-header h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .card-header .section-num {
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--blue);
+    background: var(--blue-lt);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .card-body { padding: 24px; }
+
+  /* ── Built items ── */
+  .built-list { display: flex; flex-direction: column; gap: 12px; }
+  .built-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: border-color 200ms;
+  }
+  .built-item:hover { border-color: var(--blue); }
+  .built-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--blue);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .built-item strong {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .built-item span {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* ── File tag ── */
+  code {
+    font-size: 12px;
+    background: var(--blue-lt);
+    color: var(--blue-md);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* ── Bug fixes ── */
+  .bug-list { display: flex; flex-direction: column; gap: 12px; }
+  .bug-item {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .bug-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: var(--red-lt);
+    border-bottom: 1px solid #fecaca;
+  }
+  .bug-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--red);
+    flex: 1;
+  }
+  .bug-tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: #fecaca;
+    color: var(--red);
+  }
+  .bug-fix {
+    padding: 12px 16px;
+    background: var(--green-lt);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .bug-fix-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--green);
+    white-space: nowrap;
+    margin-top: 1px;
+  }
+  .bug-fix p {
+    font-size: 13px;
+    color: #15803d;
+    line-height: 1.5;
+  }
+
+  /* ── Test results ── */
+  .test-summary {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 20px;
+    background: var(--green-lt);
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  .test-score {
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--green);
+    line-height: 1;
+  }
+  .test-score span { font-size: 16px; font-weight: 500; color: #15803d; }
+  .test-label { font-size: 14px; color: #15803d; font-weight: 500; }
+  .linter-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .linter-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    background: var(--green-lt);
+    color: var(--green);
+    border: 1px solid #bbf7d0;
+  }
+  .linter-badge svg { width: 14px; height: 14px; }
+  .test-list { display: flex; flex-direction: column; gap: 8px; }
+  .test-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+  }
+  .test-item .app-tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: var(--blue-lt);
+    color: var(--blue-md);
+    flex-shrink: 0;
+    min-width: 52px;
+    text-align: center;
+  }
+  .test-item .check {
+    margin-left: auto;
+    color: var(--green);
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  /* ── Running status ── */
+  .status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .status-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .status-item.full { grid-column: 1 / -1; }
+  .status-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+  .status-dot.green  { background: var(--green); }
+  .status-dot.amber  { background: var(--amber); }
+  .status-dot.blue   { background: var(--blue); }
+  .status-item strong {
+    font-size: 13px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .status-item span {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ── Pages built grid ── */
+  .pages-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .page-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-align: center;
+    background: var(--blue-xs);
+  }
+  .page-chip .page-route {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--blue-md);
+    font-family: 'Courier New', monospace;
+    background: var(--blue-lt);
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+  .page-chip .page-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .page-chip .page-check {
+    font-size: 13px;
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  /* ── Phase 3 preview ── */
+  .preview-list { display: flex; flex-direction: column; gap: 10px; }
+  .preview-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .preview-num {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--blue-lt);
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px 48px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .footer strong { color: var(--navy); }
+
+  @media (max-width: 600px) {
+    .status-grid { grid-template-columns: 1fr; }
+    .status-item.full { grid-column: 1; }
+    .pages-grid { grid-template-columns: repeat(2, 1fr); }
+    .header h1 { font-size: 24px; }
+    .test-summary { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .progress-bar .inner { gap: 0; overflow-x: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="header">
+  <div class="inner">
+    <div class="header-meta">
+      <span class="logo-chip">Bejundas Platform</span>
+      <span class="date-chip">May 13, 2026</span>
+    </div>
+    <h1>Phase 2 — <span>Hub Site</span></h1>
+    <p>All six hub pages ported from Viora demo-corporate, wired to SiteSettings, and pushed to GitHub. Visual layer is live.</p>
+    <div class="status-badge">COMPLETE</div>
+  </div>
+</div>
+
+<!-- ── Phase Progress ── -->
+<div class="progress-bar">
+  <div class="inner">
+    <div class="phase-step">
+      <div class="step-box">
+        <div class="step-circle done">&#10003;</div>
+        <div class="step-label done">Phase 0</div>
+      </div>
+      <div class="step-connector done"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box">
+        <div class="step-circle done">&#10003;</div>
+        <div class="step-label done">Phase 1</div>
+      </div>
+      <div class="step-connector done"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box">
+        <div class="step-circle active">&#10003;</div>
+        <div class="step-label active">Phase 2</div>
+      </div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box">
+        <div class="step-circle pending">3</div>
+        <div class="step-label">Phase 3</div>
+      </div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box">
+        <div class="step-circle pending">4</div>
+        <div class="step-label">Phase 4</div>
+      </div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box">
+        <div class="step-circle pending">5</div>
+        <div class="step-label">Phase 5</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Main ── -->
+<main>
+
+  <!-- Section 1: What Was Built -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      </div>
+      <h2>What Was Built</h2>
+      <span class="section-num">01</span>
+    </div>
+    <div class="card-body">
+
+      <!-- Pages grid -->
+      <div style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">7 Hub Pages Ported</div>
+      <div class="pages-grid">
+        <div class="page-chip">
+          <span class="page-route">/</span>
+          <span class="page-name">Home</span>
+          <span class="page-check">&#10003;</span>
+        </div>
+        <div class="page-chip">
+          <span class="page-route">/about</span>
+          <span class="page-name">About</span>
+          <span class="page-check">&#10003;</span>
+        </div>
+        <div class="page-chip">
+          <span class="page-route">/services</span>
+          <span class="page-name">Services</span>
+          <span class="page-check">&#10003;</span>
+        </div>
+        <div class="page-chip">
+          <span class="page-route">/news</span>
+          <span class="page-name">News</span>
+          <span class="page-check">&#10003;</span>
+        </div>
+        <div class="page-chip">
+          <span class="page-route">/news/&lt;slug&gt;</span>
+          <span class="page-name">News Detail</span>
+          <span class="page-check">&#10003;</span>
+        </div>
+        <div class="page-chip">
+          <span class="page-route">/team</span>
+          <span class="page-name">Team</span>
+          <span class="page-check">&#10003;</span>
+        </div>
+        <div class="page-chip" style="grid-column: 1 / -1; flex-direction: row; justify-content: center; gap: 12px;">
+          <span class="page-route">/contact</span>
+          <span class="page-name">Contact</span>
+          <span class="page-check">&#10003;</span>
+        </div>
+      </div>
+
+      <div class="built-list">
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>hub/base_hub.html — Hub Base Template</strong>
+            <span>New intermediate base that loads <code>corporate.css</code> for all hub pages without polluting <code>core/base.html</code>, which is also used by the Coming Soon system. All hub templates extend this instead of core/base directly.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Viora demo-corporate — Full Template Port</strong>
+            <span>All 7 pages ported by hand from <code>../viora/demo-corporate/</code> HTML source: hero slider, about counters, services grid, news carousel, team grid, full contact form. No demo HTML committed to the repo.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>SiteSettings — 14 New Fields + Migration</strong>
+            <span><code>hero_headline</code>, <code>hero_subheadline</code>, <code>hero_cta_text</code>, <code>about_headline</code>, <code>about_body</code>, <code>about_video_url</code>, <code>years_experience</code>, <code>projects_count</code>, <code>clients_count</code>, <code>satisfaction_pct</code>, <code>mission</code>, <code>vision</code>, <code>cta_headline</code>, <code>cta_body</code>. Migration <code>0002</code> applied.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>core/footer.html — Full Viora Footer</strong>
+            <span>Replaced Bootstrap placeholder with full 3-column Viora footer: logo + tagline, dynamic services list (via <code>footer_services</code> context), Quick Links, address / phone / email / social icons (all conditional on <code>{{ company }}</code> fields). Copyright via <code>{% now "Y" %}</code>.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>context_processors.py — footer_services Injected</strong>
+            <span>Added <code>footer_services</code> to <code>company_info()</code> with a deferred import of <code>apps.hub.models.Service</code> inside the function body to avoid circular imports. All pages now receive up to 6 active services for the footer without per-view context changes.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>static/css/bejundas.css — Header Visibility Override</strong>
+            <span>Added <code>transform: none; visibility: visible; pointer-events: all;</code> on <code>.header.header-fixed</code> to override Viora's scroll-reveal hide behaviour, ensuring the header is always visible on page load regardless of scroll position.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>.gitignore — Mapbox Token Files Excluded</strong>
+            <span><code>static/viora/js/map.js</code> and <code>map.min.js</code> contain a Mapbox demo API token. GitHub push protection blocked the commit. Both files added to <code>.gitignore</code> and removed from tracking. Not required at runtime.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Bugs Fixed -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <h2>Bugs Found &amp; Fixed</h2>
+      <span class="section-num">02</span>
+    </div>
+    <div class="card-body">
+      <div class="bug-list">
+
+        <div class="bug-item">
+          <div class="bug-head">
+            <span class="bug-label">Doubled nav labels — "Home Home / About About"</span>
+            <span class="bug-tag">Visual</span>
+          </div>
+          <div class="bug-fix">
+            <span class="bug-fix-label">Fix</span>
+            <p>Viora's navbar uses two <code>&lt;span class="text" data-splitting&gt;</code> per link for a JS character-animation hover effect. Without <code>splitting.js</code> initialising, both spans rendered simultaneously. Removed the duplicate spans — each nav link now has a single plain text anchor. <code>class="text-menu"</code> added to all <code>&lt;li&gt;</code> elements (required for Viora nav link CSS rules).</p>
+          </div>
+        </div>
+
+        <div class="bug-item">
+          <div class="bug-head">
+            <span class="bug-label">Header links invisible on first load (before scroll)</span>
+            <span class="bug-tag">CSS</span>
+          </div>
+          <div class="bug-fix">
+            <span class="bug-fix-label">Fix</span>
+            <p>Root cause: Viora's <code>.header.header-fixed</code> starts with <code>transform: translateY(-100%); visibility: hidden;</code>. JS only adds <code>.is-fixed</code> (revealing the header) after 300px of scroll. Override added to <code>bejundas.css</code>: <code>transform: none; visibility: visible; pointer-events: all;</code> — permanently visible on all pages.</p>
+          </div>
+        </div>
+
+        <div class="bug-item">
+          <div class="bug-head">
+            <span class="bug-label">Footer completely invisible — white text on white background</span>
+            <span class="bug-tag">CSS Variable</span>
+          </div>
+          <div class="bug-fix">
+            <span class="bug-fix-label">Fix</span>
+            <p>Footer uses <code>background-color: var(--Secondary)</code> where <code>--Secondary: #154040</code> is defined in <code>corporate.css</code>, not in global <code>styles.css</code>. Without that file loaded the footer background was transparent. Fix: created <code>hub/base_hub.html</code> which loads <code>corporate.css</code> via a <code>{% block demo_css %}</code> block, and updated all hub templates to extend this instead of <code>core/base.html</code> directly.</p>
+          </div>
+        </div>
+
+        <div class="bug-item">
+          <div class="bug-head">
+            <span class="bug-label">{% extends %} not first tag — Django TemplateSyntaxError</span>
+            <span class="bug-tag">Django</span>
+          </div>
+          <div class="bug-fix">
+            <span class="bug-fix-label">Fix</span>
+            <p>All 7 hub templates were initially written with <code>{% load static %}</code> on line 1 and <code>{% extends %}</code> on line 2. Django requires <code>{% extends %}</code> to be the absolute first tag in any template. Fixed by swapping tag order in all affected files.</p>
+          </div>
+        </div>
+
+        <div class="bug-item">
+          <div class="bug-head">
+            <span class="bug-label">service.name referenced — field is service.title</span>
+            <span class="bug-tag">Template</span>
+          </div>
+          <div class="bug-fix">
+            <span class="bug-fix-label">Fix</span>
+            <p>Home template and footer both referenced <code>{{ service.name }}</code> but the <code>Service</code> model field is <code>title</code>. Fixed in both <code>home.html</code> and <code>footer.html</code> by replacing with <code>{{ service.title }}</code>.</p>
+          </div>
+        </div>
+
+        <div class="bug-item">
+          <div class="bug-head">
+            <span class="bug-label">GitHub push blocked — Mapbox API token in map.js</span>
+            <span class="bug-tag">Secret Scan</span>
+          </div>
+          <div class="bug-fix">
+            <span class="bug-fix-label">Fix</span>
+            <p>GitHub push protection detected a Mapbox demo token in <code>static/viora/js/map.js</code>. Used <code>git reset --soft HEAD~1</code> + <code>git restore --staged</code> to remove both map files from the commit without losing other changes. Files added to <code>.gitignore</code>. Recommitted and pushed cleanly.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Test Results -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h2>Test Results</h2>
+      <span class="section-num">03</span>
+    </div>
+    <div class="card-body">
+      <div class="test-summary">
+        <div>
+          <div class="test-score">8<span>/8</span></div>
+          <div class="test-label">Tests passing</div>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:600;color:#15803d;margin-bottom:8px;">All checks clean — no regressions from Phase 1</div>
+          <div class="linter-row">
+            <div class="linter-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              ruff
+            </div>
+            <div class="linter-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              black
+            </div>
+            <div class="linter-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              django check
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="test-list">
+        <div class="test-item">
+          <span class="app-tag">core</span>
+          SiteSettings singleton creation
+          <span class="check">&#10003;</span>
+        </div>
+        <div class="test-item">
+          <span class="app-tag">core</span>
+          SiteSettings returns same instance
+          <span class="check">&#10003;</span>
+        </div>
+        <div class="test-item">
+          <span class="app-tag">core</span>
+          SiteSettings __str__ returns company name
+          <span class="check">&#10003;</span>
+        </div>
+        <div class="test-item">
+          <span class="app-tag">hub</span>
+          Home view returns HTTP 200
+          <span class="check">&#10003;</span>
+        </div>
+        <div class="test-item">
+          <span class="app-tag">hub</span>
+          Home view uses correct template
+          <span class="check">&#10003;</span>
+        </div>
+        <div class="test-item">
+          <span class="app-tag">leads</span>
+          VerticalPlaceholder __str__ returns display name
+          <span class="check">&#10003;</span>
+        </div>
+        <div class="test-item">
+          <span class="app-tag">leads</span>
+          Unique vertical constraint enforced
+          <span class="check">&#10003;</span>
+        </div>
+        <div class="test-item">
+          <span class="app-tag">leads</span>
+          Lead __str__ returns name + vertical
+          <span class="check">&#10003;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: What's Running -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <h2>What's Running Now</h2>
+      <span class="section-num">04</span>
+    </div>
+    <div class="card-body">
+      <div class="status-grid">
+        <div class="status-item">
+          <div class="status-dot green"></div>
+          <div>
+            <strong>Dev Server</strong>
+            <span>Running at <code>http://127.0.0.1:8000</code> — all 7 pages rendering with full Viora styling</span>
+          </div>
+        </div>
+        <div class="status-item">
+          <div class="status-dot green"></div>
+          <div>
+            <strong>Visual Layer</strong>
+            <span>Viora <code>demo-corporate</code> assets live — Bootstrap, Swiper, fonts, icons, animations</span>
+          </div>
+        </div>
+        <div class="status-item">
+          <div class="status-dot green"></div>
+          <div>
+            <strong>Header &amp; Footer</strong>
+            <span>Always visible — CSS variable chain resolved, Viora scroll-reveal override applied</span>
+          </div>
+        </div>
+        <div class="status-item">
+          <div class="status-dot green"></div>
+          <div>
+            <strong>Admin Panel</strong>
+            <span>14 new <code>SiteSettings</code> fields editable — all content admin-manageable</span>
+          </div>
+        </div>
+        <div class="status-item">
+          <div class="status-dot green"></div>
+          <div>
+            <strong>Contact Form</strong>
+            <span>CSRF-protected, <code>widget_tweaks</code> styled, email notification on submit, success state shown</span>
+          </div>
+        </div>
+        <div class="status-item">
+          <div class="status-dot amber"></div>
+          <div>
+            <strong>Real Content</strong>
+            <span>SiteSettings seeded with placeholder copy — awaiting client brand content for Phase 5</span>
+          </div>
+        </div>
+        <div class="status-item full">
+          <div class="status-dot blue"></div>
+          <div>
+            <strong>GitHub — Branch Pushed</strong>
+            <span>All Phase 2 work on <code>feature/phase-2-hub-site</code> at commit <code>edc2f42</code> — map.js excluded, CI clean</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 5: Phase 3 Preview -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+      <h2>Phase 3 — What's Next</h2>
+      <span class="section-num">05</span>
+    </div>
+    <div class="card-body">
+      <div class="preview-list">
+        <div class="preview-item">
+          <div class="preview-num">1</div>
+          Build the <strong>Coming Soon system</strong> — one shared template themed per subdomain via <code>VerticalPlaceholder</code> admin records
+        </div>
+        <div class="preview-item">
+          <div class="preview-num">2</div>
+          Seed 5 <code>VerticalPlaceholder</code> rows — financial, construction, energies, farming, investments — with default brand colors and holding copy
+        </div>
+        <div class="preview-item">
+          <div class="preview-num">3</div>
+          <code>coming_soon</code> view reads <code>request.get_host()</code>, fetches matching placeholder, renders themed page with CSS variables injected from the record
+        </div>
+        <div class="preview-item">
+          <div class="preview-num">4</div>
+          <code>LeadForm</code> captures visitor name, email, phone — vertical set automatically from host — email notification fired on submit
+        </div>
+        <div class="preview-item">
+          <div class="preview-num">5</div>
+          Tests for view, form, lead creation, and vertical theming — CI must stay green
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="footer">
+  <strong>Bejundas Platform</strong> &nbsp;·&nbsp; Phase 2 complete &nbsp;·&nbsp; Branch: <code style="font-size:11px;background:#e2e8f0;padding:1px 5px;border-radius:3px;">feature/phase-2-hub-site</code> &nbsp;·&nbsp; Commit: <code style="font-size:11px;background:#e2e8f0;padding:1px 5px;border-radius:3px;">edc2f42</code>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+{% extends "hub/base_hub.html" %}
+{% load static %}
+
+{% block title %}News & Insights — {{ company.company_name }}{% endblock %}
+{% block meta_description %}Latest news and insights from {{ company.company_name }}.{% endblock %}
+
+{% block content %}
+<div class="main-content">
+
+    <!-- News Section -->
+    <div class="section-insights-1 tf-spacing-1">
+        <div class="tf-container">
+            <div class="heading-section style-default mb_60">
+                <div class="row align-items-center">
+                    <div class="col-lg-7 d-grid gap_16">
+                        <div class="sub text-label text-uppercase split-text effect-up">News & Insights</div>
+                        <h1 class="title split-text effect-right">Latest News & Insights</h1>
+                    </div>
+                </div>
+            </div>
+
+            {% if news_list %}
+            <div class="tf-grid-layout lg-col-3 sm-col-2 gap_20">
+                {% for article in news_list %}
+                <div class="blog-item style-default hover-image-translate wow fadeInUp" data-wow-delay="{{ forloop.counter }}00ms">
+                    <a href="{% url 'hub:news_detail' article.slug %}" class="img-style mb_23">
+                        {% if article.cover %}
+                            <img loading="lazy" decoding="async" width="445" height="334"
+                                src="{{ article.cover.url }}" alt="{{ article.title }}">
+                        {% else %}
+                            <img loading="lazy" decoding="async" width="445" height="334"
+                                src="{% static 'hub/images/blog-item-8.jpg' %}" alt="{{ article.title }}">
+                        {% endif %}
+                    </a>
+                    <div class="content">
+                        <ul class="meta-post mb_12 font-3">
+                            <li class="text-caption-1">{{ article.published_at|date:"F j, Y" }}</li>
+                        </ul>
+                        <h5 class="title line-clamp-2">
+                            <a href="{% url 'hub:news_detail' article.slug %}" class="link hover-line-text">{{ article.title }}</a>
+                        </h5>
+                        {% if article.excerpt %}
+                        <p class="text-body-default text_secondary mt_12">{{ article.excerpt|truncatechars:120 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <p class="text-body-2 text_secondary">No news articles published yet. Check back soon.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <!-- End News Section -->
+
+</div>
+{% endblock %}

@@ -5,32 +5,45 @@ from unfold.admin import ModelAdmin
 from apps.core.models import SiteSettings
 
 
-class SiteSettingsProxyAdmin(ModelAdmin):
+@admin.register(SiteSettings)
+class SiteSettingsAdmin(ModelAdmin):
     def changelist_view(self, request, extra_context=None):
         return redirect("admin:core_sitesettings_change", SiteSettings.get().pk)
 
-
-@admin.register(SiteSettings)
-class SiteSettingsAdmin(ModelAdmin):
     fieldsets = (
         (
             "Identity",
+            {"fields": ("company_name", "tagline", "logo", "favicon")},
+        ),
+        (
+            "Hero Section",
+            {"fields": ("hero_headline", "hero_subheadline", "hero_cta_text")},
+        ),
+        (
+            "About Section",
             {
                 "fields": (
-                    "company_name",
-                    "tagline",
-                    "logo",
-                    "favicon",
+                    "about_headline",
+                    "about_body",
+                    "about_video_url",
+                    "years_experience",
+                    "projects_count",
+                    "clients_count",
+                    "satisfaction_pct",
                 )
             },
         ),
         (
-            "About",
-            {"fields": ("about_short",)},
+            "Mission & Vision",
+            {"fields": ("mission", "vision")},
+        ),
+        (
+            "CTA Section",
+            {"fields": ("cta_headline", "cta_body")},
         ),
         (
             "Contact",
-            {"fields": ("phone", "email", "address")},
+            {"fields": ("phone", "email", "address", "about_short")},
         ),
         (
             "Social Media",

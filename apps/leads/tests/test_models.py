@@ -6,14 +6,12 @@ from apps.leads.models import Lead, VerticalPlaceholder
 @pytest.mark.django_db
 class TestVerticalPlaceholder:
     def test_str(self):
-        vp = VerticalPlaceholder.objects.create(
-            vertical="financial",
-            headline="Coming Soon",
-        )
+        # Seeded by migration — fetch rather than create
+        vp = VerticalPlaceholder.objects.get(vertical="financial")
         assert str(vp) == "Financial Services"
 
     def test_unique_vertical(self):
-        VerticalPlaceholder.objects.create(vertical="farming")
+        # "farming" already exists from the seed migration; trying to create a second must fail
         with pytest.raises(Exception):  # noqa: B017
             VerticalPlaceholder.objects.create(vertical="farming")
 

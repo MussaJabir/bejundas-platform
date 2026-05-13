@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}Coming Soon — Bejundas{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Coming soon. Leave your details to be notified at launch.{% endblock %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'viora/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'viora/css/animate.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'viora/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'viora/font/fonts.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'viora/icons/icomoon/style.css' %}">
+
+    {% if company.favicon %}
+        <link rel="shortcut icon" href="{{ company.favicon.url }}">
+    {% else %}
+        <link rel="shortcut icon" href="{% static 'viora/favicon.svg' %}">
+    {% endif %}
+
+    <link rel="stylesheet" href="{% static 'css/bejundas.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+<div id="wrapper">
+    <div id="page">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+<script src="{% static 'viora/js/jquery.min.js' %}"></script>
+<script src="{% static 'viora/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'viora/js/wow.min.js' %}"></script>
+<script>new WOW().init();</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

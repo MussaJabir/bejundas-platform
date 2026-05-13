@@ -1,6 +1,10 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/bejundas/bejundas_platform
-    - /bin/cp -R . $DEPLOYPATH
-    - cd $DEPLOYPATH && touch tmp/restart.txt
+    - >
+      source "$(find "$HOME/virtualenv/$(basename $PWD)" -name activate -path "*/bin/activate" 2>/dev/null | head -1)"
+      && pip install -r requirements.txt --quiet
+      && python manage.py migrate --noinput
+      && python manage.py collectstatic --noinput --clear
+      && mkdir -p tmp
+      && touch tmp/restart.txt

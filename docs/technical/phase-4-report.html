@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 4 Report — Bejundas Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #1a1a2e;
+    --blue:   #2563eb;
+    --blue-md:#1d4ed8;
+    --blue-lt:#dbeafe;
+    --blue-xs:#eff6ff;
+    --green:  #16a34a;
+    --green-lt:#dcfce7;
+    --amber:  #d97706;
+    --amber-lt:#fef3c7;
+    --red:    #dc2626;
+    --red-lt: #fee2e2;
+    --text:   #0f172a;
+    --muted:  #475569;
+    --border: #e2e8f0;
+    --bg:     #f8fafc;
+    --white:  #ffffff;
+  }
+
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+
+  .header { background: var(--navy); color: var(--white); padding: 48px 0 40px; }
+  .header .inner { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+  .header-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .logo-chip { background: var(--blue); color: var(--white); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; }
+  .date-chip { font-size: 13px; color: #94a3b8; }
+  .header h1 { font-size: 32px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 8px; }
+  .header h1 span { color: #60a5fa; }
+  .header p { font-size: 15px; color: #94a3b8; max-width: 560px; }
+  .status-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; background: var(--green-lt); color: var(--green); font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 20px; }
+  .status-badge::before { content: ''; width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
+
+  .progress-bar { background: var(--white); border-bottom: 1px solid var(--border); padding: 20px 0; }
+  .progress-bar .inner { max-width: 860px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; }
+  .phase-step { display: flex; align-items: center; flex: 1; }
+  .phase-step:last-child { flex: none; }
+  .step-box { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 72px; }
+  .step-circle { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+  .step-circle.done { background: var(--blue); color: var(--white); }
+  .step-circle.active { background: var(--blue); color: var(--white); box-shadow: 0 0 0 4px var(--blue-lt); }
+  .step-circle.pending { background: var(--border); color: var(--muted); }
+  .step-label { font-size: 11px; font-weight: 500; color: var(--muted); white-space: nowrap; }
+  .step-label.done { color: var(--blue); }
+  .step-label.active { color: var(--navy); font-weight: 700; }
+  .step-connector { flex: 1; height: 2px; background: var(--border); margin-bottom: 18px; }
+  .step-connector.done { background: var(--blue); }
+
+  main { max-width: 860px; margin: 0 auto; padding: 40px 24px 64px; display: flex; flex-direction: column; gap: 24px; }
+
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .card-header { display: flex; align-items: center; gap: 12px; padding: 20px 24px; border-bottom: 1px solid var(--border); background: var(--blue-xs); }
+  .card-icon { width: 36px; height: 36px; background: var(--blue); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .card-icon svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .card-header h2 { font-size: 16px; font-weight: 700; color: var(--navy); }
+  .card-header .section-num { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--blue); background: var(--blue-lt); padding: 2px 8px; border-radius: 4px; }
+  .card-body { padding: 24px; }
+
+  code { font-size: 12px; background: var(--blue-lt); color: var(--blue-md); padding: 1px 6px; border-radius: 4px; font-family: 'Courier New', monospace; }
+  pre { background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 16px 20px; font-size: 12px; line-height: 1.7; overflow-x: auto; font-family: 'Courier New', monospace; margin: 12px 0; }
+  pre .c { color: #64748b; }
+  pre .k { color: #60a5fa; }
+  pre .s { color: #86efac; }
+
+  .built-list { display: flex; flex-direction: column; gap: 12px; }
+  .built-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 8px; transition: border-color 200ms; }
+  .built-item:hover { border-color: var(--blue); }
+  .built-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); margin-top: 6px; flex-shrink: 0; }
+  .built-item strong { font-size: 14px; font-weight: 600; color: var(--navy); display: block; margin-bottom: 2px; }
+  .built-item span { font-size: 13px; color: var(--muted); }
+
+  .flow-diagram { display: flex; align-items: center; gap: 0; flex-wrap: wrap; margin: 16px 0; }
+  .flow-box { background: var(--blue-xs); border: 1px solid var(--blue-lt); border-radius: 8px; padding: 10px 16px; font-size: 13px; font-weight: 600; color: var(--navy); text-align: center; min-width: 100px; }
+  .flow-box.server { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
+  .flow-arrow { font-size: 18px; color: var(--muted); padding: 0 8px; }
+
+  .bug-list { display: flex; flex-direction: column; gap: 12px; }
+  .bug-item { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .bug-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--red-lt); border-bottom: 1px solid #fecaca; }
+  .bug-tag { font-size: 11px; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: .06em; }
+  .bug-title { font-size: 14px; font-weight: 600; color: var(--red); }
+  .bug-body { padding: 14px 16px; }
+  .bug-body p { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .bug-body strong { color: var(--navy); }
+  .fix-tag { display: inline-block; font-size: 11px; font-weight: 700; color: var(--green); background: var(--green-lt); padding: 2px 8px; border-radius: 4px; margin-top: 6px; }
+
+  .test-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .test-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; }
+  .test-check { width: 20px; height: 20px; background: var(--green-lt); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .test-check svg { width: 11px; height: 11px; stroke: var(--green); stroke-width: 3; fill: none; }
+  .test-item span { font-size: 13px; color: var(--muted); }
+
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+  .stat-box { background: var(--blue-xs); border: 1px solid var(--blue-lt); border-radius: 10px; padding: 16px; text-align: center; }
+  .stat-box .num { font-size: 28px; font-weight: 700; color: var(--blue); line-height: 1; margin-bottom: 4px; }
+  .stat-box .lbl { font-size: 12px; color: var(--muted); font-weight: 500; }
+
+  .phase5-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .phase5-item { display: flex; align-items: flex-start; gap: 10px; padding: 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); }
+  .phase5-num { width: 24px; height: 24px; background: var(--navy); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .phase5-item strong { font-size: 13px; font-weight: 600; color: var(--navy); display: block; margin-bottom: 2px; }
+  .phase5-item span { font-size: 12px; color: var(--muted); }
+
+  .file-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .file-table th { text-align: left; padding: 10px 14px; background: var(--blue-xs); color: var(--navy); font-weight: 600; font-size: 12px; border-bottom: 1px solid var(--border); }
+  .file-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--muted); vertical-align: top; }
+  .file-table tr:last-child td { border-bottom: none; }
+  .file-table td:first-child { font-family: 'Courier New', monospace; font-size: 12px; color: var(--blue-md); }
+
+  @media (max-width: 600px) {
+    .test-grid, .phase5-grid, .stat-row { grid-template-columns: 1fr; }
+    .flow-diagram { gap: 4px; }
+    .header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="inner">
+    <div class="header-meta">
+      <span class="logo-chip">Bejundas Platform</span>
+      <span class="date-chip">May 14, 2026</span>
+    </div>
+    <h1>Phase 4 — <span>Webhook Deploy & First Production Push</span></h1>
+    <p>GitHub webhook integration, cPanel Passenger configuration, database seeding, and first live production deployment.</p>
+    <div class="status-badge">COMPLETE</div>
+  </div>
+</div>
+
+<div class="progress-bar">
+  <div class="inner">
+    <div class="phase-step">
+      <div class="step-box">
+        <div class="step-circle done">0</div>
+        <div class="step-label done">Infrastructure</div>
+      </div>
+      <div class="step-connector done"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box">
+        <div class="step-circle done">1</div>
+        <div class="step-label done">Scaffold</div>
+      </div>
+      <div class="step-connector done"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box">
+        <div class="step-circle done">2</div>
+        <div class="step-label done">Hub Site</div>
+      </div>
+      <div class="step-connector done"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box">
+        <div class="step-circle done">3</div>
+        <div class="step-label done">Coming Soon</div>
+      </div>
+      <div class="step-connector done"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box">
+        <div class="step-circle active">4</div>
+        <div class="step-label active">Deploy</div>
+      </div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box">
+        <div class="step-circle pending">5</div>
+        <div class="step-label">Polish</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- Section 1 — What Was Built -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      </div>
+      <h2>What Was Built</h2>
+      <span class="section-num">§1</span>
+    </div>
+    <div class="card-body">
+      <div class="built-list">
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>scripts/deploy.sh — cPanel virtualenv detection</strong>
+            <span>Rewrote <code>_activate_venv()</code> to dynamically find the cPanel virtualenv at <code>~/virtualenv/{app_name}/{python_version}/bin/activate</code> using <code>find</code>, with fallback to local <code>venv/</code> for dev. Eliminates the hardcoded path that broke on cPanel shared hosting.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>.cpanel.yml — Initial deployment tasks</strong>
+            <span>Replaced the placeholder <code>cp -R</code> approach with real setup tasks: activate virtualenv → <code>pip install -r requirements.txt</code> → <code>migrate --noinput</code> → <code>collectstatic --noinput --clear</code> → touch <code>tmp/restart.txt</code>. Triggered by cPanel Git Version Control "Deploy HEAD Commit".</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>config/__init__.py — PyMySQL compatibility shim</strong>
+            <span>Added <code>import pymysql; pymysql.install_as_MySQLdb()</code>. Switched <code>requirements.txt</code> from <code>mysqlclient</code> (requires compiled C headers unavailable on cPanel shared hosting) to <code>PyMySQL</code> (pure Python). Transparent drop-in for Django's MySQL backend.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>apps/hub/models.py — Service.url field</strong>
+            <span>Added <code>url = models.URLField(max_length=300, blank=True, default="")</code> to the <code>Service</code> model. Allows each service card on home and services pages to link directly to its vertical subdomain.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>apps/hub/migrations/0002_service_url.py</strong>
+            <span>Schema migration adding the <code>url</code> column to <code>hub_service</code> table.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>apps/hub/migrations/0003_seed_services.py</strong>
+            <span>Data migration seeding 5 <code>Service</code> rows — Financial, Construction, Energies, Farming, Investments — each with title, summary, icon, subdomain URL, and display order. Uses <code>get_or_create</code> for idempotency. Reversible via <code>unseed_services</code>.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>scripts/create_admin.py — Superuser bootstrap</strong>
+            <span>Standalone script runnable via cPanel Python App "Execute python script" field. Creates the initial <code>admin</code> superuser non-interactively. Skips creation if user already exists. Prints credentials to output with a change-password reminder.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>home.html + services.html — Dynamic service links</strong>
+            <span>Updated service card anchor tags to use <code>{% if service.url %}{{ service.url }}{% else %}{% url 'hub:services' %}{% endif %}</code>. Each vertical card now links to its own subdomain when a URL is set.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2 — Deploy Flow -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <h2>Deploy Flow</h2>
+      <span class="section-num">§2</span>
+    </div>
+    <div class="card-body">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Two separate deploy paths are in place — initial setup and all subsequent deploys:</p>
+
+      <p style="font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Initial Deploy (one-time)</p>
+      <div class="flow-diagram" style="margin-bottom:20px;">
+        <div class="flow-box">cPanel<br>Git Version Control</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">.cpanel.yml<br>executes</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box server">pip install<br>migrate<br>collectstatic</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box server">Passenger<br>restart</div>
+      </div>
+
+      <p style="font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Subsequent Deploys (webhook-triggered)</p>
+      <div class="flow-diagram">
+        <div class="flow-box">Merge to<br>main</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">GitHub<br>webhook</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">apps/core/<br>webhook.py</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">scripts/<br>deploy.sh</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box server">git pull<br>pip install<br>migrate<br>restart</div>
+      </div>
+
+      <p style="font-size:13px;color:var(--muted);margin-top:16px;">Webhook endpoint: <code>POST /deploy/webhook/</code> — HMAC-SHA256 validated against <code>GITHUB_WEBHOOK_SECRET</code>. Deploy runs in a detached subprocess so the HTTP response returns immediately (GitHub's 10s timeout is respected). Log written to <code>/tmp/bjp_deploy.log</code>.</p>
+    </div>
+  </div>
+
+  <!-- Section 3 — Bugs Fixed -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <h2>Bugs Found & Fixed During Deploy</h2>
+      <span class="section-num">§3</span>
+    </div>
+    <div class="card-body">
+      <div class="bug-list">
+
+        <div class="bug-item">
+          <div class="bug-header">
+            <span class="bug-tag">Bug 1</span>
+            <span class="bug-title">public_html/index.php served instead of Django app</span>
+          </div>
+          <div class="bug-body">
+            <p><strong>Root cause:</strong> Apache serves static files before Passenger. The default cPanel <code>index.php</code> in <code>public_html/</code> satisfied the request before Passenger could handle it.</p>
+            <p><strong>Fix:</strong> Deleted <code>public_html/index.php</code>. Without an index file, Apache falls through to Passenger. Verified <code>.htaccess</code> in <code>public_html/</code> contained the correct Passenger directives (auto-generated by cPanel Python App setup).</p>
+            <span class="fix-tag">FIXED</span>
+          </div>
+        </div>
+
+        <div class="bug-item">
+          <div class="bug-header">
+            <span class="bug-tag">Bug 2</span>
+            <span class="bug-title">Passenger error: recursive load of passenger_wsgi.py</span>
+          </div>
+          <div class="bug-body">
+            <p><strong>Root cause:</strong> When the cPanel Python App was created, it overwrote the project's <code>passenger_wsgi.py</code> with its default template. The default file contains <code>wsgi = load_source('wsgi', 'passenger_wsgi.py')</code> — causing infinite recursion as the file loads itself.</p>
+            <p><strong>Fix:</strong> Restored correct <code>passenger_wsgi.py</code> via File Manager: reads <code>.env</code> via <code>django-environ</code>, sets <code>DJANGO_SETTINGS_MODULE</code>, inserts <code>BASE_DIR</code> to <code>sys.path</code>, and calls <code>get_wsgi_application()</code>.</p>
+            <span class="fix-tag">FIXED</span>
+          </div>
+        </div>
+
+        <div class="bug-item">
+          <div class="bug-header">
+            <span class="bug-tag">Bug 3</span>
+            <span class="bug-title">django.core.exceptions.ImproperlyConfigured: Set the SECRET_KEY — .env "Invalid line" errors</span>
+          </div>
+          <div class="bug-body">
+            <p><strong>Root cause:</strong> The <code>.env</code> file was created in File Manager with leading spaces before every variable (copy-paste indentation), the <code>ALLOWED_HOSTS</code> value wrapped onto a second line, the file content was duplicated 3×, and <code>GITHUB_WEBHOOK_SECRET</code> was truncated. <code>django-environ</code> rejects any line not starting with the variable name directly.</p>
+            <p><strong>Fix:</strong> Rewrote <code>.env</code> from scratch with no leading spaces. Shortened <code>ALLOWED_HOSTS</code> to <code>.bejundas.co.tz</code> (Django's wildcard subdomain format — matches all 7 hostnames in one short line, preventing editor line-wrap).</p>
+            <span class="fix-tag">FIXED</span>
+          </div>
+        </div>
+
+        <div class="bug-item">
+          <div class="bug-header">
+            <span class="bug-tag">Bug 4</span>
+            <span class="bug-title">ModuleNotFoundError: No module named 'mysqlclient'</span>
+          </div>
+          <div class="bug-body">
+            <p><strong>Root cause:</strong> <code>mysqlclient</code> requires compiled C development headers (<code>libmysqlclient-dev</code>) which cPanel shared hosting does not expose. Pip install appeared to succeed but the import failed at runtime.</p>
+            <p><strong>Fix:</strong> Switched to <code>PyMySQL</code> (pure Python, no compilation). Added <code>pymysql.install_as_MySQLdb()</code> in <code>config/__init__.py</code> so Django's MySQL backend finds it transparently. No other code changes required.</p>
+            <span class="fix-tag">FIXED</span>
+          </div>
+        </div>
+
+        <div class="bug-item">
+          <div class="bug-header">
+            <span class="bug-tag">Bug 5</span>
+            <span class="bug-title">OperationalError: Unknown column 'hub_service.url'</span>
+          </div>
+          <div class="bug-body">
+            <p><strong>Root cause:</strong> Migration <code>0002_service_url</code> existed in code but had not been applied to the database. Django tried to SELECT the <code>url</code> column in the <code>HomeView</code> queryset before the column existed.</p>
+            <p><strong>Fix:</strong> Ran <code>manage.py migrate --noinput</code> via cPanel Python App Execute python script field. Column added. Migration <code>0003_seed_services</code> also ran, inserting the 5 vertical service rows.</p>
+            <span class="fix-tag">FIXED</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4 — Files Changed -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <h2>Files Changed This Phase</h2>
+      <span class="section-num">§4</span>
+    </div>
+    <div class="card-body">
+      <table class="file-table">
+        <thead>
+          <tr>
+            <th>File</th>
+            <th>Change</th>
+            <th>Reason</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>scripts/deploy.sh</td>
+            <td>Updated</td>
+            <td>Dynamic cPanel virtualenv detection via <code>find</code></td>
+          </tr>
+          <tr>
+            <td>.cpanel.yml</td>
+            <td>Updated</td>
+            <td>Real deploy tasks replacing placeholder cp -R</td>
+          </tr>
+          <tr>
+            <td>config/__init__.py</td>
+            <td>Created</td>
+            <td>PyMySQL shim for Django MySQL backend</td>
+          </tr>
+          <tr>
+            <td>requirements.txt</td>
+            <td>Updated</td>
+            <td>mysqlclient → PyMySQL</td>
+          </tr>
+          <tr>
+            <td>apps/hub/models.py</td>
+            <td>Updated</td>
+            <td>Added url field to Service model</td>
+          </tr>
+          <tr>
+            <td>apps/hub/migrations/0002_service_url.py</td>
+            <td>Created</td>
+            <td>Schema migration for url column</td>
+          </tr>
+          <tr>
+            <td>apps/hub/migrations/0003_seed_services.py</td>
+            <td>Created</td>
+            <td>Seeds 5 vertical service rows</td>
+          </tr>
+          <tr>
+            <td>apps/hub/templates/hub/home.html</td>
+            <td>Updated</td>
+            <td>Service card links to subdomain URL when set</td>
+          </tr>
+          <tr>
+            <td>apps/hub/templates/hub/services.html</td>
+            <td>Updated</td>
+            <td>Service card title + arrow links to subdomain URL</td>
+          </tr>
+          <tr>
+            <td>scripts/create_admin.py</td>
+            <td>Created</td>
+            <td>Non-interactive superuser bootstrap for cPanel</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Section 5 — Test Results -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>Test Results</h2>
+      <span class="section-num">§5</span>
+    </div>
+    <div class="card-body">
+      <div class="stat-row">
+        <div class="stat-box">
+          <div class="num">23</div>
+          <div class="lbl">Tests Passing</div>
+        </div>
+        <div class="stat-box">
+          <div class="num">0</div>
+          <div class="lbl">Failures</div>
+        </div>
+        <div class="stat-box">
+          <div class="num">2 ✓</div>
+          <div class="lbl">Linters (ruff + black)</div>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">All 23 tests from Phases 1–3 continue to pass. No regressions introduced by Phase 4 changes. Linters clean on all 46 files.</p>
+      <div class="test-grid">
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>core: SiteSettings singleton</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>core: same-instance check</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>core: SiteSettings __str__</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>hub: home view returns 200</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>hub: correct template used</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>leads: VerticalPlaceholder __str__</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>leads: unique vertical constraint</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>leads: Lead __str__</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>leads: coming_soon 200</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>leads: correct template</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>leads: placeholder in context</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>leads: valid form creates lead</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>leads: vertical set from host</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>leads: submitted flag set</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>leads: invalid form rejected</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>leads: form valid all fields</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>leads: missing name rejected</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>leads: missing email rejected</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>leads: bad email rejected</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>leads: phone optional</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>leads: message optional</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>leads: inactive placeholder hidden</span>
+        </div>
+        <div class="test-item">
+          <div class="test-check"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>
+          <span>leads: vertical not overridable via POST</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 6 — Phase 5 Preview -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <h2>Phase 5 Preview — Polish & Soft Launch</h2>
+      <span class="section-num">§6</span>
+    </div>
+    <div class="card-body">
+      <div class="phase5-grid">
+        <div class="phase5-item">
+          <div class="phase5-num">1</div>
+          <div>
+            <strong>Mobile pass — all hub pages</strong>
+            <span>Responsive audit at 375px, 768px, 1024px. Touch targets, text sizes, nav overflow.</span>
+          </div>
+        </div>
+        <div class="phase5-item">
+          <div class="phase5-num">2</div>
+          <div>
+            <strong>SEO meta tags</strong>
+            <span>Per-page title, description, OG card image. Django context processor for defaults.</span>
+          </div>
+        </div>
+        <div class="phase5-item">
+          <div class="phase5-num">3</div>
+          <div>
+            <strong>sitemap.xml + robots.txt</strong>
+            <span>Django's sitemap framework. robots.txt disallowing /admin/.</span>
+          </div>
+        </div>
+        <div class="phase5-item">
+          <div class="phase5-num">4</div>
+          <div>
+            <strong>Custom 404 + 500 pages</strong>
+            <span>Branded error pages extending base_hub.html.</span>
+          </div>
+        </div>
+        <div class="phase5-item">
+          <div class="phase5-num">5</div>
+          <div>
+            <strong>Client copy via SiteSettings</strong>
+            <span>Fill real content: hero, about, team, news. Admin walkthrough with client.</span>
+          </div>
+        </div>
+        <div class="phase5-item">
+          <div class="phase5-num">6</div>
+          <div>
+            <strong>Soft launch</strong>
+            <span>Share live URL with client. Collect feedback. Public announcement.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

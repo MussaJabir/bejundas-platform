@@ -1,47 +1,341 @@
-{% extends "core/base.html" %}
-{% load widget_tweaks %}
+{% extends "leads/base_coming_soon.html" %}
+{% load static widget_tweaks %}
+
 {% block title %}Coming Soon — {{ placeholder.get_vertical_display|default:"Bejundas" }}{% endblock %}
+{% block meta_description %}{{ placeholder.subheadline|default:"Something great is on its way. Leave your details to be the first to know." }}{% endblock %}
+
 {% block extra_head %}
 <style>
-    :root {
-        --primary: {{ placeholder.primary_color|default:"#1a1a2e" }};
-        --accent: {{ placeholder.accent_color|default:"#e94560" }};
-    }
+  :root {
+    --cs-primary: {{ placeholder.primary_color|default:"#1a1a2e" }};
+    --cs-accent:  {{ placeholder.accent_color|default:"#e94560" }};
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    background: var(--cs-primary);
+    margin: 0;
+  }
+
+  .cs-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Top bar ── */
+  .cs-topbar {
+    padding: 28px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .cs-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .cs-brand-dot {
+    width: 10px; height: 10px;
+    background: var(--cs-accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .cs-brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .cs-vertical-badge {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--cs-primary);
+    background: var(--cs-accent);
+    padding: 5px 14px;
+    border-radius: 20px;
+  }
+
+  /* ── Main hero area ── */
+  .cs-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 48px 40px;
+  }
+  .cs-inner {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 80px;
+    align-items: center;
+  }
+
+  /* ── Left column ── */
+  .cs-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .cs-eyebrow-line {
+    width: 32px;
+    height: 2px;
+    background: var(--cs-accent);
+  }
+  .cs-eyebrow-text {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--cs-accent);
+  }
+  .cs-headline {
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    margin-bottom: 20px;
+  }
+  .cs-subheadline {
+    font-size: 16px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.7;
+    max-width: 480px;
+    margin-bottom: 40px;
+  }
+  .cs-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    transition: color 200ms;
+  }
+  .cs-back-link:hover { color: rgba(255,255,255,0.9); }
+  .cs-back-link svg {
+    width: 14px; height: 14px;
+    stroke: currentColor; fill: none;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  /* ── Right column — form card ── */
+  .cs-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 40px 36px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+  }
+  .cs-card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 6px;
+  }
+  .cs-card-sub {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+  .cs-field { margin-bottom: 16px; }
+  .cs-field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: #475569;
+    margin-bottom: 6px;
+  }
+  .cs-field input,
+  .cs-field textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #0f172a;
+    background: #f8fafc;
+    outline: none;
+    transition: border-color 200ms;
+    font-family: inherit;
+  }
+  .cs-field input:focus,
+  .cs-field textarea:focus {
+    border-color: var(--cs-accent);
+    background: #ffffff;
+  }
+  .cs-field-error {
+    font-size: 12px;
+    color: #dc2626;
+    margin-top: 4px;
+  }
+  .cs-submit {
+    width: 100%;
+    padding: 13px;
+    background: var(--cs-accent);
+    color: var(--cs-primary);
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    cursor: pointer;
+    transition: opacity 200ms;
+    margin-top: 8px;
+  }
+  .cs-submit:hover { opacity: .88; }
+
+  /* Success state */
+  .cs-success { text-align: center; padding: 20px 0; }
+  .cs-success-icon {
+    width: 56px; height: 56px;
+    background: #dcfce7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+  }
+  .cs-success-icon svg {
+    width: 24px; height: 24px;
+    stroke: #16a34a; fill: none;
+    stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .cs-success-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 8px;
+  }
+  .cs-success-text {
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.6;
+  }
+
+  /* ── Footer strip ── */
+  .cs-footer {
+    padding: 20px 40px;
+    text-align: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .cs-footer a {
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    transition: color 200ms;
+  }
+  .cs-footer a:hover { color: #fff; }
+
+  @media (max-width: 860px) {
+    .cs-inner { grid-template-columns: 1fr; gap: 40px; }
+    .cs-topbar, .cs-main { padding-left: 24px; padding-right: 24px; }
+    .cs-footer { padding-left: 24px; padding-right: 24px; }
+    .cs-subheadline { max-width: 100%; }
+  }
+
+  @media (max-width: 480px) {
+    .cs-topbar { padding: 20px; }
+    .cs-main { padding: 32px 20px; }
+    .cs-card { padding: 28px 20px; }
+  }
 </style>
 {% endblock %}
-{% block content %}
-<section class="py-5 text-center">
-    <div class="container">
-        {% if placeholder %}
-            <h1>{{ placeholder.headline|default:"Coming Soon" }}</h1>
-            <p class="lead">{{ placeholder.subheadline|default:"We are working hard to bring you something great." }}</p>
-        {% else %}
-            <h1>Coming Soon</h1>
-            <p class="lead">We are working hard to bring you something great.</p>
-        {% endif %}
 
+{% block content %}
+<div class="cs-page">
+
+  <div class="cs-topbar">
+    <a href="https://bejundas.co.tz" class="cs-brand">
+      <div class="cs-brand-dot"></div>
+      <span class="cs-brand-name">Bejundas Group</span>
+    </a>
+    {% if placeholder %}
+    <span class="cs-vertical-badge">{{ placeholder.get_vertical_display }}</span>
+    {% endif %}
+  </div>
+
+  <div class="cs-main">
+    <div class="cs-inner">
+
+      <div class="cs-left wow fadeInLeft" data-wow-duration="0.8s">
+        <div class="cs-eyebrow">
+          <div class="cs-eyebrow-line"></div>
+          <span class="cs-eyebrow-text">Bejundas Group of Companies</span>
+        </div>
+        <h1 class="cs-headline">
+          {% if placeholder and placeholder.headline %}{{ placeholder.headline }}
+          {% else %}Something Great<br>Is On Its Way{% endif %}
+        </h1>
+        <p class="cs-subheadline">
+          {% if placeholder and placeholder.subheadline %}{{ placeholder.subheadline }}
+          {% else %}We are working hard to bring you an exceptional experience. Leave your details and we will notify you the moment we launch.{% endif %}
+        </p>
+        <a href="https://bejundas.co.tz" class="cs-back-link">
+          <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          Back to Bejundas Group
+        </a>
+      </div>
+
+      <div class="cs-card wow fadeInRight" data-wow-duration="0.8s" data-wow-delay="0.1s">
         {% if submitted %}
-            <div class="alert alert-success mt-4">
-                Thank you! We will notify you when we launch.
-            </div>
+        <div class="cs-success">
+          <div class="cs-success-icon">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="cs-success-title">You Are On the List!</div>
+          <p class="cs-success-text">
+            Thank you for your interest in Bejundas{% if placeholder %} {{ placeholder.get_vertical_display }}{% endif %}.
+            We will reach out to you as soon as we launch.
+          </p>
+        </div>
+
         {% else %}
-            <div class="mt-4" style="max-width: 480px; margin: 0 auto;">
-                <p>Be the first to know when we launch. Leave your details below.</p>
-                <form method="post">
-                    {% csrf_token %}
-                    {% for field in form %}
-                        <div class="mb-3 text-start">
-                            <label class="form-label">{{ field.label }}</label>
-                            {{ field|add_class:"form-control" }}
-                            {% if field.errors %}
-                                <div class="text-danger small">{{ field.errors.0 }}</div>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-                    <button type="submit" class="btn btn-primary w-100">Notify Me</button>
-                </form>
-            </div>
+        <div class="cs-card-title">Get Notified at Launch</div>
+        <p class="cs-card-sub">Leave your details below and be the first to hear from us when we go live.</p>
+
+        <form method="post" action="">
+          {% csrf_token %}
+          {% for field in form %}
+          <div class="cs-field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% if field.widget_type == 'textarea' %}
+              {% render_field field rows="3" placeholder=field.label %}
+            {% else %}
+              {% render_field field placeholder=field.label %}
+            {% endif %}
+            {% if field.errors %}
+            <div class="cs-field-error">{% for error in field.errors %}{{ error }}{% endfor %}</div>
+            {% endif %}
+          </div>
+          {% endfor %}
+          <button type="submit" class="cs-submit">Notify Me When You Launch</button>
+        </form>
         {% endif %}
+      </div>
+
     </div>
-</section>
+  </div>
+
+  <div class="cs-footer">
+    &copy; {% now "Y" %} <a href="https://bejundas.co.tz">Bejundas Group of Companies</a> &mdash; All rights reserved
+  </div>
+
+</div>
 {% endblock %}

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 3 Report — Bejundas Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #1a1a2e;
+    --blue:   #2563eb;
+    --blue-md:#1d4ed8;
+    --blue-lt:#dbeafe;
+    --blue-xs:#eff6ff;
+    --green:  #16a34a;
+    --green-lt:#dcfce7;
+    --amber:  #d97706;
+    --amber-lt:#fef3c7;
+    --red:    #dc2626;
+    --red-lt: #fee2e2;
+    --text:   #0f172a;
+    --muted:  #475569;
+    --border: #e2e8f0;
+    --bg:     #f8fafc;
+    --white:  #ffffff;
+  }
+
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+
+  .header { background: var(--navy); color: var(--white); padding: 48px 0 40px; }
+  .header .inner { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+  .header-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .logo-chip { background: var(--blue); color: var(--white); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; }
+  .date-chip { font-size: 13px; color: #94a3b8; }
+  .header h1 { font-size: 32px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 8px; }
+  .header h1 span { color: #60a5fa; }
+  .header p { font-size: 15px; color: #94a3b8; max-width: 540px; }
+  .status-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; background: var(--green-lt); color: var(--green); font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 20px; }
+  .status-badge::before { content: ''; width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
+
+  .progress-bar { background: var(--white); border-bottom: 1px solid var(--border); padding: 20px 0; }
+  .progress-bar .inner { max-width: 860px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; }
+  .phase-step { display: flex; align-items: center; flex: 1; }
+  .phase-step:last-child { flex: none; }
+  .step-box { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 72px; }
+  .step-circle { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+  .step-circle.done { background: var(--blue); color: var(--white); }
+  .step-circle.active { background: var(--blue); color: var(--white); box-shadow: 0 0 0 4px var(--blue-lt); }
+  .step-circle.pending { background: var(--border); color: var(--muted); }
+  .step-label { font-size: 11px; font-weight: 500; color: var(--muted); white-space: nowrap; }
+  .step-label.done { color: var(--blue); }
+  .step-label.active { color: var(--navy); font-weight: 700; }
+  .step-connector { flex: 1; height: 2px; background: var(--border); margin-bottom: 18px; }
+  .step-connector.done { background: var(--blue); }
+
+  main { max-width: 860px; margin: 0 auto; padding: 40px 24px 64px; display: flex; flex-direction: column; gap: 24px; }
+
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .card-header { display: flex; align-items: center; gap: 12px; padding: 20px 24px; border-bottom: 1px solid var(--border); background: var(--blue-xs); }
+  .card-icon { width: 36px; height: 36px; background: var(--blue); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .card-icon svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .card-header h2 { font-size: 16px; font-weight: 700; color: var(--navy); }
+  .card-header .section-num { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--blue); background: var(--blue-lt); padding: 2px 8px; border-radius: 4px; }
+  .card-body { padding: 24px; }
+
+  code { font-size: 12px; background: var(--blue-lt); color: var(--blue-md); padding: 1px 6px; border-radius: 4px; font-family: 'Courier New', monospace; }
+
+  .built-list { display: flex; flex-direction: column; gap: 12px; }
+  .built-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 8px; transition: border-color 200ms; }
+  .built-item:hover { border-color: var(--blue); }
+  .built-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); margin-top: 6px; flex-shrink: 0; }
+  .built-item strong { font-size: 14px; font-weight: 600; color: var(--navy); display: block; margin-bottom: 2px; }
+  .built-item span { font-size: 13px; color: var(--muted); }
+
+  /* Vertical theme swatches */
+  .verticals-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 20px; }
+  .vertical-swatch { border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .swatch-color { height: 48px; }
+  .swatch-info { padding: 10px 10px 12px; background: var(--white); }
+  .swatch-name { font-size: 11px; font-weight: 700; color: var(--navy); display: block; margin-bottom: 2px; }
+  .swatch-hex { font-size: 10px; color: var(--muted); font-family: 'Courier New', monospace; }
+
+  .bug-list { display: flex; flex-direction: column; gap: 12px; }
+  .bug-item { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .bug-head { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--red-lt); border-bottom: 1px solid #fecaca; }
+  .bug-label { font-size: 13px; font-weight: 700; color: var(--red); flex: 1; }
+  .bug-tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 2px 8px; border-radius: 4px; background: #fecaca; color: var(--red); }
+  .bug-fix { padding: 12px 16px; background: var(--green-lt); display: flex; align-items: flex-start; gap: 10px; }
+  .bug-fix-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--green); white-space: nowrap; margin-top: 1px; }
+  .bug-fix p { font-size: 13px; color: #15803d; line-height: 1.5; }
+
+  .test-summary { display: flex; align-items: center; gap: 24px; padding: 20px; background: var(--green-lt); border: 1px solid #bbf7d0; border-radius: 10px; margin-bottom: 20px; }
+  .test-score { font-size: 40px; font-weight: 700; color: var(--green); line-height: 1; }
+  .test-score span { font-size: 16px; font-weight: 500; color: #15803d; }
+  .test-label { font-size: 14px; color: #15803d; font-weight: 500; }
+  .linter-row { display: flex; gap: 12px; margin-top: 16px; }
+  .linter-badge { display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; background: var(--green-lt); color: var(--green); border: 1px solid #bbf7d0; }
+  .linter-badge svg { width: 14px; height: 14px; }
+  .test-list { display: flex; flex-direction: column; gap: 8px; }
+  .test-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; }
+  .test-item .app-tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 2px 7px; border-radius: 4px; background: var(--blue-lt); color: var(--blue-md); flex-shrink: 0; min-width: 52px; text-align: center; }
+  .test-item .check { margin-left: auto; color: var(--green); font-weight: 700; font-size: 15px; }
+
+  .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .status-item { display: flex; align-items: flex-start; gap: 10px; padding: 14px; border: 1px solid var(--border); border-radius: 8px; }
+  .status-item.full { grid-column: 1 / -1; }
+  .status-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+  .status-dot.green { background: var(--green); }
+  .status-dot.amber { background: var(--amber); }
+  .status-dot.blue  { background: var(--blue); }
+  .status-item strong { font-size: 13px; font-weight: 600; display: block; margin-bottom: 2px; }
+  .status-item span { font-size: 12px; color: var(--muted); }
+
+  .preview-list { display: flex; flex-direction: column; gap: 10px; }
+  .preview-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px dashed var(--border); border-radius: 8px; font-size: 14px; color: var(--muted); }
+  .preview-num { width: 24px; height: 24px; border-radius: 50%; background: var(--blue-lt); color: var(--blue); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+  .footer { max-width: 860px; margin: 0 auto; padding: 0 24px 48px; text-align: center; font-size: 12px; color: var(--muted); }
+  .footer strong { color: var(--navy); }
+
+  @media (max-width: 600px) {
+    .status-grid { grid-template-columns: 1fr; }
+    .status-item.full { grid-column: 1; }
+    .verticals-grid { grid-template-columns: repeat(2, 1fr); }
+    .header h1 { font-size: 24px; }
+    .test-summary { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .progress-bar .inner { overflow-x: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="inner">
+    <div class="header-meta">
+      <span class="logo-chip">Bejundas Platform</span>
+      <span class="date-chip">May 13, 2026</span>
+    </div>
+    <h1>Phase 3 — <span>Coming Soon System</span></h1>
+    <p>Five vertical subdomains live with per-brand theming, lead capture, and email notification. 23/23 tests passing.</p>
+    <div class="status-badge">COMPLETE</div>
+  </div>
+</div>
+
+<div class="progress-bar">
+  <div class="inner">
+    <div class="phase-step">
+      <div class="step-box"><div class="step-circle done">&#10003;</div><div class="step-label done">Phase 0</div></div>
+      <div class="step-connector done"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box"><div class="step-circle done">&#10003;</div><div class="step-label done">Phase 1</div></div>
+      <div class="step-connector done"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box"><div class="step-circle done">&#10003;</div><div class="step-label done">Phase 2</div></div>
+      <div class="step-connector done"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box"><div class="step-circle active">&#10003;</div><div class="step-label active">Phase 3</div></div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box"><div class="step-circle pending">4</div><div class="step-label">Phase 4</div></div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="phase-step">
+      <div class="step-box"><div class="step-circle pending">5</div><div class="step-label">Phase 5</div></div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- Section 1: What Was Built -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      </div>
+      <h2>What Was Built</h2>
+      <span class="section-num">01</span>
+    </div>
+    <div class="card-body">
+
+      <div style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">5 Vertical Subdomains — Seeded &amp; Themed</div>
+      <div class="verticals-grid">
+        <div class="vertical-swatch">
+          <div class="swatch-color" style="background:#0a2342;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Financial</span>
+            <span class="swatch-hex">#0a2342 / #c9a84c</span>
+          </div>
+        </div>
+        <div class="vertical-swatch">
+          <div class="swatch-color" style="background:#2c2c2c;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Construction</span>
+            <span class="swatch-hex">#2c2c2c / #f47920</span>
+          </div>
+        </div>
+        <div class="vertical-swatch">
+          <div class="swatch-color" style="background:#0d3b2e;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Energies</span>
+            <span class="swatch-hex">#0d3b2e / #f9c41a</span>
+          </div>
+        </div>
+        <div class="vertical-swatch">
+          <div class="swatch-color" style="background:#2d5a27;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Farming</span>
+            <span class="swatch-hex">#2d5a27 / #8bc34a</span>
+          </div>
+        </div>
+        <div class="vertical-swatch">
+          <div class="swatch-color" style="background:#1a0533;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Investments</span>
+            <span class="swatch-hex">#1a0533 / #d4af37</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="built-list">
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>leads/base_coming_soon.html — Standalone Viora Base</strong>
+            <span>New base template that loads Viora shared assets (bootstrap, styles, fonts, icons) but excludes the hub navbar and footer — those reference <code>{% url 'hub:home' %}</code> which raises <code>NoReverseMatch</code> on subdomain URL confs. Includes <code>wow.min.js</code> for entrance animations.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>leads/coming_soon.html — Full Viora-Styled Redesign</strong>
+            <span>Replaced the Bootstrap placeholder. Split layout: left column (eyebrow, headline, subheadline, back link) + right column (white form card). CSS variables <code>--cs-primary</code> and <code>--cs-accent</code> injected from <code>VerticalPlaceholder</code> in <code>{% block extra_head %}</code>. Success state on <code>{% if submitted %}</code>. Fully responsive — stacks to single column at 860px.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>0002_seed_vertical_placeholders — Data Migration</strong>
+            <span>Seeds all 5 <code>VerticalPlaceholder</code> rows with brand colors, headlines, and subheadlines. Uses <code>get_or_create</code> so it's safe to re-run. Reversible — <code>reverse_code</code> deletes the seeded rows. Applied to local MySQL dev DB.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>leads/tests/test_views.py — 8 View Tests</strong>
+            <span>Known vertical returns 200 · correct template used · placeholder in context · inactive placeholder not shown · valid form creates lead with correct vertical · submitted flag set · invalid form rejects · vertical always set from host, never from POST input (prevents vertical spoofing).</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>leads/tests/test_forms.py — 7 Form Tests</strong>
+            <span>Valid with name + email · valid with all fields · missing name rejected · missing email rejected · bad email format rejected · phone optional · message optional.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>leads/tests/test_models.py — Updated for Seeded Data</strong>
+            <span>Changed <code>test_str</code> to fetch the seeded financial placeholder via <code>get()</code> instead of <code>create()</code> — avoids <code>IntegrityError</code> from duplicate unique constraint after migration runs on test DB. <code>test_unique_vertical</code> now tests the constraint directly against the already-existing seeded row.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Bug Fixed -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <h2>Bug Found &amp; Fixed</h2>
+      <span class="section-num">02</span>
+    </div>
+    <div class="card-body">
+      <div class="bug-list">
+        <div class="bug-item">
+          <div class="bug-head">
+            <span class="bug-label">NoReverseMatch — 'djdt' is not a registered namespace on all subdomains</span>
+            <span class="bug-tag">URL Conf</span>
+          </div>
+          <div class="bug-fix">
+            <span class="bug-fix-label">Fix</span>
+            <p>The debug toolbar middleware injects itself into every response site-wide, including coming_soon pages. Its template resolves <code>{% url 'djdt:render_panel' %}</code> — but the <code>djdt</code> namespace was only registered in <code>config/urls.py</code> (hub URL conf), not in <code>apps/leads/urls.py</code>. Added the same <code>if settings.DEBUG: include(debug_toolbar.urls)</code> block to the leads URL conf. No-op in production where <code>DEBUG=False</code> and the package is not installed.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Test Results -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h2>Test Results</h2>
+      <span class="section-num">03</span>
+    </div>
+    <div class="card-body">
+      <div class="test-summary">
+        <div>
+          <div class="test-score">23<span>/23</span></div>
+          <div class="test-label">Tests passing</div>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:600;color:#15803d;margin-bottom:8px;">All checks clean — no regressions from Phase 1 or 2</div>
+          <div class="linter-row">
+            <div class="linter-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              ruff
+            </div>
+            <div class="linter-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              black
+            </div>
+            <div class="linter-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              django check
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="test-list">
+        <div class="test-item"><span class="app-tag">core</span> SiteSettings singleton creation <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">core</span> SiteSettings returns same instance <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">core</span> SiteSettings __str__ returns company name <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">hub</span> Home view returns HTTP 200 <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">hub</span> Home view uses correct template <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">leads</span> VerticalPlaceholder __str__ returns display name <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">leads</span> Unique vertical constraint enforced <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">leads</span> Lead __str__ returns name + vertical <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">leads</span> LeadForm valid with name and email <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">leads</span> LeadForm valid with all fields <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">leads</span> LeadForm rejects missing name <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">leads</span> LeadForm rejects missing email <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">leads</span> LeadForm rejects bad email format <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">leads</span> Phone field is optional <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">leads</span> Message field is optional <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">leads</span> Known vertical returns HTTP 200 <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">leads</span> Correct template used <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">leads</span> Placeholder in context <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">leads</span> Inactive placeholder not shown <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">leads</span> Valid form creates lead with correct vertical <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">leads</span> Valid form sets submitted flag <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">leads</span> Invalid form does not create lead <span class="check">&#10003;</span></div>
+        <div class="test-item"><span class="app-tag">leads</span> Vertical set from host, not POST input <span class="check">&#10003;</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: What's Running -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <h2>What's Running Now</h2>
+      <span class="section-num">04</span>
+    </div>
+    <div class="card-body">
+      <div class="status-grid">
+        <div class="status-item">
+          <div class="status-dot green"></div>
+          <div><strong>financial.bejundas.local:8000</strong><span>Navy / gold theme — Bejundas Financial</span></div>
+        </div>
+        <div class="status-item">
+          <div class="status-dot green"></div>
+          <div><strong>construction.bejundas.local:8000</strong><span>Dark grey / orange theme — Bejundas Construction</span></div>
+        </div>
+        <div class="status-item">
+          <div class="status-dot green"></div>
+          <div><strong>energies.bejundas.local:8000</strong><span>Dark green / yellow theme — Bejundas Energies</span></div>
+        </div>
+        <div class="status-item">
+          <div class="status-dot green"></div>
+          <div><strong>farming.bejundas.local:8000</strong><span>Forest green / lime theme — Bejundas Farming</span></div>
+        </div>
+        <div class="status-item full">
+          <div class="status-dot green"></div>
+          <div><strong>investments.bejundas.local:8000</strong><span>Deep purple / gold theme — Bejundas Investments</span></div>
+        </div>
+        <div class="status-item">
+          <div class="status-dot green"></div>
+          <div><strong>Lead Capture</strong><span>Form submits, lead row created, email notification sent — vertical set from host header, not user input</span></div>
+        </div>
+        <div class="status-item">
+          <div class="status-dot green"></div>
+          <div><strong>Admin Panel</strong><span>All 5 <code>VerticalPlaceholder</code> rows editable — colors, headline, subheadline, active toggle</span></div>
+        </div>
+        <div class="status-item full">
+          <div class="status-dot blue"></div>
+          <div><strong>GitHub — Branch Pushed</strong><span>All Phase 3 work on <code>feature/phase-3-coming-soon</code> at commit <code>610a423</code> — 2 commits, CI clean</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 5: Phase 4 Preview -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+      <h2>Phase 4 — What's Next</h2>
+      <span class="section-num">05</span>
+    </div>
+    <div class="card-body">
+      <div class="preview-list">
+        <div class="preview-item">
+          <div class="preview-num">1</div>
+          Verify <code>apps/core/webhook.py</code> HMAC validation and <code>scripts/deploy.sh</code> — git pull, pip install, migrate, collectstatic, touch <code>tmp/restart.txt</code>
+        </div>
+        <div class="preview-item">
+          <div class="preview-num">2</div>
+          Configure <code>GITHUB_WEBHOOK_SECRET</code> in server <code>.env</code> and matching GitHub repo webhook secret
+        </div>
+        <div class="preview-item">
+          <div class="preview-num">3</div>
+          Merge <code>develop</code> → <code>main</code>, first production push — verify webhook fires, deploy log clean, site live at <code>bejundas.co.tz</code>
+        </div>
+        <div class="preview-item">
+          <div class="preview-num">4</div>
+          Verify all 7 hostnames respond correctly — hub, 5 coming soon subdomains, technologies 301 redirect
+        </div>
+        <div class="preview-item">
+          <div class="preview-num">5</div>
+          Set <code>DEBUG=False</code>, <code>ALLOWED_HOSTS</code>, collect static, confirm no debug toolbar leakage in production
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="footer">
+  <strong>Bejundas Platform</strong> &nbsp;·&nbsp; Phase 3 complete &nbsp;·&nbsp; Branch: <code style="font-size:11px;background:#e2e8f0;padding:1px 5px;border-radius:3px;">feature/phase-3-coming-soon</code> &nbsp;·&nbsp; Commit: <code style="font-size:11px;background:#e2e8f0;padding:1px 5px;border-radius:3px;">610a423</code>
+</div>
+
+</body>
+</html>

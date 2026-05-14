@@ -7,6 +7,31 @@
     <meta name="description" content="{% block meta_description %}{{ company.tagline }}{% endblock %}">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{ company.company_name }}">
+    <meta property="og:title" content="{% block og_title %}{{ company.company_name }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ company.tagline }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% static 'images/brand/og-image.png' %}{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ company.company_name }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{{ company.tagline }}{% endblock %}">
+    <meta name="twitter:image" content="{% static 'images/brand/og-image.png' %}">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/brand/favicon.svg' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/brand/favicon-32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/brand/favicon-16.png' %}">
+    <link rel="shortcut icon" href="{% static 'images/brand/favicon.ico' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/brand/apple-touch-icon.png' %}">
+    <meta name="msapplication-TileImage" content="{% static 'images/brand/mstile-150.png' %}">
+    <meta name="msapplication-TileColor" content="#1a1a2e">
+    <meta name="theme-color" content="#1a1a2e">
+    <link rel="manifest" href="{% static 'images/brand/site.webmanifest' %}">
+
     <link rel="stylesheet" type="text/css" href="{% static 'viora/css/bootstrap.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'viora/css/animate.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'viora/css/swiper-bundle.min.css' %}">
@@ -17,12 +42,6 @@
 
     <link rel="stylesheet" href="{% static 'viora/font/fonts.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'viora/icons/icomoon/style.css' %}">
-
-    {% if company.favicon %}
-        <link rel="shortcut icon" href="{{ company.favicon.url }}">
-    {% else %}
-        <link rel="shortcut icon" href="{% static 'viora/favicon.svg' %}">
-    {% endif %}
 
     <link rel="stylesheet" href="{% static 'css/bejundas.css' %}">
     {% block extra_head %}{% endblock %}

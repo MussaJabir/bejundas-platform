@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 240" role="img" aria-label="Bejundas Group of Companies">
+  <title>Bejundas Group of Companies</title>
+  <defs>
+    
+  </defs>
+  
+  <g transform="translate(0,0) scale(0.94)">
+    <g transform="skewY(11)">
+      <rect x="54" y="42" width="42" height="140" fill="#0F3CB5"></rect>
+      <rect x="106" y="30" width="46" height="160" fill="#0F3CB5"></rect>
+      <rect x="162" y="46" width="36" height="124" fill="#1AA3F0"></rect>
+      <path d="M93 85 L80 85 L98 55 L116 85 L103 85 L103 128 L93 128 Z" fill="#FFFFFF"></path>
+      <path d="M141 116 L128 116 L146 86 L164 116 L151 116 L151 159 L141 159 Z" fill="#FFFFFF"></path>
+    </g>
+  </g>
+  
+  <text x="245" y="138" class="wm-name">Bejundas</text>
+  <text x="248" y="184" class="wm-sub">GROUP OF COMPANIES</text>
+</svg>

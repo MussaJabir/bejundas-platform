@@ -26,3 +26,89 @@ body {
     visibility: visible;
     pointer-events: all;
 }
+
+/* ─── Mobile Responsive Fixes ──────────────────────────────────────────────── */
+
+/* Navbar: scale wordmark logo on small screens */
+@media (max-width: 575px) {
+    .logo_header {
+        width: 130px;
+        height: auto;
+    }
+}
+
+/* About page — Mission/Vision overview: stack vertically on mobile */
+@media (max-width: 767px) {
+    .section-overview .wrap-box {
+        flex-direction: column;
+        gap: 0;
+    }
+    .section-overview .col-content.mission,
+    .section-overview .col-content.vision {
+        flex: 1 1 auto;
+        width: 100%;
+    }
+    .section-overview .col-content.vision {
+        min-height: 280px;
+    }
+}
+
+/* Services page — hide the circular "Talk To An Expert" button on mobile */
+@media (max-width: 767px) {
+    .section-service .heading .btn_wrapper {
+        display: none;
+    }
+    .section-service .heading {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* Services page — prevent service image from being too tall on mobile */
+@media (max-width: 767px) {
+    .service-item.style-default .img-style img {
+        width: 100%;
+        max-height: 260px;
+        object-fit: cover;
+    }
+}
+
+/* News detail — stack bottom nav buttons on mobile */
+@media (max-width: 575px) {
+    .blog-post-detail .d-flex.justify-content-between {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}
+
+/* Team page — counter overlay: reposition on mobile */
+@media (max-width: 767px) {
+    .section-about-team .counter-item {
+        position: relative;
+        width: 100%;
+        padding: 24px 16px;
+    }
+}
+
+/* General: reduce section vertical padding on mobile */
+@media (max-width: 575px) {
+    .tf-spacing-1 {
+        padding-top: 48px;
+        padding-bottom: 48px;
+    }
+}
+
+/* CTA section: reduce heading margin on mobile */
+@media (max-width: 991px) {
+    .section-cta .heading {
+        margin-bottom: 24px;
+    }
+}
+
+/* Footer: ensure logo scales correctly */
+.footer-logo .main-logo {
+    width: auto;
+    max-width: 160px;
+    height: auto;
+}

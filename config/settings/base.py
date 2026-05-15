@@ -203,11 +203,42 @@ UNFOLD = {
             {
                 "title": "Site Settings",
                 "separator": True,
+                "collapsible": True,
                 "items": [
                     {
-                        "title": "Site Settings",
-                        "icon": "tune",
-                        "link": reverse_lazy("admin:core_sitesettings_changelist"),
+                        "title": "Identity & Branding",
+                        "icon": "badge",
+                        "link": reverse_lazy("admin:core_identitysettings_changelist"),
+                    },
+                    {
+                        "title": "Hero Section",
+                        "icon": "web_asset",
+                        "link": reverse_lazy("admin:core_herosettings_changelist"),
+                    },
+                    {
+                        "title": "About Section",
+                        "icon": "info",
+                        "link": reverse_lazy("admin:core_aboutsettings_changelist"),
+                    },
+                    {
+                        "title": "Mission & Vision",
+                        "icon": "flag",
+                        "link": reverse_lazy("admin:core_missionvisionsettings_changelist"),
+                    },
+                    {
+                        "title": "CTA Section",
+                        "icon": "campaign",
+                        "link": reverse_lazy("admin:core_ctasettings_changelist"),
+                    },
+                    {
+                        "title": "Contact Info",
+                        "icon": "contact_mail",
+                        "link": reverse_lazy("admin:core_contactsettings_changelist"),
+                    },
+                    {
+                        "title": "Social Media",
+                        "icon": "share",
+                        "link": reverse_lazy("admin:core_socialmediasettings_changelist"),
                     },
                 ],
             },

@@ -6,7 +6,7 @@ SERVICES = [
         "slug": "financial-services",
         "summary": "Banking, insurance, and investment solutions for individuals and businesses across Tanzania.",
         "icon": "icon-Dollar",
-        "url": "https://financial.bejundas.co.tz",
+        "url": "/financial/",
         "order": 1,
     },
     {
@@ -14,7 +14,7 @@ SERVICES = [
         "slug": "construction",
         "summary": "End-to-end construction and architectural solutions — from design to delivery — built to last.",
         "icon": "icon-Buildings",
-        "url": "https://construction.bejundas.co.tz",
+        "url": "/construction/",
         "order": 2,
     },
     {
@@ -22,7 +22,7 @@ SERVICES = [
         "slug": "energies",
         "summary": "Sustainable energy systems and solutions powering homes and businesses toward a cleaner future.",
         "icon": "icon-Lightning",
-        "url": "https://energies.bejundas.co.tz",
+        "url": "/energies/",
         "order": 3,
     },
     {
@@ -30,7 +30,7 @@ SERVICES = [
         "slug": "farming",
         "summary": "Modern agricultural solutions driving food security, rural growth, and sustainable land use.",
         "icon": "icon-Plant",
-        "url": "https://farming.bejundas.co.tz",
+        "url": "/farming/",
         "order": 4,
     },
     {
@@ -38,7 +38,7 @@ SERVICES = [
         "slug": "investments",
         "summary": "Strategic investment advisory and portfolio management services for long-term wealth creation.",
         "icon": "icon-ChartLineUp",
-        "url": "https://investments.bejundas.co.tz",
+        "url": "/investments/",
         "order": 5,
     },
 ]

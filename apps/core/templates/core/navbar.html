@@ -6,7 +6,7 @@
                 {% if company.logo %}
                     <img class="logo_header" alt="{{ company.company_name }}" width="167" height="52" src="{{ company.logo.url }}">
                 {% else %}
-                    <img class="logo_header" alt="{{ company.company_name }}" width="167" height="52" src="{% static 'images/brand/logo-wordmark.svg' %}">
+                    <span class="h5 fw-7">{{ company.company_name }}</span>
                 {% endif %}
             </a>
 

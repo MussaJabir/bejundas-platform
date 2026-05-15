@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Bejundas Group of Companies">
+  <title>Bejundas Group of Companies</title>
+
+  <!-- Navy background -->
+  <rect width="1200" height="630" fill="#1a1a2e"/>
+
+  <!-- Subtle radial highlight (top-left) -->
+  <defs>
+    <radialGradient id="glow" cx="0.2" cy="0.2" r="0.7">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#1a1a2e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- B monogram chip -->
+  <rect x="540" y="130" width="120" height="120" rx="16" fill="#ffffff"/>
+  <text x="600" y="190" text-anchor="middle" dominant-baseline="central"
+        font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+        font-weight="800" font-size="86" fill="#1a1a2e">B</text>
+
+  <!-- Wordmark -->
+  <text x="600" y="340" text-anchor="middle" dominant-baseline="central"
+        font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+        font-weight="800" font-size="92" letter-spacing="6" fill="#ffffff">BEJUNDAS</text>
+
+  <!-- Tagline -->
+  <text x="600" y="420" text-anchor="middle" dominant-baseline="central"
+        font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+        font-weight="400" font-size="34" letter-spacing="3" fill="#94a3b8">Group of Companies</text>
+
+  <!-- Accent line -->
+  <rect x="560" y="475" width="80" height="4" rx="2" fill="#e94560"/>
+
+  <!-- Bottom domain label -->
+  <text x="600" y="555" text-anchor="middle" dominant-baseline="central"
+        font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+        font-weight="500" font-size="22" letter-spacing="2" fill="#94a3b8">bejundas.co.tz</text>
+</svg>

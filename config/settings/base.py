@@ -1,6 +1,8 @@
 from pathlib import Path
 
 import environ
+from django.templatetags.static import static
+from django.urls import reverse_lazy
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -113,23 +115,149 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 CONTACT_EMAIL = env("CONTACT_EMAIL")
 LEADS_EMAIL = env("LEADS_EMAIL")
 
+# --- Django Unfold Admin ---
+
+
+def _bejundas_logo(request):
+    return static("images/brand/favicon.svg")
+
+
 UNFOLD = {
     "SITE_TITLE": "Bejundas Admin",
-    "SITE_HEADER": "Bejundas Group",
+    "SITE_HEADER": "Bejundas Group of Companies",
     "SITE_URL": "/",
+    "SITE_ICON": _bejundas_logo,
+    "SITE_LOGO": _bejundas_logo,
+    "SITE_SYMBOL": "business",
+    "SHOW_HISTORY": True,
+    "SHOW_VIEW_ON_SITE": True,
+    "DASHBOARD_CALLBACK": "apps.core.admin.dashboard_callback",
     "COLORS": {
         "primary": {
-            "50": "250 245 255",
-            "100": "243 232 255",
-            "200": "233 213 255",
-            "300": "216 180 254",
-            "400": "196 148 254",
-            "500": "168 85 247",
-            "600": "147 51 234",
-            "700": "126 34 206",
-            "800": "107 33 168",
-            "900": "88 28 135",
-            "950": "59 7 100",
+            "50": "239 246 255",
+            "100": "219 234 254",
+            "200": "191 219 254",
+            "300": "147 197 253",
+            "400": "96 165 250",
+            "500": "59 130 246",
+            "600": "37 99 235",
+            "700": "29 78 216",
+            "800": "30 64 175",
+            "900": "30 58 138",
+            "950": "23 37 84",
         },
+    },
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": False,
+        "navigation": [
+            {
+                "title": "Dashboard",
+                "separator": False,
+                "items": [
+                    {
+                        "title": "Overview",
+                        "icon": "dashboard",
+                        "link": reverse_lazy("admin:index"),
+                    },
+                ],
+            },
+            {
+                "title": "Website Content",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Services",
+                        "icon": "list_alt",
+                        "link": reverse_lazy("admin:hub_service_changelist"),
+                    },
+                    {
+                        "title": "News",
+                        "icon": "newspaper",
+                        "link": reverse_lazy("admin:hub_news_changelist"),
+                    },
+                    {
+                        "title": "Team Members",
+                        "icon": "groups",
+                        "link": reverse_lazy("admin:hub_teammember_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": "Leads",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "All Leads",
+                        "icon": "inbox",
+                        "link": reverse_lazy("admin:leads_lead_changelist"),
+                        "badge": "apps.core.admin.unread_leads_badge",
+                    },
+                    {
+                        "title": "Vertical Placeholders",
+                        "icon": "category",
+                        "link": reverse_lazy("admin:leads_verticalplaceholder_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": "Site Settings",
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": "Identity & Branding",
+                        "icon": "badge",
+                        "link": reverse_lazy("admin:core_identitysettings_changelist"),
+                    },
+                    {
+                        "title": "Hero Section",
+                        "icon": "web_asset",
+                        "link": reverse_lazy("admin:core_herosettings_changelist"),
+                    },
+                    {
+                        "title": "About Section",
+                        "icon": "info",
+                        "link": reverse_lazy("admin:core_aboutsettings_changelist"),
+                    },
+                    {
+                        "title": "Mission & Vision",
+                        "icon": "flag",
+                        "link": reverse_lazy("admin:core_missionvisionsettings_changelist"),
+                    },
+                    {
+                        "title": "CTA Section",
+                        "icon": "campaign",
+                        "link": reverse_lazy("admin:core_ctasettings_changelist"),
+                    },
+                    {
+                        "title": "Contact Info",
+                        "icon": "contact_mail",
+                        "link": reverse_lazy("admin:core_contactsettings_changelist"),
+                    },
+                    {
+                        "title": "Social Media",
+                        "icon": "share",
+                        "link": reverse_lazy("admin:core_socialmediasettings_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": "Administration",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Users",
+                        "icon": "person",
+                        "link": reverse_lazy("admin:auth_user_changelist"),
+                    },
+                    {
+                        "title": "Groups",
+                        "icon": "group",
+                        "link": reverse_lazy("admin:auth_group_changelist"),
+                    },
+                ],
+            },
+        ],
     },
 }

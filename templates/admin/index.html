@@ -1,0 +1,210 @@
+{% extends "unfold/layouts/base_simple.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block title %}{% trans "Dashboard" %} | Bejundas Admin{% endblock %}
+
+{% block content %}
+<div class="px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+
+  {# ── Page header ─────────────────────────────────────────── #}
+  <div class="pb-2">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Bejundas Group of Companies — site overview</p>
+  </div>
+
+  {# ── KPI cards ───────────────────────────────────────────── #}
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+    {# Total Leads — branded navy gradient card #}
+    <div class="relative rounded-xl p-5 overflow-hidden" style="background:linear-gradient(135deg,#1a1a2e 0%,#2563eb 100%);">
+      <div class="flex items-start justify-between mb-4">
+        <p class="text-xs font-semibold uppercase tracking-widest text-blue-200">Total Leads</p>
+        <a href="{% url 'admin:leads_lead_changelist' %}"
+           class="w-7 h-7 rounded-full border border-white/25 flex items-center justify-center text-white/60 hover:bg-white/10 hover:text-white transition">
+          <span class="material-symbols-outlined" style="font-size:14px">arrow_outward</span>
+        </a>
+      </div>
+      <p class="text-5xl font-extrabold text-white leading-none">{{ total_leads }}</p>
+      <p class="mt-2 text-xs text-blue-200">all-time across every vertical</p>
+    </div>
+
+    {# New This Week — accents blue if > 0 #}
+    <div class="relative rounded-xl p-5 border shadow-sm
+      {% if new_this_week > 0 %}bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800{% else %}bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800{% endif %}">
+      <div class="flex items-start justify-between mb-4">
+        <p class="text-xs font-semibold uppercase tracking-widest {% if new_this_week > 0 %}text-primary-600{% else %}text-gray-400{% endif %}">New This Week</p>
+        <a href="{% url 'admin:leads_lead_changelist' %}"
+           class="w-7 h-7 rounded-full border flex items-center justify-center transition
+             {% if new_this_week > 0 %}border-primary-300 text-primary-500 hover:bg-primary-500 hover:border-primary-500 hover:text-white{% else %}border-gray-200 dark:border-gray-700 text-gray-400 hover:bg-primary-500 hover:border-primary-500 hover:text-white{% endif %}">
+          <span class="material-symbols-outlined" style="font-size:14px">arrow_outward</span>
+        </a>
+      </div>
+      <p class="text-5xl font-extrabold leading-none {% if new_this_week > 0 %}text-primary-600{% else %}text-gray-900 dark:text-white{% endif %}">{{ new_this_week }}</p>
+      <p class="mt-2 text-xs {% if new_this_week > 0 %}text-primary-400{% else %}text-gray-400{% endif %}">last 7 days</p>
+    </div>
+
+    {# Unread Leads — accents red if > 0 (needs attention) #}
+    <div class="relative rounded-xl p-5 border shadow-sm
+      {% if unread_leads > 0 %}border-red-200 dark:border-red-800{% else %}bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800{% endif %}"
+      {% if unread_leads > 0 %}style="background-color:#fef2f2;"{% endif %}>
+      <div class="flex items-start justify-between mb-4">
+        <p class="text-xs font-semibold uppercase tracking-widest {% if unread_leads > 0 %}text-red-600{% else %}text-gray-400{% endif %}">Unread Leads</p>
+        <a href="{% url 'admin:leads_lead_changelist' %}?notified__exact=0"
+           class="w-7 h-7 rounded-full border flex items-center justify-center transition
+             {% if unread_leads > 0 %}border-red-300 text-red-500 hover:bg-red-500 hover:border-red-500 hover:text-white{% else %}border-gray-200 dark:border-gray-700 text-gray-400 hover:bg-primary-500 hover:border-primary-500 hover:text-white{% endif %}">
+          <span class="material-symbols-outlined" style="font-size:14px">arrow_outward</span>
+        </a>
+      </div>
+      <div class="flex items-end gap-2">
+        <p class="text-5xl font-extrabold leading-none {% if unread_leads > 0 %}text-red-600{% else %}text-gray-900 dark:text-white{% endif %}">{{ unread_leads }}</p>
+        {% if unread_leads > 0 %}
+        <span class="mb-1 text-xs font-bold text-white px-2 py-0.5 rounded-full uppercase tracking-wider" style="background-color:#e94560;">Awaiting</span>
+        {% endif %}
+      </div>
+      <p class="mt-2 text-xs {% if unread_leads > 0 %}text-red-400{% else %}text-gray-400{% endif %}">notification not sent yet</p>
+    </div>
+
+    {# Active Verticals #}
+    <div class="relative rounded-xl p-5 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-sm">
+      <div class="flex items-start justify-between mb-4">
+        <p class="text-xs font-semibold uppercase tracking-widest text-gray-400">Active Verticals</p>
+        <a href="{% url 'admin:leads_verticalplaceholder_changelist' %}"
+           class="w-7 h-7 rounded-full border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-400 hover:bg-primary-500 hover:border-primary-500 hover:text-white transition">
+          <span class="material-symbols-outlined" style="font-size:14px">arrow_outward</span>
+        </a>
+      </div>
+      <p class="text-5xl font-extrabold text-gray-900 dark:text-white leading-none">{{ active_verticals }}</p>
+      <p class="mt-2 text-xs text-gray-400">of {{ verticals_total }} configured</p>
+    </div>
+
+  </div>
+
+  {# ── Status mini-chart + Recent leads ──────────────────── #}
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+    {# Lead status chart #}
+    <div class="rounded-xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-sm p-5">
+      <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary-500" style="font-size:18px">mark_email_unread</span>
+        Lead Status
+      </h2>
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full" style="background-color:#e94560;"></span>
+            <span class="text-sm text-gray-600 dark:text-gray-300">Awaiting notification</span>
+          </div>
+          <span class="text-sm font-bold" style="color:#e94560;">{{ unread_leads }}</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+            <span class="text-sm text-gray-600 dark:text-gray-300">Notified</span>
+          </div>
+          <span class="text-sm font-bold text-green-600">{{ notified_leads }}</span>
+        </div>
+        {% if total_leads > 0 %}
+        <div class="pt-2">
+          <div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-1.5 flex overflow-hidden">
+            {% if unread_leads > 0 %}
+            <div class="h-1.5" style="background-color:#e94560;width:{% widthratio unread_leads total_leads 100 %}%"></div>
+            {% endif %}
+            {% if notified_leads > 0 %}
+            <div class="bg-green-500 h-1.5" style="width:{% widthratio notified_leads total_leads 100 %}%"></div>
+            {% endif %}
+          </div>
+          <p class="mt-2 text-xs text-gray-400">{{ total_leads }} lead{{ total_leads|pluralize }} total</p>
+        </div>
+        {% else %}
+        <p class="pt-2 text-xs text-gray-400">No leads received yet.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    {# Recent leads table #}
+    <div class="lg:col-span-2 rounded-xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-sm p-5">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary-500" style="font-size:18px">inbox</span>
+          Recent Leads
+        </h2>
+        <a href="{% url 'admin:leads_lead_changelist' %}"
+           class="text-xs text-primary-500 hover:text-primary-700 font-medium">View all →</a>
+      </div>
+
+      {% if recent_leads %}
+      <div class="divide-y divide-gray-50 dark:divide-gray-800">
+        {% for lead in recent_leads %}
+        <a href="{% url 'admin:leads_lead_change' lead.pk %}"
+           class="flex items-center justify-between py-2.5 gap-3 hover:bg-gray-50 dark:hover:bg-gray-800 -mx-2 px-2 rounded transition">
+          <div class="min-w-0 flex-1">
+            <p class="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate">{{ lead.name }}</p>
+            <p class="text-xs text-gray-400 truncate">{{ lead.email }} · {{ lead.vertical|title }}</p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="text-xs text-gray-400">{{ lead.created_at|date:"d M H:i" }}</span>
+            {% if lead.notified %}
+            <span class="text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300 px-2 py-0.5 rounded-full uppercase tracking-wide">Notified</span>
+            {% else %}
+            <span class="text-xs font-semibold text-white px-2 py-0.5 rounded-full uppercase tracking-wide" style="background-color:#e94560;">New</span>
+            {% endif %}
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="text-sm text-gray-400 text-center py-6">No leads received yet.</p>
+      {% endif %}
+    </div>
+
+  </div>
+
+  {# ── Leads by Vertical ─────────────────────────────────── #}
+  <div class="rounded-xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-sm p-5">
+    <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary-500" style="font-size:18px">bar_chart</span>
+      Leads by Vertical
+    </h2>
+
+    {% if leads_by_vertical %}
+    <div class="space-y-3">
+      {% for v in leads_by_vertical %}
+      <div class="flex items-center gap-3">
+        <div class="w-32 shrink-0 flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full" style="background-color:{{ v.primary_color }};"></span>
+          <span class="text-sm font-medium {% if v.is_active %}text-gray-700 dark:text-gray-200{% else %}text-gray-400{% endif %}">{{ v.label }}</span>
+        </div>
+        <div class="flex-1 bg-gray-100 dark:bg-gray-800 rounded-full h-2 overflow-hidden">
+          {% if v.count > 0 and max_vertical_count > 0 %}
+          <div class="h-2 rounded-full" style="background-color:{{ v.primary_color }};width:{% widthratio v.count max_vertical_count 100 %}%"></div>
+          {% endif %}
+        </div>
+        <span class="w-10 text-right text-sm font-semibold text-gray-700 dark:text-gray-200">{{ v.count }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-sm text-gray-400 text-center py-6">No verticals configured yet.</p>
+    {% endif %}
+  </div>
+
+  {# ── Content snapshot footer ───────────────────────────── #}
+  <div class="grid grid-cols-3 gap-4">
+    <div class="rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-4 text-center">
+      <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ services_count }}</p>
+      <p class="text-xs text-gray-500 mt-1 uppercase tracking-wide">Active Services</p>
+    </div>
+    <div class="rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-4 text-center">
+      <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ news_count }}</p>
+      <p class="text-xs text-gray-500 mt-1 uppercase tracking-wide">Published News</p>
+    </div>
+    <div class="rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-4 text-center">
+      <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ team_count }}</p>
+      <p class="text-xs text-gray-500 mt-1 uppercase tracking-wide">Team Members</p>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

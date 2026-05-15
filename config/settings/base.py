@@ -130,6 +130,7 @@ UNFOLD = {
     "SITE_SYMBOL": "business",
     "SHOW_HISTORY": True,
     "SHOW_VIEW_ON_SITE": True,
+    "DASHBOARD_CALLBACK": "apps.core.admin.dashboard_callback",
     "COLORS": {
         "primary": {
             "50": "239 246 255",

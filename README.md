@@ -1,18 +1,18 @@
 # Bejundas Platform
 
-Multi-subdomain Django web platform for Bejundas Group of Companies.
+Django web platform for Bejundas Group of Companies.
 
-One Django project, one Passenger app, one deploy. Subdomains routed via `django-hosts`.
+One Django project, one Passenger app, one deploy. All verticals live under the single `bejundas.co.tz` host as URL paths (see CLAUDE.md ADR-007).
 
-| Subdomain | Status | Description |
+| URL | Status | Description |
 |---|---|---|
 | `bejundas.co.tz` | Live (MVP) | Parent landing site |
-| `financial.bejundas.co.tz` | Coming Soon | Financial Services |
-| `construction.bejundas.co.tz` | Coming Soon | Construction & Engineering |
-| `energies.bejundas.co.tz` | Coming Soon | Energies & Gas |
-| `farming.bejundas.co.tz` | Coming Soon | Farming |
-| `investments.bejundas.co.tz` | Coming Soon | Investments & Hospitality |
-| `technologies.bejundas.co.tz` | 301 redirect | Redirects to [bjptechnologies.co.tz](https://bjptechnologies.co.tz) |
+| `bejundas.co.tz/financial/` | Coming Soon | Financial Services |
+| `bejundas.co.tz/construction/` | Coming Soon | Construction & Engineering |
+| `bejundas.co.tz/energies/` | Coming Soon | Energies & Gas |
+| `bejundas.co.tz/farming/` | Coming Soon | Farming |
+| `bejundas.co.tz/investments/` | Coming Soon | Investments & Hospitality |
+| `bejundas.co.tz/technologies/` | 301 redirect | Redirects to [bjptechnologies.co.tz](https://bjptechnologies.co.tz) |
 
 ---
 
@@ -20,7 +20,6 @@ One Django project, one Passenger app, one deploy. Subdomains routed via `django
 
 - Django 5.x LTS, Python 3.11
 - MySQL 8 / MariaDB
-- `django-hosts` (subdomain routing)
 - `django-unfold` (admin)
 - `django-environ` (env var loading)
 - WhiteNoise (static files)
@@ -56,21 +55,14 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-### Subdomain routing in development
+### Local URLs
 
-Add to `/etc/hosts`:
+No `/etc/hosts` setup needed — verticals are URL paths on the single host.
 
-```
-127.0.0.1   bejundas.local
-127.0.0.1   financial.bejundas.local
-127.0.0.1   construction.bejundas.local
-127.0.0.1   energies.bejundas.local
-127.0.0.1   farming.bejundas.local
-127.0.0.1   investments.bejundas.local
-127.0.0.1   technologies.bejundas.local
-```
-
-Visit `http://bejundas.local:8000` (hub) and `http://financial.bejundas.local:8000` (Coming Soon themed for financial).
+- `http://127.0.0.1:8000/` — hub home
+- `http://127.0.0.1:8000/financial/` — Financial Coming Soon
+- `http://127.0.0.1:8000/construction/`, `/energies/`, `/farming/`, `/investments/`
+- `http://127.0.0.1:8000/technologies/` — 301 to bjptechnologies.co.tz
 
 ---
 

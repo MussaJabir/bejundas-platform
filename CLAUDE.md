@@ -17,11 +17,11 @@
 
 ### What this project is
 
-A multi-subdomain Django web platform serving Bejundas Group's six business verticals plus a parent landing site. Built as a **monorepo** — one Django project, one Passenger app, one deploy — with subdomain routing handled by `django-hosts`.
+A Django web platform serving Bejundas Group's parent landing site plus six business verticals — all under a single host (`bejundas.co.tz`) with verticals routed at URL paths (`/financial/`, `/construction/`, etc.). Built as a **monorepo**: one Django project, one Passenger app, one deploy. See ADR-007 for the routing decision.
 
-### Subdomain map
+### URL map
 
-| Subdomain | Status (MVP) | Django app |
+| URL | Status (MVP) | Django app |
 |---|---|---|
 | `bejundas.co.tz/` | Full marketing site | `apps.hub` |
 | `bejundas.co.tz/financial/` | Coming Soon page | `apps.leads.coming_soon` |
@@ -54,15 +54,15 @@ This section explains *why* the architecture is what it is. Read it before propo
 
 ### ADR-002: Hub-only MVP
 
-**Decision:** Build the hub site fully. The five verticals get a single shared "Coming Soon" page themed per subdomain via a `VerticalPlaceholder` admin record.
+**Decision:** Build the hub site fully. The five verticals get a single shared "Coming Soon" page themed per vertical via a `VerticalPlaceholder` admin record (looked up by URL kwarg).
 
 **Why:**
 - Client confirmed no real content exists for any vertical at MVP time.
 - Building 6 vertical-specific apps with placeholder content creates 6 abandoned shells.
-- Coming Soon + lead capture form turns each subdomain into a marketing asset that converts visitors into a `Lead` row, which is more valuable than a fake services page.
+- Coming Soon + lead capture form turns each vertical URL into a marketing asset that converts visitors into a `Lead` row, which is more valuable than a fake services page.
 - Verticals are added later when content is ready (see §13 Adding a New Vertical).
 
-**Trade-off:** Subdomains do not show full vertical-specific content at launch. Acceptable because no real content exists to show.
+**Trade-off:** Vertical URLs do not show full vertical-specific content at launch. Acceptable because no real content exists to show.
 
 ### ADR-003: MySQL for both dev and production
 
@@ -454,8 +454,7 @@ Required GitHub repo secret: same value, configured under Settings → Webhooks.
 |---|---|---|
 | `SECRET_KEY` | yes | Django secret |
 | `DEBUG` | yes | `True` in dev, `False` in prod |
-| `ALLOWED_HOSTS` | yes | Comma-separated. Include all 7 hostnames |
-| `PARENT_HOST` | yes | `bejundas.co.tz` |
+| `ALLOWED_HOSTS` | yes | Comma-separated. `bejundas.co.tz,www.bejundas.co.tz` in prod |
 | `DB_NAME` | yes | |
 | `DB_USER` | yes | |
 | `DB_PASS` | yes | |
@@ -504,10 +503,10 @@ Required GitHub repo secret: same value, configured under Settings → Webhooks.
 ### Phase 0 — Infrastructure (client/dev does this in cPanel)
 
 1. MySQL: create `bejundas_db` + user + grant ALL privileges
-2. Domains: create 6 subdomains (`financial`, `construction`, `energies`, `farming`, `investments`, `technologies`) each with **"Share document root with bejundas.co.tz" ON**
+2. Domains: just `bejundas.co.tz` and `www.bejundas.co.tz`. **No subdomains** — verticals are URL paths (`/financial/`, `/construction/`, …) on the single host. See ADR-007.
 3. Setup Python App: Python 3.11, app root `bejundas_platform`, URL `bejundas.co.tz`, startup file `passenger_wsgi.py`, entry point `application`
-4. SSL/TLS: AutoSSL on for all 7 hostnames
-5. (Optional but recommended) Cloudflare in front for caching + free wildcard SSL fallback
+4. SSL/TLS: AutoSSL on `bejundas.co.tz` + `www.bejundas.co.tz`
+5. (Optional but recommended) Cloudflare in front for caching + DDoS protection
 
 ### Phase 1 — Repo scaffold (Claude does)
 

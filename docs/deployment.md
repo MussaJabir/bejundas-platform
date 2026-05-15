@@ -43,21 +43,9 @@ cPanel home > **MySQL Databases**
 
 ### 2. Subdomains
 
-cPanel home > **Domains** > **Create A New Domain**
+**No subdomains needed.** Verticals are routed at path-based URLs (`/financial/`, `/construction/`, etc.) on the single `bejundas.co.tz` domain. See CLAUDE.md ADR-007 for the rationale.
 
-For each of the following 6 subdomains:
-- `financial.bejundas.co.tz`
-- `construction.bejundas.co.tz`
-- `energies.bejundas.co.tz`
-- `farming.bejundas.co.tz`
-- `investments.bejundas.co.tz`
-- `technologies.bejundas.co.tz`
-
-In the create form:
-- Domain: enter the subdomain
-- Toggle **"Share document root with bejundas.co.tz"** to **ON**
-
-This routes all subdomain requests through the same Passenger app as the main domain.
+If subdomains exist from a previous setup, delete them via **Domains** > select subdomain > **Remove**.
 
 ### 3. Python App
 
@@ -74,9 +62,9 @@ After creation, cPanel gives a `source virtualenv/...` command. Copy it — you 
 
 ### 4. SSL/TLS
 
-cPanel home > **SSL/TLS Status** > select all 7 hostnames > **Run AutoSSL**
+cPanel home > **SSL/TLS Status** > select `bejundas.co.tz` and `www.bejundas.co.tz` > **Run AutoSSL**
 
-Verify each hostname gets a valid certificate. If AutoSSL fails for a subdomain, ensure DNS is pointing correctly.
+Verify both hostnames get a valid certificate.
 
 Optional but recommended: put **Cloudflare** in front for caching, free wildcard SSL fallback, and DDoS protection.
 
@@ -86,8 +74,7 @@ Via cPanel **File Manager** or **SSH** (if available), create `/home/bejundas/be
 
 - `DEBUG=False`
 - `SECRET_KEY=<generate a fresh 50-char random string>`
-- `ALLOWED_HOSTS=bejundas.co.tz,www.bejundas.co.tz,financial.bejundas.co.tz,construction.bejundas.co.tz,energies.bejundas.co.tz,farming.bejundas.co.tz,investments.bejundas.co.tz,technologies.bejundas.co.tz`
-- `PARENT_HOST=bejundas.co.tz`
+- `ALLOWED_HOSTS=bejundas.co.tz,www.bejundas.co.tz`
 - `DB_NAME`, `DB_USER`, `DB_PASS`, `DB_HOST=localhost`, `DB_PORT=3306`
 - `EMAIL_*` settings
 - `GITHUB_WEBHOOK_SECRET=<generate a fresh 64-char random string>` — keep a copy for GitHub webhook config
@@ -180,8 +167,8 @@ If the webhook itself is broken: SSH and `git reset --hard <previous-good-commit
 | Site doesn't restart | `tmp/restart.txt` not touched | Run `touch tmp/restart.txt` manually |
 | Webhook returns 401 | HMAC mismatch | Confirm `GITHUB_WEBHOOK_SECRET` matches in both places |
 | Webhook returns 200 but no deploy | Detached process died silently | Check `/tmp/bjp_deploy.log` and `passenger.log` |
-| Subdomain shows main site instead of Coming Soon | Document root not shared | Re-create subdomain with "Share document root" ON |
-| `ALLOWED_HOSTS` error | Subdomain not in env var | Add to `.env` `ALLOWED_HOSTS`, redeploy |
+| `/financial/` shows hub home instead of Coming Soon | Include order in `config/urls.py` is wrong (hub before leads) or new vertical not in `INSTALLED_APPS` | Fix order; restart Passenger |
+| `ALLOWED_HOSTS` error | New hostname not in env var | Add to `.env` `ALLOWED_HOSTS`, redeploy |
 
 ---
 

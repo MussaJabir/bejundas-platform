@@ -6,13 +6,7 @@ from apps.leads.forms import LeadForm
 from apps.leads.models import VerticalPlaceholder
 
 
-def _get_vertical_from_host(request) -> str:
-    host = request.get_host().split(":")[0]
-    return host.split(".")[0] if "." in host else ""
-
-
-def coming_soon(request):
-    vertical = _get_vertical_from_host(request)
+def coming_soon(request, vertical: str):
     placeholder = VerticalPlaceholder.objects.filter(vertical=vertical, is_active=True).first()
 
     if request.method == "POST":

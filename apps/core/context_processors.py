@@ -11,8 +11,9 @@ def company_info(request):
 
 
 def app_theme(request):
-    host = request.get_host().split(":")[0]
-    subdomain = host.split(".")[0] if "." in host else ""
+    vertical = ""
+    if getattr(request, "resolver_match", None):
+        vertical = request.resolver_match.kwargs.get("vertical", "") or ""
 
     theme_map = {
         "financial": {"primary": "#0a2342", "accent": "#c9a84c", "label": "Financial Services"},
@@ -32,7 +33,7 @@ def app_theme(request):
 
     return {
         "app_theme": theme_map.get(
-            subdomain,
+            vertical,
             {"primary": "#1a1a2e", "accent": "#e94560", "label": "Bejundas Group"},
         )
     }

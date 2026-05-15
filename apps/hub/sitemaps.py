@@ -10,6 +10,11 @@ STATIC_PAGES = [
     ("hub:news", 0.7, "weekly"),
     ("hub:team", 0.6, "monthly"),
     ("hub:contact", 0.8, "monthly"),
+    ("leads:financial", 0.7, "monthly"),
+    ("leads:construction", 0.7, "monthly"),
+    ("leads:energies", 0.7, "monthly"),
+    ("leads:farming", 0.7, "monthly"),
+    ("leads:investments", 0.7, "monthly"),
 ]
 
 

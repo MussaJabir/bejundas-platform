@@ -6,7 +6,11 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="footer-about">
                         <a href="{% url 'hub:home' %}" class="footer-logo site-logo mb_19">
-                            <img src="{% static 'images/brand/logo-white.svg' %}" alt="{{ company.company_name }}" class="main-logo" width="167" height="52">
+                            {% if company.logo %}
+                                <img src="{{ company.logo.url }}" alt="{{ company.company_name }}" class="main-logo">
+                            {% else %}
+                                <span class="h5 fw-7 text_white">{{ company.company_name }}</span>
+                            {% endif %}
                         </a>
                         {% if company.tagline %}
                             <p class="text-caption-1 text_white">{{ company.tagline }}</p>

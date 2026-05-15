@@ -85,3 +85,57 @@ class SiteSettings(BaseModel):
     def get(cls):
         obj, _ = cls.objects.get_or_create(pk="00000000-0000-0000-0000-000000000001")
         return obj
+
+
+# --- Proxy admin sections ---
+# Each proxy is the same SiteSettings row, displayed via a focused admin
+# fieldset so the sidebar splits one giant form into seven discrete entries.
+
+
+class IdentitySettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = "Identity & Branding"
+        verbose_name_plural = "Identity & Branding"
+
+
+class HeroSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = "Hero Section"
+        verbose_name_plural = "Hero Section"
+
+
+class AboutSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = "About Section"
+        verbose_name_plural = "About Section"
+
+
+class MissionVisionSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = "Mission & Vision"
+        verbose_name_plural = "Mission & Vision"
+
+
+class CTASettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = "CTA Section"
+        verbose_name_plural = "CTA Section"
+
+
+class ContactSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = "Contact Info"
+        verbose_name_plural = "Contact Info"
+
+
+class SocialMediaSettings(SiteSettings):
+    class Meta:
+        proxy = True
+        verbose_name = "Social Media"
+        verbose_name_plural = "Social Media"

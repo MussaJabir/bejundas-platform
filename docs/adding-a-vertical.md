@@ -1,6 +1,8 @@
 # Adding a New Vertical — Playbook
 
-This is the long-form guide for promoting a Coming Soon subdomain to a full vertical Django app. CLAUDE.md §13 has the condensed version; this document expands on each step with code, examples, and gotchas.
+This is the long-form guide for promoting a Coming Soon URL path to a full vertical Django app. CLAUDE.md §13 has the condensed version; this document expands on each step with code, examples, and gotchas.
+
+> **Routing note (2026-05-15):** Verticals live at path-based URLs under `bejundas.co.tz` (`/financial/`, `/construction/`, etc.) — not subdomains. `django-hosts` is no longer in the project. See CLAUDE.md ADR-007.
 
 ---
 
@@ -12,7 +14,7 @@ Use this when a vertical (financial, construction, energies, farming, investment
 2. A content owner assigned
 3. A clear deadline to finish populating
 
-If any of those is missing, leave the subdomain on the Coming Soon page. Empty admin shells become abandoned admin shells.
+If any of those is missing, leave the path on the Coming Soon page. Empty admin shells become abandoned admin shells.
 
 ---
 
@@ -88,17 +90,27 @@ INSTALLED_APPS = [
 ]
 ```
 
-### Step 4 — Switch subdomain routing
+### Step 4 — Switch path routing
 
-In `config/hosts.py`, replace the line that points `financial` to the Coming Soon view:
+In `apps/leads/urls.py`, remove the line that points `/financial/` to the Coming Soon view:
 
 ```python
-# before
-host(r'financial', 'apps.leads.urls', name='financial-coming-soon'),
-
-# after
-host(r'financial', 'apps.financial.urls', name='financial'),
+# delete this line
+path("financial/", views.coming_soon, {"vertical": "financial"}, name="financial"),
 ```
+
+In `config/urls.py`, add an include for the new vertical URLs (above `apps.hub.urls`):
+
+```python
+urlpatterns = [
+    ...
+    path("", include("apps.leads.urls")),
+    path("financial/", include("apps.financial.urls")),  # <-- new
+    path("", include("apps.hub.urls")),
+]
+```
+
+In `apps/financial/urls.py`, define the vertical's own URL conf with `app_name = "financial"`. Routes inside are relative (`""` for the home page, `"products/"` for the list, etc.) — Django strips the `/financial/` prefix for you.
 
 ### Step 5 — Build models
 
@@ -468,7 +480,7 @@ from django.urls import reverse
 
 @pytest.mark.django_db
 def test_home_view(client):
-    response = client.get(reverse('financial:home'), HTTP_HOST='financial.bejundas.local')
+    response = client.get(reverse('financial:home'))
     assert response.status_code == 200
     assert 'financial/home.html' in [t.name for t in response.templates]
 ```
@@ -486,7 +498,7 @@ pytest apps/financial/
 ### Step 13 — Commit, push, PR
 
 ```bash
-git add apps/financial/ config/hosts.py config/settings/base.py
+git add apps/financial/ apps/leads/urls.py config/urls.py config/settings/base.py
 git commit -m "feat(financial): launch financial vertical with products and loan applications"
 git push -u origin feature/vertical-financial
 
@@ -547,7 +559,7 @@ For the second vertical onward, the shared infrastructure (BaseModel, SiteSettin
 - New views, URLs, forms, templates from the matching Viora demo
 - New admin registrations
 - New tests
-- Update `config/hosts.py` and `INSTALLED_APPS`
+- Update `apps/leads/urls.py` (remove the path) and `config/urls.py` (add the include); add to `INSTALLED_APPS`
 
 The first vertical typically reveals 3-5 gaps in the shared infrastructure (e.g. missing template tag, missing context variable). Fix those in `apps.core` and the gaps stay fixed forever.
 
@@ -557,9 +569,9 @@ The first vertical typically reveals 3-5 gaps in the shared infrastructure (e.g.
 
 | Gotcha | Cause | Fix |
 |---|---|---|
-| Subdomain still shows Coming Soon after deploy | Forgot to update `config/hosts.py` | Update host pattern, redeploy |
-| Static files 404 on subdomain | Viora assets not in `STATICFILES_DIRS` | Add path, run `collectstatic` |
+| `/financial/` still shows Coming Soon after deploy | Forgot to remove the line from `apps/leads/urls.py` or to add the include in `config/urls.py` | Update both, redeploy |
+| Static files 404 on `/financial/` pages | Viora assets not in `STATICFILES_DIRS` | Add path, run `collectstatic` |
 | Admin section doesn't appear | App not in `INSTALLED_APPS` or `admin.py` not discovered | Verify both; restart Passenger |
 | `NoReverseMatch` for `financial:home` | URL namespace not set | Add `app_name = 'financial'` in `urls.py` |
-| Form submission redirects to wrong domain | `success_url` is absolute path, hits `bejundas.co.tz` instead of `financial.bejundas.co.tz` | Use `django-hosts` `host_url` template tag, or use `reverse_lazy` with `host` kwarg |
+| Hub page matches `/financial/` instead of vertical | Wrong include order — hub is catching `financial/` somehow | Make sure `apps.financial.urls` include is listed **before** `apps.hub.urls` in `config/urls.py` |
 | Admin styling broken on new pages | New app templates don't inherit from `core/base.html` | Always extend `core/base.html` (or your `base_<vertical>.html` which extends `core/base.html`) |

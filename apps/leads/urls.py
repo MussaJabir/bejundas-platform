@@ -1,15 +1,29 @@
-from django.conf import settings
-from django.urls import include, path
+from django.urls import path
+from django.views.generic import RedirectView
 
 from apps.leads import views
 
 app_name = "leads"
 
 urlpatterns = [
-    path("", views.coming_soon, name="coming_soon"),
+    path("financial/", views.coming_soon, {"vertical": "financial"}, name="financial"),
+    path(
+        "construction/",
+        views.coming_soon,
+        {"vertical": "construction"},
+        name="construction",
+    ),
+    path("energies/", views.coming_soon, {"vertical": "energies"}, name="energies"),
+    path("farming/", views.coming_soon, {"vertical": "farming"}, name="farming"),
+    path(
+        "investments/",
+        views.coming_soon,
+        {"vertical": "investments"},
+        name="investments",
+    ),
+    path(
+        "technologies/",
+        RedirectView.as_view(url="https://bjptechnologies.co.tz", permanent=True),
+        name="technologies",
+    ),
 ]
-
-if settings.DEBUG:
-    import debug_toolbar
-
-    urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns

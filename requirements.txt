@@ -1,5 +1,4 @@
 Django>=5.1,<6.0
-django-hosts>=6.0,<7.0
 django-unfold>=0.40,<1.0
 django-environ>=0.11,<1.0
 django-widget-tweaks>=1.5,<2.0

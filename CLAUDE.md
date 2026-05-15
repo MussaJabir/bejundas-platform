@@ -17,21 +17,23 @@
 
 ### What this project is
 
-A multi-subdomain Django web platform serving Bejundas Group's six business verticals plus a parent landing site. Built as a **monorepo** — one Django project, one Passenger app, one deploy — with subdomain routing handled by `django-hosts`.
+A Django web platform serving Bejundas Group's parent landing site plus six business verticals — all under a single host (`bejundas.co.tz`) with verticals routed at URL paths (`/financial/`, `/construction/`, etc.). Built as a **monorepo**: one Django project, one Passenger app, one deploy. See ADR-007 for the routing decision.
 
-### Subdomain map
+### URL map
 
-| Subdomain | Status (MVP) | Django app |
+| URL | Status (MVP) | Django app |
 |---|---|---|
-| `bejundas.co.tz` | Full marketing site | `apps.hub` |
-| `financial.bejundas.co.tz` | Coming Soon page | `apps.leads.coming_soon` |
-| `construction.bejundas.co.tz` | Coming Soon page | `apps.leads.coming_soon` |
-| `energies.bejundas.co.tz` | Coming Soon page | `apps.leads.coming_soon` |
-| `farming.bejundas.co.tz` | Coming Soon page | `apps.leads.coming_soon` |
-| `investments.bejundas.co.tz` | Coming Soon page | `apps.leads.coming_soon` |
-| `technologies.bejundas.co.tz` | 301 redirect to `bjptechnologies.co.tz` | redirect view |
+| `bejundas.co.tz/` | Full marketing site | `apps.hub` |
+| `bejundas.co.tz/financial/` | Coming Soon page | `apps.leads.coming_soon` |
+| `bejundas.co.tz/construction/` | Coming Soon page | `apps.leads.coming_soon` |
+| `bejundas.co.tz/energies/` | Coming Soon page | `apps.leads.coming_soon` |
+| `bejundas.co.tz/farming/` | Coming Soon page | `apps.leads.coming_soon` |
+| `bejundas.co.tz/investments/` | Coming Soon page | `apps.leads.coming_soon` |
+| `bejundas.co.tz/technologies/` | 301 redirect to `bjptechnologies.co.tz` | `RedirectView` in `apps.leads.urls` |
 
 `bjptechnologies.co.tz` is a separate live site in the [bjp-technologies-web](https://github.com/MussaJabir/bjp-technologies-web) repo. It is **not** part of this monorepo.
+
+> **Note:** Earlier the verticals lived on subdomains (`financial.bejundas.co.tz`, etc.) routed via `django-hosts`. The client requested a path-based structure on 2026-05-15. Subdomains were deleted in cPanel. See ADR-007.
 
 ---
 
@@ -41,26 +43,26 @@ This section explains *why* the architecture is what it is. Read it before propo
 
 ### ADR-001: Monorepo over six separate repos
 
-**Decision:** Single Django project, multiple apps, `django-hosts` for routing.
+**Decision:** Single Django project, multiple apps. (Originally also: `django-hosts` for subdomain routing — superseded by ADR-007.)
 
 **Why:**
-- cPanel + Passenger handles wildcard subdomains via "Share document root" toggle. One Passenger app serves all subdomains cleanly.
+- One Passenger app serves the whole platform cleanly.
 - Six separate repos means six webhook deploys, six virtualenvs, six SSL renewals, six CI pipelines. Unmaintainable for a solo developer.
 - Shared code (base templates, Lead model, admin theme, deploy pipeline) lives in one place.
 
-**Trade-off:** A bug in shared code can break all subdomains at once. Mitigated by CI tests and staged deploys.
+**Trade-off:** A bug in shared code can break the whole platform at once. Mitigated by CI tests and staged deploys.
 
 ### ADR-002: Hub-only MVP
 
-**Decision:** Build the hub site fully. The five verticals get a single shared "Coming Soon" page themed per subdomain via a `VerticalPlaceholder` admin record.
+**Decision:** Build the hub site fully. The five verticals get a single shared "Coming Soon" page themed per vertical via a `VerticalPlaceholder` admin record (looked up by URL kwarg).
 
 **Why:**
 - Client confirmed no real content exists for any vertical at MVP time.
 - Building 6 vertical-specific apps with placeholder content creates 6 abandoned shells.
-- Coming Soon + lead capture form turns each subdomain into a marketing asset that converts visitors into a `Lead` row, which is more valuable than a fake services page.
+- Coming Soon + lead capture form turns each vertical URL into a marketing asset that converts visitors into a `Lead` row, which is more valuable than a fake services page.
 - Verticals are added later when content is ready (see §13 Adding a New Vertical).
 
-**Trade-off:** Subdomains do not show full vertical-specific content at launch. Acceptable because no real content exists to show.
+**Trade-off:** Vertical URLs do not show full vertical-specific content at launch. Acceptable because no real content exists to show.
 
 ### ADR-003: MySQL for both dev and production
 
@@ -104,6 +106,18 @@ This section explains *why* the architecture is what it is. Read it before propo
 
 **Trade-off:** Requires `GITHUB_WEBHOOK_SECRET` env var on server. HMAC validation in webhook handler.
 
+### ADR-007: Path-based routing instead of subdomains (supersedes the routing half of ADR-001)
+
+**Decision:** Verticals live at `/financial/`, `/construction/`, `/energies/`, `/farming/`, `/investments/`, `/technologies/` — all under the single `bejundas.co.tz` host. `django-hosts` is removed. The technologies path is a `RedirectView` to `bjptechnologies.co.tz`.
+
+**Why:**
+- Client direction (2026-05-15): subdomains imply "separate business," paths imply "section of the parent." Bejundas is a holdings group — paths match the brand reality better.
+- One canonical domain consolidates SEO link equity instead of fragmenting it across six hostnames.
+- One SSL cert, one DNS record, one cPanel domain. The wildcard-subdomain Passenger setup that caused Phase 4 deploy headaches goes away.
+- Coming Soon view now reads `vertical` as a URL kwarg; `app_theme` context processor reads `request.resolver_match.kwargs.get("vertical")`. Same `VerticalPlaceholder` model, same `LeadForm` — only the lookup key changed.
+
+**Trade-off:** Anyone with bookmarks to old subdomains gets a hard 404. Acceptable because subdomains were live for one day and the site was never publicly announced. No 301 redirects retained on cPanel — old subdomains deleted entirely.
+
 ---
 
 ## 3. Technology Stack
@@ -113,7 +127,7 @@ This section explains *why* the architecture is what it is. Read it before propo
 | Language | Python 3.11 | cPanel-supported version |
 | Framework | Django 5.x LTS | Stability over Django 6 |
 | Database | MySQL 8 / MariaDB | `utf8mb4` charset always |
-| Routing | `django-hosts` | Subdomain → URLConf mapping |
+| Routing | Plain Django URL conf | Path-based — see ADR-007 |
 | Admin | `django-unfold` | Themed admin |
 | Forms | `django-widget-tweaks` | Lighter than crispy-forms |
 | Env vars | `django-environ` | Loaded in `manage.py` and `passenger_wsgi.py` |
@@ -440,8 +454,7 @@ Required GitHub repo secret: same value, configured under Settings → Webhooks.
 |---|---|---|
 | `SECRET_KEY` | yes | Django secret |
 | `DEBUG` | yes | `True` in dev, `False` in prod |
-| `ALLOWED_HOSTS` | yes | Comma-separated. Include all 7 hostnames |
-| `PARENT_HOST` | yes | `bejundas.co.tz` |
+| `ALLOWED_HOSTS` | yes | Comma-separated. `bejundas.co.tz,www.bejundas.co.tz` in prod |
 | `DB_NAME` | yes | |
 | `DB_USER` | yes | |
 | `DB_PASS` | yes | |
@@ -490,10 +503,10 @@ Required GitHub repo secret: same value, configured under Settings → Webhooks.
 ### Phase 0 — Infrastructure (client/dev does this in cPanel)
 
 1. MySQL: create `bejundas_db` + user + grant ALL privileges
-2. Domains: create 6 subdomains (`financial`, `construction`, `energies`, `farming`, `investments`, `technologies`) each with **"Share document root with bejundas.co.tz" ON**
+2. Domains: just `bejundas.co.tz` and `www.bejundas.co.tz`. **No subdomains** — verticals are URL paths (`/financial/`, `/construction/`, …) on the single host. See ADR-007.
 3. Setup Python App: Python 3.11, app root `bejundas_platform`, URL `bejundas.co.tz`, startup file `passenger_wsgi.py`, entry point `application`
-4. SSL/TLS: AutoSSL on for all 7 hostnames
-5. (Optional but recommended) Cloudflare in front for caching + free wildcard SSL fallback
+4. SSL/TLS: AutoSSL on `bejundas.co.tz` + `www.bejundas.co.tz`
+5. (Optional but recommended) Cloudflare in front for caching + DDoS protection
 
 ### Phase 1 — Repo scaffold (Claude does)
 
@@ -584,12 +597,18 @@ INSTALLED_APPS = [
 
 ### Step 4 — Switch routing
 
-In `config/hosts.py`:
+The vertical's "Coming Soon" URL currently lives in `apps/leads/urls.py`:
 ```python
-host(r'financial', 'apps.financial.urls', name='financial'),
+path("financial/", views.coming_soon, {"vertical": "financial"}, name="financial"),
 ```
 
-(Replace the previous line that pointed `financial` to `apps.leads.coming_soon`.)
+When the vertical ships:
+1. Remove that line from `apps/leads/urls.py`.
+2. Add an include in `config/urls.py` (above `apps.hub.urls`):
+   ```python
+   path("financial/", include("apps.financial.urls")),
+   ```
+3. Inside `apps/financial/urls.py`, define the vertical's own routes (`""` → home, `"products/"` → list, etc.) with `app_name = "financial"`.
 
 ### Step 5 — Build models
 
@@ -791,18 +810,13 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-To test subdomain routing locally, edit `/etc/hosts`:
-```
-127.0.0.1   bejundas.local
-127.0.0.1   financial.bejundas.local
-127.0.0.1   construction.bejundas.local
-127.0.0.1   energies.bejundas.local
-127.0.0.1   farming.bejundas.local
-127.0.0.1   investments.bejundas.local
-127.0.0.1   technologies.bejundas.local
-```
+Verticals are at path-based URLs:
+- `http://127.0.0.1:8000/` — hub
+- `http://127.0.0.1:8000/financial/` — financial Coming Soon
+- `http://127.0.0.1:8000/construction/`, `/energies/`, `/farming/`, `/investments/`
+- `http://127.0.0.1:8000/technologies/` — 301 to `bjptechnologies.co.tz`
 
-Then visit `http://bejundas.local:8000` and `http://financial.bejundas.local:8000`.
+No `/etc/hosts` edits needed.
 
 ### Run tests
 

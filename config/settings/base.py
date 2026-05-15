@@ -16,8 +16,6 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG")
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
-PARENT_HOST = env("PARENT_HOST")
-
 INSTALLED_APPS = [
     "unfold",
     "unfold.contrib.filters",
@@ -30,7 +28,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sitemaps",
-    "django_hosts",
     "widget_tweaks",
     "apps.core",
     "apps.hub",
@@ -38,7 +35,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "django_hosts.middleware.HostsRequestMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -47,12 +43,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django_hosts.middleware.HostsResponseMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
-ROOT_HOSTCONF = "config.hosts"
-DEFAULT_HOST = "hub"
 
 TEMPLATES = [
     {

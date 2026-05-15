@@ -8,6 +8,13 @@ from unfold.admin import ModelAdmin
 from apps.core.models import SiteSettings
 
 
+def unread_leads_badge(request):
+    from apps.leads.models import Lead
+
+    count = Lead.objects.filter(notified=False).count()
+    return str(count) if count else None
+
+
 def dashboard_callback(request, context):
     from apps.hub.models import News, Service, TeamMember
     from apps.leads.models import Lead, VerticalPlaceholder

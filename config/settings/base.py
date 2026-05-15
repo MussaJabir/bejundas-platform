@@ -2,6 +2,7 @@ from pathlib import Path
 
 import environ
 from django.templatetags.static import static
+from django.urls import reverse_lazy
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -145,5 +146,87 @@ UNFOLD = {
             "900": "30 58 138",
             "950": "23 37 84",
         },
+    },
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": False,
+        "navigation": [
+            {
+                "title": "Dashboard",
+                "separator": False,
+                "items": [
+                    {
+                        "title": "Overview",
+                        "icon": "dashboard",
+                        "link": reverse_lazy("admin:index"),
+                    },
+                ],
+            },
+            {
+                "title": "Website Content",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Services",
+                        "icon": "list_alt",
+                        "link": reverse_lazy("admin:hub_service_changelist"),
+                    },
+                    {
+                        "title": "News",
+                        "icon": "newspaper",
+                        "link": reverse_lazy("admin:hub_news_changelist"),
+                    },
+                    {
+                        "title": "Team Members",
+                        "icon": "groups",
+                        "link": reverse_lazy("admin:hub_teammember_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": "Leads",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "All Leads",
+                        "icon": "inbox",
+                        "link": reverse_lazy("admin:leads_lead_changelist"),
+                        "badge": "apps.core.admin.unread_leads_badge",
+                    },
+                    {
+                        "title": "Vertical Placeholders",
+                        "icon": "category",
+                        "link": reverse_lazy("admin:leads_verticalplaceholder_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": "Site Settings",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Site Settings",
+                        "icon": "tune",
+                        "link": reverse_lazy("admin:core_sitesettings_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": "Administration",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Users",
+                        "icon": "person",
+                        "link": reverse_lazy("admin:auth_user_changelist"),
+                    },
+                    {
+                        "title": "Groups",
+                        "icon": "group",
+                        "link": reverse_lazy("admin:auth_group_changelist"),
+                    },
+                ],
+            },
+        ],
     },
 }

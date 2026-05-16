@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Update — Bejundas Platform | Phase 5 Admin Overhaul</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #1a1a2e;
+    --blue:    #2563eb;
+    --blue-md: #1d4ed8;
+    --blue-lt: #dbeafe;
+    --blue-xs: #eff6ff;
+    --green:   #16a34a;
+    --green-lt:#dcfce7;
+    --amber:   #d97706;
+    --amber-lt:#fef3c7;
+    --red:     #dc2626;
+    --red-lt:  #fee2e2;
+    --text:    #0f172a;
+    --muted:   #475569;
+    --border:  #e2e8f0;
+    --bg:      #f8fafc;
+    --white:   #ffffff;
+  }
+
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  .header { background: var(--navy); color: var(--white); padding: 52px 0 44px; }
+  .inner { max-width: 800px; margin: 0 auto; padding: 0 32px; }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-dot { width: 10px; height: 10px; background: #60a5fa; border-radius: 50%; }
+  .brand-name { font-size: 14px; font-weight: 600; color: #94a3b8; letter-spacing: .04em; text-transform: uppercase; }
+  .report-date { font-size: 13px; color: #94a3b8; }
+  .header h1 { font-size: 34px; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 12px; }
+  .header h1 span { color: #60a5fa; }
+  .header .subtitle { font-size: 16px; color: #94a3b8; max-width: 540px; margin-bottom: 24px; }
+  .status-pill { display: inline-flex; align-items: center; gap: 8px; background: var(--green-lt); color: var(--green); font-size: 13px; font-weight: 700; padding: 7px 16px; border-radius: 20px; letter-spacing: .03em; }
+  .status-pill::before { content: ''; width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
+
+  main { max-width: 800px; margin: 0 auto; padding: 40px 32px 64px; display: flex; flex-direction: column; gap: 28px; }
+
+  .intro { background: var(--white); border: 1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 24px 28px; font-size: 15px; color: var(--muted); line-height: 1.8; }
+  .intro strong { color: var(--navy); }
+
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .card-header { display: flex; align-items: center; gap: 14px; padding: 20px 28px; border-bottom: 1px solid var(--border); background: var(--blue-xs); }
+  .card-icon { width: 38px; height: 38px; background: var(--blue); border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .card-icon svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .card-header h2 { font-size: 16px; font-weight: 700; color: var(--navy); }
+  .card-header .card-tag { margin-left: auto; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--blue); background: var(--blue-lt); padding: 3px 10px; border-radius: 4px; }
+  .card-body { padding: 28px; }
+
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .compare-col h3 { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 12px; }
+  .compare-col.before h3 { color: var(--red); }
+  .compare-col.after  h3 { color: var(--green); }
+  .compare-list { list-style: none; padding: 0; margin: 0; }
+  .compare-list li { padding: 10px 14px; border-radius: 8px; margin-bottom: 6px; font-size: 13px; line-height: 1.5; }
+  .compare-list li.before { background: var(--red-lt);   color: #991b1b; }
+  .compare-list li.after  { background: var(--green-lt); color: #14532d; }
+
+  .phase-list { display: flex; flex-direction: column; gap: 14px; }
+  .phase-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; }
+  .phase-num { width: 32px; height: 32px; background: var(--blue); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .phase-content strong { font-size: 15px; font-weight: 700; color: var(--navy); display: block; margin-bottom: 4px; }
+  .phase-content p { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0; }
+
+  .what-list { display: flex; flex-direction: column; gap: 14px; }
+  .what-item { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; }
+  .what-icon { width: 28px; height: 28px; background: var(--blue-lt); color: var(--blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .what-content strong { font-size: 14px; font-weight: 600; color: var(--navy); display: block; margin-bottom: 2px; }
+  .what-content span { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  .impact-banner { background: linear-gradient(135deg, #1a1a2e 0%, #1e3a8a 100%); color: var(--white); border-radius: 14px; padding: 28px 32px; }
+  .impact-banner h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+  .impact-banner p { font-size: 14px; color: #cbd5e1; line-height: 1.7; }
+
+  .access-box { background: var(--blue-xs); border: 1px solid var(--blue-lt); border-radius: 10px; padding: 22px 26px; }
+  .access-box h3 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 8px; text-transform: uppercase; letter-spacing: .04em; }
+  .access-box p { font-size: 14px; color: var(--muted); margin-bottom: 12px; }
+  .access-url { display: inline-block; font-family: 'Courier New', monospace; font-size: 13px; color: var(--blue-md); background: var(--blue-lt); padding: 6px 14px; border-radius: 6px; }
+
+  .closing { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 28px; text-align: center; }
+  .closing h3 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .closing p { font-size: 14px; color: var(--muted); }
+
+  .page-footer { max-width: 800px; margin: 0 auto; padding: 24px 32px 40px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); }
+
+  /* ── Print / PDF styles ── */
+  @media print {
+    body { background: white; font-size: 12px; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+    .card, .impact-banner, .closing, .access-box { break-inside: avoid; }
+    @page { margin: 15mm; size: A4; }
+  }
+
+  @media (max-width: 600px) {
+    .compare-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 26px; }
+    .page-footer { flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="inner">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-dot"></div>
+        <div class="brand-name">Bejundas Group of Companies</div>
+      </div>
+      <div class="report-date">May 15, 2026</div>
+    </div>
+    <h1>Your Admin Panel <span>Just Got Powerful</span></h1>
+    <p class="subtitle">A complete redesign of the website's behind-the-scenes control panel — branded, organized, and built around how you actually work day-to-day.</p>
+    <div class="status-pill">PHASE 5 — Admin Overhaul Complete</div>
+  </div>
+</div>
+
+<main>
+
+  <div class="intro">
+    Up to now your admin panel was the standard Django default — a flat list of database tables in generic purple. Functional, but not ready to hand to a non-technical team member. <strong>This phase rebuilt it from the ground up</strong> to feel like part of the Bejundas brand and surface what matters most: incoming leads.
+  </div>
+
+  <!-- Before / After -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      </div>
+      <h2>Before vs After</h2>
+      <span class="card-tag">Comparison</span>
+    </div>
+    <div class="card-body">
+      <div class="compare-grid">
+        <div class="compare-col before">
+          <h3>Before</h3>
+          <ul class="compare-list">
+            <li class="before">Generic purple Django admin</li>
+            <li class="before">Flat list of database tables</li>
+            <li class="before">No dashboard — just a model index</li>
+            <li class="before">Site Settings was one giant 30-field form</li>
+            <li class="before">No way to see unread leads at a glance</li>
+            <li class="before">No batch operations on leads</li>
+            <li class="before">No image previews in lists</li>
+          </ul>
+        </div>
+        <div class="compare-col after">
+          <h3>After</h3>
+          <ul class="compare-list">
+            <li class="after">Bejundas-branded blue + navy theme</li>
+            <li class="after">Organized sidebar with grouped sections</li>
+            <li class="after">Dashboard with KPIs, recent leads, charts</li>
+            <li class="after">Settings split into 7 focused sections</li>
+            <li class="after">Live red badge shows unread lead count</li>
+            <li class="after">"Mark as notified" works on multiple leads</li>
+            <li class="after">Photo, cover, and color thumbnails everywhere</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 phases -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      </div>
+      <h2>What Was Built — In 5 Steps</h2>
+      <span class="card-tag">Phases</span>
+    </div>
+    <div class="card-body">
+      <div class="phase-list">
+        <div class="phase-item">
+          <div class="phase-num">1</div>
+          <div class="phase-content">
+            <strong>Brand Alignment</strong>
+            <p>Replaced the default purple theme with Bejundas's navy + blue palette. Added the "B" monogram as the sidebar logo and browser favicon. Now the admin and the public website feel like the same brand world.</p>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">2</div>
+          <div class="phase-content">
+            <strong>Custom Dashboard</strong>
+            <p>Built a real overview screen instead of a database list. Shows total leads, new leads this week, unread leads (highlighted in red), and a colour-coded chart of leads by business vertical — all the moment you log in.</p>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">3</div>
+          <div class="phase-content">
+            <strong>Organized Sidebar</strong>
+            <p>Grouped every section into clear categories: Dashboard, Website Content, Leads, Site Settings, Administration. Added an icon to each item, plus a live red badge on "All Leads" that shows how many are still awaiting follow-up.</p>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">4</div>
+          <div class="phase-content">
+            <strong>Settings Split Into 7 Focused Sections</strong>
+            <p>Site Settings used to be one giant form with 30+ fields stacked together. Now it's seven clean sections — Identity &amp; Branding, Hero, About, Mission &amp; Vision, CTA, Contact, Social Media — each opening to just the fields that matter for that part of the site.</p>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">5</div>
+          <div class="phase-content">
+            <strong>Polish &amp; Convenience</strong>
+            <p>Added colour-coded status pills (red NEW, green NOTIFIED, amber DRAFT, etc.), thumbnail previews for team photos and news covers, vertical brand colour swatches, and a "mark multiple leads as notified" batch button.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- What you can do now -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <h2>What You Can Do Faster Now</h2>
+      <span class="card-tag">Workflow Wins</span>
+    </div>
+    <div class="card-body">
+      <div class="what-list">
+        <div class="what-item">
+          <div class="what-icon">→</div>
+          <div class="what-content">
+            <strong>See unread leads instantly</strong>
+            <span>The moment you log in, the red badge in the sidebar tells you exactly how many leads need your follow-up. No more scrolling through tables.</span>
+          </div>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">→</div>
+          <div class="what-content">
+            <strong>Update only the part of the site you care about</strong>
+            <span>Want to change the home page hero text? Click "Hero Section". Just the right form opens — no scrolling past Address, Mission, Social, etc.</span>
+          </div>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">→</div>
+          <div class="what-content">
+            <strong>Mark multiple leads as notified at once</strong>
+            <span>After replying to a batch of enquiries, tick the boxes and use the "Mark as notified" action. Done in one click instead of opening each lead.</span>
+          </div>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">→</div>
+          <div class="what-content">
+            <strong>Spot a published vs draft article at a glance</strong>
+            <span>News articles show a green LIVE pill or amber DRAFT pill in the list, plus a thumbnail of the cover image. No need to open each one.</span>
+          </div>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">→</div>
+          <div class="what-content">
+            <strong>Verify each business vertical's brand colours</strong>
+            <span>The Vertical Placeholders list shows two coloured dots per row (primary + accent). One look confirms each Coming Soon page is themed correctly.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Brand fidelity callout -->
+  <div class="impact-banner">
+    <h3>Branded — not generic</h3>
+    <p>The admin chrome, sidebar, dashboard cards, status pills, and even the favicon now use the same navy (<strong>#1a1a2e</strong>), blue (<strong>#2563eb</strong>), and accent red (<strong>#e94560</strong>) you see on bejundas.co.tz. When you or a team member opens the admin panel, it looks and feels like Bejundas — not like a developer tool.</p>
+  </div>
+
+  <!-- Access -->
+  <div class="access-box">
+    <h3>How to access</h3>
+    <p>The admin panel is reached at the URL below. Sign in with the username and password we set up together.</p>
+    <span class="access-url">https://bejundas.co.tz/admin/</span>
+  </div>
+
+  <!-- Closing -->
+  <div class="closing">
+    <h3>Ready for daily use</h3>
+    <p>The admin overhaul is complete and live. Next time you log in, everything should feel more focused and faster to navigate. If anything feels missing, let us know and we'll adjust.</p>
+  </div>
+
+</main>
+
+<div class="page-footer">
+  <span>Bejundas Platform · Phase 5 Admin Overhaul</span>
+  <span>Prepared by BJP Technologies · 15 May 2026</span>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 5 Technical Report — Admin Overhaul — Bejundas Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #1a1a2e;
+    --blue:   #2563eb;
+    --blue-md:#1d4ed8;
+    --blue-lt:#dbeafe;
+    --blue-xs:#eff6ff;
+    --green:  #16a34a;
+    --green-lt:#dcfce7;
+    --amber:  #d97706;
+    --amber-lt:#fef3c7;
+    --red:    #dc2626;
+    --red-lt: #fee2e2;
+    --text:   #0f172a;
+    --muted:  #475569;
+    --border: #e2e8f0;
+    --bg:     #f8fafc;
+    --white:  #ffffff;
+  }
+
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+
+  .header { background: var(--navy); color: var(--white); padding: 48px 0 40px; }
+  .header .inner { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+  .header-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .logo-chip { background: var(--blue); color: var(--white); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; }
+  .date-chip { font-size: 13px; color: #94a3b8; }
+  .header h1 { font-size: 30px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 8px; }
+  .header h1 span { color: #60a5fa; }
+  .header p { font-size: 15px; color: #94a3b8; max-width: 640px; }
+  .status-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; background: var(--green-lt); color: var(--green); font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 20px; }
+  .status-badge::before { content: ''; width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
+
+  main { max-width: 880px; margin: 0 auto; padding: 40px 24px 64px; display: flex; flex-direction: column; gap: 24px; }
+
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .card-header { display: flex; align-items: center; gap: 12px; padding: 20px 24px; border-bottom: 1px solid var(--border); background: var(--blue-xs); }
+  .card-icon { width: 36px; height: 36px; background: var(--blue); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .card-icon svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .card-header h2 { font-size: 16px; font-weight: 700; color: var(--navy); }
+  .card-header .section-num { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--blue); background: var(--blue-lt); padding: 2px 8px; border-radius: 4px; }
+  .card-body { padding: 24px; }
+
+  code { font-size: 12px; background: var(--blue-lt); color: var(--blue-md); padding: 1px 6px; border-radius: 4px; font-family: 'Courier New', monospace; }
+  pre { background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 16px 20px; font-size: 12px; line-height: 1.7; overflow-x: auto; font-family: 'Courier New', monospace; margin: 12px 0; }
+  pre .c { color: #64748b; }
+  pre .k { color: #60a5fa; }
+  pre .s { color: #86efac; }
+  pre .d { color: #f87171; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .stat-box { background: var(--blue-xs); border: 1px solid var(--blue-lt); border-radius: 10px; padding: 16px 12px; text-align: center; }
+  .stat-box .num { font-size: 26px; font-weight: 700; color: var(--blue); line-height: 1; margin-bottom: 4px; }
+  .stat-box .lbl { font-size: 11px; color: var(--muted); font-weight: 500; }
+
+  .phase-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .phase-table th { text-align: left; padding: 10px 14px; background: var(--blue-xs); color: var(--navy); font-weight: 600; font-size: 12px; border-bottom: 1px solid var(--border); }
+  .phase-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--muted); vertical-align: top; }
+  .phase-table tr:last-child td { border-bottom: none; }
+  .phase-table .pr-pill { display: inline-block; background: var(--blue-lt); color: var(--blue-md); font-family: 'Courier New', monospace; font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
+  .phase-table .ph-num { display: inline-block; background: var(--navy); color: var(--white); font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 700; min-width: 24px; text-align: center; }
+
+  .file-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .file-table th { text-align: left; padding: 10px 14px; background: var(--blue-xs); color: var(--navy); font-weight: 600; font-size: 12px; border-bottom: 1px solid var(--border); }
+  .file-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--muted); vertical-align: top; }
+  .file-table tr:last-child td { border-bottom: none; }
+  .file-table td:first-child { font-family: 'Courier New', monospace; font-size: 12px; color: var(--blue-md); white-space: nowrap; }
+  .file-table .tag-add { display: inline-block; background: var(--green-lt); color: var(--green); font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-right: 6px; }
+  .file-table .tag-mod { display: inline-block; background: var(--amber-lt); color: var(--amber); font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-right: 6px; }
+  .file-table .tag-del { display: inline-block; background: var(--red-lt); color: var(--red); font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-right: 6px; }
+
+  .built-list { display: flex; flex-direction: column; gap: 12px; }
+  .built-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 8px; }
+  .built-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); margin-top: 6px; flex-shrink: 0; }
+  .built-item strong { font-size: 14px; font-weight: 600; color: var(--navy); display: block; margin-bottom: 2px; }
+  .built-item span { font-size: 13px; color: var(--muted); }
+
+  .checklist { display: flex; flex-direction: column; gap: 8px; }
+  .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
+  .check-mark { width: 18px; height: 18px; border-radius: 4px; background: var(--green); color: var(--white); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .check-mark.todo { background: var(--white); border: 1.5px solid var(--border); color: transparent; }
+  .check-item span { font-size: 13px; color: var(--text); }
+
+  .bug-card { border: 1px solid #fecaca; border-radius: 10px; overflow: hidden; }
+  .bug-header { background: var(--red-lt); padding: 12px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #fecaca; }
+  .bug-tag { font-size: 11px; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: .06em; }
+  .bug-title { font-size: 14px; font-weight: 600; color: var(--red); }
+  .bug-body { padding: 16px; }
+  .bug-body p { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  .bug-body strong { color: var(--navy); }
+  .fix-tag { display: inline-block; font-size: 11px; font-weight: 700; color: var(--green); background: var(--green-lt); padding: 2px 8px; border-radius: 4px; margin-top: 6px; }
+
+  /* ── Print / PDF styles ── */
+  @media print {
+    body { background: white; font-size: 12px; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+    .card, .stat-row, .file-table, .phase-table, .bug-card { break-inside: avoid; }
+    @page { margin: 15mm; size: A4; }
+  }
+
+  @media (max-width: 600px) {
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="inner">
+    <div class="header-meta">
+      <span class="logo-chip">Bejundas Platform</span>
+      <span class="date-chip">15 May 2026</span>
+    </div>
+    <h1>Phase 5 — Django Admin <span>Overhaul</span></h1>
+    <p>Five-PR rebuild of the Django admin from default Unfold theme to a fully Bejundas-branded operations panel. New custom dashboard, curated sidebar with grouped icons + live unread-leads badge, <code>SiteSettings</code> split into 7 proxy admins, batch lead actions, and a fix for an upstream Unfold badge rendering bug.</p>
+    <div class="status-badge">SHIPPED — PRs #31 + #32 + #33 + #34 + #35 merged</div>
+  </div>
+</div>
+
+<main>
+
+  <!-- Stats row -->
+  <div class="stat-row">
+    <div class="stat-box"><div class="num">5</div><div class="lbl">Sub-phase PRs</div></div>
+    <div class="stat-box"><div class="num">7</div><div class="lbl">Proxy admins</div></div>
+    <div class="stat-box"><div class="num">24/24</div><div class="lbl">Tests passing</div></div>
+    <div class="stat-box"><div class="num">1</div><div class="lbl">Upstream bug fix</div></div>
+  </div>
+
+  <!-- Phase summary table -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      </div>
+      <h2>Sub-Phase Summary</h2>
+      <span class="section-num">§1</span>
+    </div>
+    <div class="card-body">
+      <table class="phase-table">
+        <thead>
+          <tr><th>#</th><th>PR</th><th>Title</th><th>Lines (+/−)</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="ph-num">1</span></td>
+            <td><span class="pr-pill">#31</span></td>
+            <td><strong>Brand alignment</strong> — UNFOLD palette swap (purple → Tailwind blue), <code>SITE_ICON</code>/<code>SITE_LOGO</code> callbacks pointing to favicon.svg, <code>SITE_HEADER</code>/<code>SITE_SYMBOL</code>, <code>SHOW_HISTORY</code>+<code>SHOW_VIEW_ON_SITE</code>.</td>
+            <td>+25 / −12</td>
+          </tr>
+          <tr>
+            <td><span class="ph-num">2</span></td>
+            <td><span class="pr-pill">#32</span></td>
+            <td><strong>Custom dashboard</strong> — new <code>dashboard_callback()</code>, <code>templates/admin/index.html</code> (KPI cards, recent leads, vertical bar chart, content stats footer).</td>
+            <td>+257 / 0</td>
+          </tr>
+          <tr>
+            <td><span class="ph-num">3</span></td>
+            <td><span class="pr-pill">#33</span></td>
+            <td><strong>Sidebar navigation</strong> — curated <code>SIDEBAR.navigation</code> with 5 grouped sections, Material icons, <code>unread_leads_badge()</code> callback wired to <code>"badge"</code>.</td>
+            <td>+90 / 0</td>
+          </tr>
+          <tr>
+            <td><span class="ph-num">4</span></td>
+            <td><span class="pr-pill">#34</span></td>
+            <td><strong>Settings split</strong> — 7 proxy models on <code>SiteSettings</code>, <code>_BaseSiteSettingsAdmin</code> shared base, sidebar replaced with 7 grouped settings entries. Bonus: Unfold badge rendering bug fix.</td>
+            <td>+346 / −26</td>
+          </tr>
+          <tr>
+            <td><span class="ph-num">5</span></td>
+            <td><span class="pr-pill">#35</span></td>
+            <td><strong>Polish</strong> — status pills (Lead, VerticalPlaceholder, Service, TeamMember, News), image thumbnails (TeamMember photo, News cover), color swatches (VerticalPlaceholder), batch actions (<code>mark_as_notified</code>/<code>mark_as_unread</code>), <code>list_per_page</code> + ordering.</td>
+            <td>+207 / −17</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Architecture: proxy admins -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      </div>
+      <h2>Architecture: SiteSettings Proxy Pattern</h2>
+      <span class="section-num">§2</span>
+    </div>
+    <div class="card-body">
+      <p style="font-size:14px;color:var(--muted);margin-bottom:14px;">The single <code>SiteSettings</code> singleton row gets seven different admin views via proxy models. No DB schema changes — proxies share the parent table.</p>
+
+      <pre><span class="c"># apps/core/models.py</span>
+<span class="k">class</span> SiteSettings(BaseModel):
+    <span class="c"># ...30+ fields...</span>
+    @classmethod
+    <span class="k">def</span> get(cls):
+        obj, _ = cls.objects.get_or_create(pk=<span class="s">"00000000-..."</span>)
+        return obj
+
+<span class="k">class</span> IdentitySettings(SiteSettings):
+    <span class="k">class</span> Meta: proxy = <span class="k">True</span>
+
+<span class="k">class</span> HeroSettings(SiteSettings):
+    <span class="k">class</span> Meta: proxy = <span class="k">True</span>
+
+<span class="c"># ...5 more — AboutSettings, MissionVisionSettings, CTASettings,</span>
+<span class="c"># ContactSettings, SocialMediaSettings</span>
+
+
+<span class="c"># apps/core/admin.py</span>
+<span class="k">class</span> _BaseSiteSettingsAdmin(ModelAdmin):
+    <span class="k">def</span> has_add_permission(self, request):    return <span class="k">False</span>
+    <span class="k">def</span> has_delete_permission(self, request, obj=<span class="k">None</span>): return <span class="k">False</span>
+
+    <span class="k">def</span> changelist_view(self, request, extra_context=<span class="k">None</span>):
+        model_name = self.model._meta.model_name
+        return HttpResponseRedirect(
+            reverse(<span class="s">f"admin:core_{model_name}_change"</span>, args=[SiteSettings.get().pk])
+        )
+
+@admin.register(HeroSettings)
+<span class="k">class</span> HeroSettingsAdmin(_BaseSiteSettingsAdmin):
+    fieldsets = ((<span class="s">"Home Page — Hero Section"</span>, {<span class="s">"fields"</span>: (...)}),)</pre>
+    </div>
+  </div>
+
+  <!-- Bug fix call-out -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+      </div>
+      <h2>Upstream Bug: Unfold Badge Renders "None"</h2>
+      <span class="section-num">§3</span>
+    </div>
+    <div class="card-body">
+      <div class="bug-card">
+        <div class="bug-header">
+          <span class="bug-tag">Bug</span>
+          <span class="bug-title">Sidebar badge bubble renders the literal text "NONE" when the badge callback returns Python <code>None</code></span>
+        </div>
+        <div class="bug-body">
+          <p><strong>Root cause:</strong> Unfold (v0.93.0) wraps the badge callable with <code>django.utils.functional.lazy(callback)(request)</code>. Lazy proxies are <strong>always truthy</strong> in Python — <code>bool(lazy_proxy)</code> returns <code>True</code> regardless of the wrapped value. So Unfold's template guard <code>{% if item.badge_callback %}</code> never short-circuits, and <code>{{ item.badge_callback }}</code> renders <code>str(None)</code> = <code>"None"</code> (then CSS <code>text-transform:uppercase</code> turns it into "NONE").</p>
+          <pre><span class="c"># Verified in Django shell:</span>
+&gt;&gt;&gt; <span class="k">from</span> django.utils.functional <span class="k">import</span> lazy
+&gt;&gt;&gt; ln = lazy(<span class="k">lambda</span> r: <span class="k">None</span>)(<span class="s">'req'</span>)
+&gt;&gt;&gt; <span class="k">bool</span>(ln)   <span class="c"># always True</span>
+<span class="k">True</span>
+&gt;&gt;&gt; str(ln)
+<span class="s">'None'</span></pre>
+          <p><strong>Fix:</strong> Override <code>templates/unfold/helpers/app_list_badge.html</code>. Use <code>{% with bv=item.badge_callback|stringformat:"s" %}</code> to coerce the lazy to a real string, then guard with <code>{% if bv and bv != "None" %}</code>. Cleanly hides the badge when the callback returns falsy values without touching the rest of the badge logic.</p>
+          <span class="fix-tag">Fixed in PR #34</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Files changed across all 5 PRs -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <h2>Files Changed (Cumulative)</h2>
+      <span class="section-num">§4</span>
+    </div>
+    <div class="card-body">
+      <table class="file-table">
+        <thead><tr><th>Path</th><th>Change</th></tr></thead>
+        <tbody>
+          <tr><td>config/settings/base.py</td><td><span class="tag-mod">MOD</span> Full <code>UNFOLD</code> rewrite — palette, logo callbacks, <code>SIDEBAR.navigation</code>, <code>DASHBOARD_CALLBACK</code></td></tr>
+          <tr><td>apps/core/admin.py</td><td><span class="tag-mod">MOD</span> Added <code>dashboard_callback</code>, <code>unread_leads_badge</code>, <code>_BaseSiteSettingsAdmin</code> + 7 proxy admins; removed monolithic SiteSettingsAdmin</td></tr>
+          <tr><td>apps/core/models.py</td><td><span class="tag-mod">MOD</span> Added 7 proxy classes (Identity / Hero / About / MissionVision / CTA / Contact / SocialMedia)</td></tr>
+          <tr><td>apps/core/migrations/0003_..._and_more.py</td><td><span class="tag-add">ADD</span> Auto-generated proxy model migration (no SQL changes)</td></tr>
+          <tr><td>apps/leads/admin.py</td><td><span class="tag-mod">MOD</span> Status pills, color swatches, <code>mark_as_notified</code>/<code>mark_as_unread</code> actions, <code>list_per_page</code></td></tr>
+          <tr><td>apps/hub/admin.py</td><td><span class="tag-mod">MOD</span> Photo / cover thumbnails, status pills, icon chip, ordering, fieldset descriptions</td></tr>
+          <tr><td>templates/admin/index.html</td><td><span class="tag-add">ADD</span> Custom dashboard — KPI cards, status chart, recent leads table, vertical bar chart, content stats footer</td></tr>
+          <tr><td>templates/unfold/helpers/app_list_badge.html</td><td><span class="tag-add">ADD</span> Override fixing the lazy-proxy "None" badge bug</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Sidebar navigation final shape -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </div>
+      <h2>Sidebar Navigation (Final State)</h2>
+      <span class="section-num">§5</span>
+    </div>
+    <div class="card-body">
+      <pre>DASHBOARD
+  dashboard      Overview
+
+WEBSITE CONTENT
+  list_alt       Services
+  newspaper      News
+  groups         Team Members
+
+LEADS
+  inbox          All Leads          <span class="d">[N]</span>  <span class="c">← red badge, unread_leads_badge()</span>
+  category       Vertical Placeholders
+
+SITE SETTINGS  <span class="c">(collapsible)</span>
+  badge          Identity &amp; Branding
+  web_asset      Hero Section
+  info           About Section
+  flag           Mission &amp; Vision
+  campaign       CTA Section
+  contact_mail   Contact Info
+  share          Social Media
+
+ADMINISTRATION
+  person         Users
+  group          Groups</pre>
+    </div>
+  </div>
+
+  <!-- Test + smoke results -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>Test + Smoke Results</h2>
+      <span class="section-num">§6</span>
+    </div>
+    <div class="card-body">
+      <div class="built-list">
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Lint + format clean</strong>
+            <span><code>ruff check .</code> passes; <code>black --check .</code> clean across all 5 PRs.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Test suite green</strong>
+            <span>24/24 pytest tests passing on every PR. No new test regressions; no test deletions.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Migration dry-run</strong>
+            <span><code>python manage.py migrate core</code> applies <code>0003_..._and_more</code> cleanly (proxy-only, no SQL).</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Playwright smoke test (each phase)</strong>
+            <span>Login → dashboard → sidebar → 7 settings entries → leads list with seeded data — all visual elements verified before merge.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Badge bug verification</strong>
+            <span>HTML inspection: 0 unread → no <code>&lt;span&gt;</code> at all; 2 unread → red bubble with "2".</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decisions / trade-offs -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      </div>
+      <h2>Decisions &amp; Trade-offs</h2>
+      <span class="section-num">§7</span>
+    </div>
+    <div class="card-body">
+      <div class="built-list">
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Tailwind blue palette over true Bejundas navy as <code>primary</code></strong>
+            <span>The public site uses navy (<code>#1a1a2e</code>) for chrome and blue (<code>#2563eb</code>) for interactive elements. Using navy as Unfold <code>primary.500</code> would make every button pure-dark (heavy, hard to read). Using the Tailwind blue palette matches the public site's <code>--blue</code> token used in templates, reports, and CSS — same brand world.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Proxy admins over a single monolithic ModelAdmin</strong>
+            <span>Same pattern proven on <code>bjp-technologies-web</code>. Splitting <code>SiteSettings</code> into 7 proxy admins gives 7 focused sidebar entries instead of one giant form. Trade-off: 7 ContentType entries in the DB (cosmetic) and slightly chattier admin permissions to manage. Acceptable.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Dropped <code>date_hierarchy</code> mid-Phase-5</strong>
+            <span>It triggers MySQL <code>CONVERT_TZ()</code> which fails on hosts without timezone tables installed (cPanel may or may not). The date <code>list_filter</code> still provides date-range filtering without the dependency.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Override Unfold template instead of monkey-patching</strong>
+            <span>Cleaner separation; survives Unfold upgrades as long as the upstream template path stays the same. If Unfold restructures, the override stops applying and we fall back to upstream behaviour (badge shows "None" again — visible but not fatal).</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Production deploy checklist -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      </div>
+      <h2>Production Deploy Checklist</h2>
+      <span class="section-num">§8</span>
+    </div>
+    <div class="card-body">
+      <div class="checklist">
+        <div class="check-item"><div class="check-mark">✓</div><span>Merge PRs #31 → #32 → #33 → #34 → #35 into <code>develop</code>, then <code>develop</code> → <code>main</code></span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>cPanel Terminal: <code>git pull origin main</code> &amp;&amp; <code>pip install -r requirements.txt</code> (no new packages, but safe)</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span><code>python manage.py migrate</code> — applies <code>core.0003_..._and_more</code> (proxy models, no SQL)</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span><code>python manage.py collectstatic --noinput</code> — picks up Phase 1 favicon if not already deployed</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span><code>touch tmp/restart.txt</code> — Passenger reload</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>Visit <code>https://bejundas.co.tz/admin/</code> — verify branded login, dashboard, sidebar groups</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>Login as superuser — confirm 7 settings entries, status pills, batch actions visible</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>Submit a test lead via <code>/financial/</code> public form — verify it appears in admin, badge increments, "Mark as notified" action works</span></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div style="max-width: 880px; margin: 0 auto; padding: 24px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border);">
+  <span>Phase 5 · Admin Overhaul · PRs #31–#35</span>
+  <span>15 May 2026 · Bejundas Platform</span>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+{% extends "construction/base_construction.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Contact — Bejundas Construction{% endblock %}
+{% block meta_description %}Get in touch with Bejundas Construction — site visits, scoping, and proposals for construction projects across Tanzania.{% endblock %}
+
+{% block content %}
+
+<!-- Page hero -->
+<section class="c-page-hero">
+  <div class="c-container">
+    <span class="c-eyebrow">Talk to Us</span>
+    <h1>Start a Conversation</h1>
+  </div>
+</section>
+
+<!-- Contact details + form -->
+<section class="c-section">
+  <div class="c-container">
+    <div class="c-row">
+
+      <!-- Left: contact details -->
+      <div style="flex: 1 1 320px;">
+        <span class="c-eyebrow">Get in Touch</span>
+        <h2 class="c-section-title">We'd Like to Hear About Your Project</h2>
+        <p class="c-section-sub">Send us the basics — site, scope, timing — and we'll come back to you within two working days with the right next step. For larger or more detailed scopes, use the quote request form coming in the next phase.</p>
+
+        <div style="margin-top: 36px; display: grid; gap: 18px;">
+
+          {% if company.phone %}
+          <div style="display: flex; align-items: flex-start; gap: 14px;">
+            <div style="width: 40px; height: 40px; background: var(--construction-soft); color: var(--construction-accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">&#9742;</div>
+            <div>
+              <div style="font-size: 11px; font-weight: 700; color: var(--construction-muted); text-transform: uppercase; letter-spacing: .08em;">Phone</div>
+              <a href="tel:{{ company.phone }}" style="font-size: 15px; color: var(--construction-primary); text-decoration: none; font-weight: 600;">{{ company.phone }}</a>
+            </div>
+          </div>
+          {% endif %}
+
+          {% if company.email %}
+          <div style="display: flex; align-items: flex-start; gap: 14px;">
+            <div style="width: 40px; height: 40px; background: var(--construction-soft); color: var(--construction-accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">&#9993;</div>
+            <div>
+              <div style="font-size: 11px; font-weight: 700; color: var(--construction-muted); text-transform: uppercase; letter-spacing: .08em;">Email</div>
+              <a href="mailto:{{ company.email }}" style="font-size: 15px; color: var(--construction-primary); text-decoration: none; font-weight: 600;">{{ company.email }}</a>
+            </div>
+          </div>
+          {% endif %}
+
+          {% if company.address %}
+          <div style="display: flex; align-items: flex-start; gap: 14px;">
+            <div style="width: 40px; height: 40px; background: var(--construction-soft); color: var(--construction-accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">&#9873;</div>
+            <div>
+              <div style="font-size: 11px; font-weight: 700; color: var(--construction-muted); text-transform: uppercase; letter-spacing: .08em;">Office</div>
+              <div style="font-size: 14px; color: var(--construction-primary); line-height: 1.6;">{{ company.address|linebreaksbr }}</div>
+            </div>
+          </div>
+          {% endif %}
+
+        </div>
+      </div>
+
+      <!-- Right: form -->
+      <div style="flex: 1 1 480px;">
+        <div style="background: #fff; padding: 36px 36px; border-radius: 8px; border: 1px solid var(--construction-border); box-shadow: 0 12px 32px rgba(0,0,0,.04);">
+
+          {% if sent %}
+            <div class="c-form-success">&#10003; Thanks — we've received your message and will be in touch within two working days.</div>
+          {% endif %}
+
+          <form method="post" novalidate>
+            {% csrf_token %}
+
+            <div class="c-form-grid cols-2">
+              <div class="c-form-field">
+                <label for="{{ form.name.id_for_label }}">Full Name</label>
+                {{ form.name|add_class:"" }}
+                {% if form.name.errors %}<div class="errors">{{ form.name.errors|join:" " }}</div>{% endif %}
+              </div>
+              <div class="c-form-field">
+                <label for="{{ form.email.id_for_label }}">Email Address</label>
+                {{ form.email }}
+                {% if form.email.errors %}<div class="errors">{{ form.email.errors|join:" " }}</div>{% endif %}
+              </div>
+            </div>
+
+            <div class="c-form-grid cols-2" style="margin-top: 18px;">
+              <div class="c-form-field">
+                <label for="{{ form.phone.id_for_label }}">Phone <span style="color:var(--construction-muted); font-weight: 400; text-transform: none;">(optional)</span></label>
+                {{ form.phone }}
+              </div>
+              <div class="c-form-field">
+                <label for="{{ form.subject.id_for_label }}">Subject</label>
+                {{ form.subject }}
+                {% if form.subject.errors %}<div class="errors">{{ form.subject.errors|join:" " }}</div>{% endif %}
+              </div>
+            </div>
+
+            <div class="c-form-field" style="margin-top: 18px;">
+              <label for="{{ form.message.id_for_label }}">Message</label>
+              {{ form.message }}
+              {% if form.message.errors %}<div class="errors">{{ form.message.errors|join:" " }}</div>{% endif %}
+            </div>
+
+            <div style="margin-top: 24px;">
+              <button type="submit" class="c-btn c-btn-primary">Send Message</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

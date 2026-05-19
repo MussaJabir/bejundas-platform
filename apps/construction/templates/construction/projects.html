@@ -1,0 +1,69 @@
+{% extends "construction/base_construction.html" %}
+{% load static %}
+
+{% block title %}Projects — Bejundas Construction{% endblock %}
+{% block meta_description %}Project portfolio from Bejundas Construction — residential, commercial, civil, industrial and fit-out work across Tanzania.{% endblock %}
+
+{% block content %}
+
+<!-- Page hero -->
+<section class="c-page-hero">
+  <div class="c-container">
+    <span class="c-eyebrow">Our Work</span>
+    <h1>Project Portfolio</h1>
+  </div>
+</section>
+
+<!-- Filters + grid -->
+<section class="c-section">
+  <div class="c-container">
+
+    <!-- Filter chips -->
+    <div class="c-filter-row">
+      <a href="{% url 'construction:projects' %}" class="c-filter-chip{% if not active_sector %} active{% endif %}">All Sectors</a>
+      {% for code, label in sector_choices %}
+        <a href="?sector={{ code }}" class="c-filter-chip{% if active_sector == code %} active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    <!-- Grid -->
+    <div class="c-row">
+      {% for project in projects %}
+        <div class="c-col-3">
+          <a href="{% url 'construction:project_detail' slug=project.slug %}" class="c-project-card">
+            {% if project.cover_image %}
+              <img src="{{ project.cover_image.url }}" alt="{{ project.title }}">
+            {% else %}
+              <img src="{% static 'construction/images/service-item-1.jpg' %}" alt="{{ project.title }}">
+            {% endif %}
+            <div class="overlay">
+              <span class="sector">{{ project.get_sector_display }}</span>
+              <h3 class="ptitle">{{ project.title }}</h3>
+              <p class="pmeta">{{ project.location_city }} · {{ project.year_completed }}</p>
+            </div>
+          </a>
+        </div>
+      {% empty %}
+        <div style="flex: 1 1 100%;">
+          <div class="c-coming-soon">
+            <span class="badge-soon">No Projects Yet</span>
+            <p>{% if active_sector %}No projects in this sector yet. <a href="{% url 'construction:projects' %}" style="color: var(--construction-accent); font-weight: 600;">View all sectors</a>.{% else %}Project portfolio coming soon — entries get added via the admin panel.{% endif %}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="c-section c-section-soft">
+  <div class="c-container">
+    <div class="c-cta-banner">
+      <h2>Have a Similar Project?</h2>
+      <p>Reach out — we'll send a referenceable case study from a comparable build and walk through how we'd approach yours.</p>
+      <a href="{% url 'construction:contact' %}" class="c-btn c-btn-primary">Talk to Our Team</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

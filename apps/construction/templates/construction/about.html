@@ -1,0 +1,145 @@
+{% extends "construction/base_construction.html" %}
+{% load static %}
+
+{% block title %}About — Bejundas Construction{% endblock %}
+{% block meta_description %}Bejundas Construction is the construction arm of Bejundas Group — design-build, civil works, MEP and project management across Tanzania.{% endblock %}
+
+{% block content %}
+
+<!-- Page hero -->
+<section class="c-page-hero">
+  <div class="c-container">
+    <span class="c-eyebrow">About Us</span>
+    <h1>Built for the Long Term, Engineered for Tanzania</h1>
+  </div>
+</section>
+
+<!-- Story -->
+<section class="c-section">
+  <div class="c-container">
+    <div class="c-row" style="align-items: center;">
+      <div style="flex: 1 1 460px;">
+        <span class="c-eyebrow">Our Story</span>
+        <h2 class="c-section-title">From a Single Site to a Multi-Sector Contractor</h2>
+        <p class="c-section-sub">Bejundas Construction grew out of Bejundas Group's vision of building a diversified Tanzanian holdings business. What started with residential builds in Dar es Salaam has expanded into civil works across the lakes regions, commercial fit-outs in Dodoma's growing administrative quarter, and industrial facilities serving the country's logistics corridor.</p>
+        <p class="c-section-sub" style="margin-top: 14px;">Every project we take on is treated as a long-term partnership. We don't disappear after handover — we stand behind our work with structured warranties, scheduled inspections, and an in-house maintenance team for repeat clients.</p>
+      </div>
+      <div style="flex: 1 1 380px;">
+        <img src="{% static 'construction/images/arch/about-1.jpg' %}" alt="Construction site" style="width: 100%; height: auto; border-radius: 6px; box-shadow: 0 16px 40px rgba(0,0,0,.12);">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mission / Vision -->
+<section class="c-section c-section-soft">
+  <div class="c-container">
+    <div class="c-row">
+      <div class="c-col-2">
+        <div style="background: #fff; padding: 36px 32px; border-radius: 8px; border-left: 4px solid var(--construction-accent); height: 100%;">
+          <span class="c-eyebrow">Our Mission</span>
+          <h3 style="font-size: 22px; font-weight: 700; color: var(--construction-primary); margin-top: 8px; margin-bottom: 14px;">Deliver every project on spec, on time, and on budget — without cutting corners.</h3>
+          <p style="font-size: 14px; color: var(--construction-muted); line-height: 1.7; margin: 0;">We treat client capital and timelines as if they were our own. That means realistic schedules over optimistic ones, transparent change orders, and weekly progress reports backed by site photography.</p>
+        </div>
+      </div>
+      <div class="c-col-2">
+        <div style="background: #fff; padding: 36px 32px; border-radius: 8px; border-left: 4px solid var(--construction-primary); height: 100%;">
+          <span class="c-eyebrow">Our Vision</span>
+          <h3 style="font-size: 22px; font-weight: 700; color: var(--construction-primary); margin-top: 8px; margin-bottom: 14px;">Become Tanzania's most-trusted private-sector contractor by 2030.</h3>
+          <p style="font-size: 14px; color: var(--construction-muted); line-height: 1.7; margin: 0;">Trust isn't built by marketing. It's built by finishing what you started — and being there when something needs fixing five years later. That's the standard we measure ourselves against.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="c-stat-strip">
+  <div class="c-container">
+    <div class="c-row">
+      <div class="c-col-4 stat"><div class="num">120+</div><div class="lbl">Projects Completed</div></div>
+      <div class="c-col-4 stat"><div class="num">15</div><div class="lbl">Years Experience</div></div>
+      <div class="c-col-4 stat"><div class="num">5</div><div class="lbl">Regions Served</div></div>
+      <div class="c-col-4 stat"><div class="num">98%</div><div class="lbl">On-time Delivery</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Certifications -->
+<section class="c-section">
+  <div class="c-container">
+    <div style="text-align: center; margin-bottom: 30px;">
+      <span class="c-eyebrow">Credentials</span>
+      <h2 class="c-section-title">Certifications &amp; Licences</h2>
+      <p class="c-section-sub" style="margin: 0 auto;">We work to recognised standards and maintain active registration with the bodies that govern construction in Tanzania.</p>
+    </div>
+    <div class="c-cert-strip">
+      {% for cert in certifications %}
+        <div class="c-cert-badge">
+          <p class="cert-name">{{ cert.name }}</p>
+          <p class="cert-meta">{{ cert.issuer }} · {{ cert.year_awarded }}</p>
+        </div>
+      {% empty %}
+        <div class="c-cert-badge">
+          <p class="cert-name">NCC Class 1 Registration</p>
+          <p class="cert-meta">National Construction Council · 2018</p>
+        </div>
+        <div class="c-cert-badge">
+          <p class="cert-name">ISO 9001:2015</p>
+          <p class="cert-meta">Quality Management · 2021</p>
+        </div>
+        <div class="c-cert-badge">
+          <p class="cert-name">ISO 14001:2015</p>
+          <p class="cert-meta">Environmental Management · 2022</p>
+        </div>
+        <div class="c-cert-badge">
+          <p class="cert-name">OSHA Compliance</p>
+          <p class="cert-meta">Workplace Safety · 2023</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+{% if testimonials %}
+<section class="c-section c-section-soft">
+  <div class="c-container">
+    <div style="text-align: center; margin-bottom: 50px;">
+      <span class="c-eyebrow">In Their Words</span>
+      <h2 class="c-section-title">What Our Clients Say</h2>
+    </div>
+    <div class="c-row">
+      {% for t in testimonials %}
+        <div class="c-col-3">
+          <div style="background:#fff; padding: 28px; border-radius:8px; border:1px solid var(--construction-border); height:100%;">
+            <div style="font-size: 28px; color: var(--construction-accent); line-height:1; margin-bottom: 12px;">&ldquo;</div>
+            <p style="font-size: 14px; color: var(--construction-primary); line-height: 1.7; margin-bottom: 18px; font-style: italic;">{{ t.quote }}</p>
+            <div style="border-top: 1px solid var(--construction-border); padding-top: 14px;">
+              <strong style="display:block; font-size: 14px; color: var(--construction-primary);">{{ t.author_name }}</strong>
+              {% if t.author_role or t.organisation %}
+                <span style="font-size: 12px; color: var(--construction-muted);">
+                  {{ t.author_role }}{% if t.author_role and t.organisation %} · {% endif %}{{ t.organisation }}
+                </span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- CTA -->
+<section class="c-section">
+  <div class="c-container">
+    <div class="c-cta-banner">
+      <h2>Ready to Start Your Project?</h2>
+      <p>Get in touch — we'll review your scope and respond with a structured proposal within two working days.</p>
+      <a href="{% url 'construction:contact' %}" class="c-btn c-btn-primary">Talk to Our Team</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -4,11 +4,14 @@ from django.contrib.sitemaps.views import sitemap
 from django.http import HttpResponse
 from django.urls import include, path
 
+from apps.construction.sitemaps import ConstructionStaticSitemap, ProjectSitemap
 from apps.hub.sitemaps import HubStaticSitemap, NewsSitemap
 
 sitemaps = {
     "static": HubStaticSitemap,
     "news": NewsSitemap,
+    "construction": ConstructionStaticSitemap,
+    "construction_projects": ProjectSitemap,
 }
 
 

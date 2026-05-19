@@ -202,6 +202,33 @@ UNFOLD = {
                 ],
             },
             {
+                "title": "Construction",
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": "Services",
+                        "icon": "engineering",
+                        "link": reverse_lazy("admin:construction_constructionservice_changelist"),
+                    },
+                    {
+                        "title": "Projects",
+                        "icon": "domain",
+                        "link": reverse_lazy("admin:construction_project_changelist"),
+                    },
+                    {
+                        "title": "Testimonials",
+                        "icon": "format_quote",
+                        "link": reverse_lazy("admin:construction_testimonial_changelist"),
+                    },
+                    {
+                        "title": "Certifications",
+                        "icon": "verified",
+                        "link": reverse_lazy("admin:construction_certification_changelist"),
+                    },
+                ],
+            },
+            {
                 "title": "Site Settings",
                 "separator": True,
                 "collapsible": True,

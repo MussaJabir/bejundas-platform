@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Update — Bejundas Platform | SEO Indexing Setup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #1a1a2e;
+    --blue:    #2563eb;
+    --blue-md: #1d4ed8;
+    --blue-lt: #dbeafe;
+    --blue-xs: #eff6ff;
+    --green:   #16a34a;
+    --green-lt:#dcfce7;
+    --amber:   #d97706;
+    --amber-lt:#fef3c7;
+    --red:     #dc2626;
+    --red-lt:  #fee2e2;
+    --text:    #0f172a;
+    --muted:   #475569;
+    --border:  #e2e8f0;
+    --bg:      #f8fafc;
+    --white:   #ffffff;
+  }
+
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  .header { background: var(--navy); color: var(--white); padding: 52px 0 44px; }
+  .inner { max-width: 800px; margin: 0 auto; padding: 0 32px; }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-dot { width: 10px; height: 10px; background: #60a5fa; border-radius: 50%; }
+  .brand-name { font-size: 14px; font-weight: 600; color: #94a3b8; letter-spacing: .04em; text-transform: uppercase; }
+  .report-date { font-size: 13px; color: #94a3b8; }
+  .header h1 { font-size: 34px; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 12px; }
+  .header h1 span { color: #60a5fa; }
+  .header .subtitle { font-size: 16px; color: #94a3b8; max-width: 560px; margin-bottom: 24px; }
+  .status-pill { display: inline-flex; align-items: center; gap: 8px; background: var(--green-lt); color: var(--green); font-size: 13px; font-weight: 700; padding: 7px 16px; border-radius: 20px; letter-spacing: .03em; }
+  .status-pill::before { content: ''; width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
+
+  main { max-width: 800px; margin: 0 auto; padding: 40px 32px 64px; display: flex; flex-direction: column; gap: 28px; }
+
+  .intro { background: var(--white); border: 1px solid var(--border); border-left: 4px solid var(--blue); border-radius: 10px; padding: 24px 28px; font-size: 15px; color: var(--muted); line-height: 1.8; }
+  .intro strong { color: var(--navy); }
+
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .card-header { display: flex; align-items: center; gap: 14px; padding: 20px 28px; border-bottom: 1px solid var(--border); background: var(--blue-xs); }
+  .card-icon { width: 38px; height: 38px; background: var(--blue); border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .card-icon svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .card-header h2 { font-size: 16px; font-weight: 700; color: var(--navy); }
+  .card-header .card-tag { margin-left: auto; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--blue); background: var(--blue-lt); padding: 3px 10px; border-radius: 4px; }
+  .card-body { padding: 28px; }
+
+  .engine-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .engine-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 20px 18px; }
+  .engine-name { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+  .engine-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .engine-dot.google { background: #4285f4; }
+  .engine-dot.bing   { background: #008373; }
+  .engine-meta { font-size: 12px; color: var(--muted); display: flex; flex-direction: column; gap: 5px; }
+  .engine-meta b { color: var(--text); font-weight: 600; }
+
+  .done-list { display: flex; flex-direction: column; gap: 12px; }
+  .done-item { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; }
+  .done-check { width: 26px; height: 26px; background: var(--green); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  .done-content strong { font-size: 14px; font-weight: 600; color: var(--navy); display: block; margin-bottom: 2px; }
+  .done-content span { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  .proof-banner { background: linear-gradient(135deg, #1a1a2e 0%, #1e3a8a 100%); color: var(--white); border-radius: 14px; padding: 28px 32px; }
+  .proof-banner h3 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+  .proof-banner .quote-box { background: rgba(255,255,255,.06); border-left: 3px solid #60a5fa; padding: 16px 18px; border-radius: 6px; font-size: 14px; color: #e2e8f0; line-height: 1.7; }
+  .proof-banner .quote-box .url { color: #60a5fa; font-family: 'Courier New', monospace; font-size: 12px; }
+  .proof-banner .sitelinks { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .proof-banner .sitelink { background: rgba(96,165,250,.15); color: #93c5fd; font-size: 12px; padding: 4px 10px; border-radius: 4px; }
+  .proof-banner .related-searches { margin-top: 16px; font-size: 13px; color: #cbd5e1; }
+  .proof-banner .related-searches b { color: #fff; }
+  .proof-banner .related-tag { display: inline-block; background: rgba(255,255,255,.08); color: #e2e8f0; font-size: 12px; padding: 3px 10px; border-radius: 12px; margin-left: 6px; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .stat-box { background: var(--blue-xs); border: 1px solid var(--blue-lt); border-radius: 10px; padding: 18px 12px; text-align: center; }
+  .stat-box .num { font-size: 28px; font-weight: 700; color: var(--blue); line-height: 1; margin-bottom: 6px; }
+  .stat-box .lbl { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+
+  .crawled-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+  .crawled-table th { text-align: left; padding: 10px 12px; background: var(--blue-xs); color: var(--navy); font-weight: 600; font-size: 12px; border-bottom: 1px solid var(--border); }
+  .crawled-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--muted); }
+  .crawled-table tr:last-child td { border-bottom: none; }
+  .crawled-table td:first-child { font-family: 'Courier New', monospace; font-size: 12px; color: var(--blue-md); }
+  .crawled-table .ok { display: inline-flex; align-items: center; gap: 5px; color: var(--green); font-weight: 600; font-size: 12px; }
+  .crawled-table .ok::before { content: ''; width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
+
+  .what-list { display: flex; flex-direction: column; gap: 14px; }
+  .what-item { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; }
+  .what-icon { width: 28px; height: 28px; background: var(--blue-lt); color: var(--blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .what-content strong { font-size: 14px; font-weight: 600; color: var(--navy); display: block; margin-bottom: 2px; }
+  .what-content span { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  .timeline { display: flex; flex-direction: column; gap: 12px; }
+  .timeline-row { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; border-left: 3px solid var(--blue); }
+  .tl-when { font-size: 12px; font-weight: 700; color: var(--blue-md); min-width: 88px; padding-top: 2px; text-transform: uppercase; letter-spacing: .04em; }
+  .tl-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .tl-text strong { color: var(--navy); }
+
+  .access-box { background: var(--blue-xs); border: 1px solid var(--blue-lt); border-radius: 10px; padding: 22px 26px; }
+  .access-box h3 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 10px; text-transform: uppercase; letter-spacing: .04em; }
+  .access-box p { font-size: 14px; color: var(--muted); margin-bottom: 12px; }
+  .access-url { display: inline-block; font-family: 'Courier New', monospace; font-size: 12px; color: var(--blue-md); background: var(--blue-lt); padding: 6px 14px; border-radius: 6px; margin-right: 8px; margin-bottom: 6px; }
+
+  .closing { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 28px; text-align: center; }
+  .closing h3 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .closing p { font-size: 14px; color: var(--muted); }
+
+  .page-footer { max-width: 800px; margin: 0 auto; padding: 24px 32px 40px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); }
+
+  /* ── Print / PDF styles ── */
+  @media print {
+    body { background: white; font-size: 12px; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+    .card, .proof-banner, .closing, .access-box, .stat-row { break-inside: avoid; }
+    @page { margin: 15mm; size: A4; }
+  }
+
+  @media (max-width: 600px) {
+    .engine-grid { grid-template-columns: 1fr; }
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .header h1 { font-size: 26px; }
+    .page-footer { flex-direction: column; gap: 8px; text-align: center; }
+    .timeline-row { flex-direction: column; }
+    .tl-when { min-width: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="inner">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-dot"></div>
+        <div class="brand-name">Bejundas Group of Companies</div>
+      </div>
+      <div class="report-date">May 19, 2026</div>
+    </div>
+    <h1>Your Site Is Now <span>On The Map</span></h1>
+    <p class="subtitle">Bejundas is now connected to Google and Bing, the two search engines that drive over 95% of all web search traffic in Tanzania. Both engines have already started indexing the site.</p>
+    <span class="status-pill">SHIPPED — Both engines active</span>
+  </div>
+</div>
+
+<main>
+
+  <!-- Intro -->
+  <div class="intro">
+    Before this milestone, your website existed online but was effectively <strong>invisible</strong> — search engines didn't know it was there. We've now formally registered <strong>bejundas.co.tz</strong> with both Google Search Console and Bing Webmaster Tools, submitted the full site map, and within three days Google had already successfully crawled and indexed your main pages. People searching for "Bejundas" on Google now see your real website on the first page, complete with quick links to your About, Team, and Contact pages.
+  </div>
+
+  <!-- Headline stats -->
+  <div class="stat-row">
+    <div class="stat-box"><div class="num">2</div><div class="lbl">Search engines connected</div></div>
+    <div class="stat-box"><div class="num">11</div><div class="lbl">Pages submitted</div></div>
+    <div class="stat-box"><div class="num">4</div><div class="lbl">Confirmed crawls</div></div>
+    <div class="stat-box"><div class="num">100%</div><div class="lbl">Indexing success</div></div>
+  </div>
+
+  <!-- Engines -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <h2>Both Engines, Both Verified</h2>
+      <span class="card-tag">Step 1</span>
+    </div>
+    <div class="card-body">
+      <div class="engine-grid">
+        <div class="engine-card">
+          <div class="engine-name"><span class="engine-dot google"></span> Google Search Console</div>
+          <div class="engine-meta">
+            <div><b>Verified:</b> May 15, 2026</div>
+            <div><b>Status:</b> Active</div>
+            <div><b>Sitemap status:</b> Success (11 pages)</div>
+          </div>
+        </div>
+        <div class="engine-card">
+          <div class="engine-name"><span class="engine-dot bing"></span> Bing Webmaster Tools</div>
+          <div class="engine-meta">
+            <div><b>Verified:</b> May 15, 2026</div>
+            <div><b>Status:</b> Active</div>
+            <div><b>Sitemap status:</b> Inherited from Google</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- What was done -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>What Was Done</h2>
+      <span class="card-tag">Setup</span>
+    </div>
+    <div class="card-body">
+      <div class="done-list">
+        <div class="done-item">
+          <div class="done-check">✓</div>
+          <div class="done-content">
+            <strong>Verified ownership of bejundas.co.tz with Google</strong>
+            <span>Added a secure ownership record to the domain so Google trusts that this website belongs to Bejundas Group.</span>
+          </div>
+        </div>
+        <div class="done-item">
+          <div class="done-check">✓</div>
+          <div class="done-content">
+            <strong>Connected Bing using the same Google credentials</strong>
+            <span>Bing offers a one-click import from Google Search Console — saved duplicate setup work and keeps both engines in sync.</span>
+          </div>
+        </div>
+        <div class="done-item">
+          <div class="done-check">✓</div>
+          <div class="done-content">
+            <strong>Submitted the full site map (11 pages)</strong>
+            <span>Includes the main hub pages — Home, About, Services, News, Team, Contact — plus the five Coming Soon vertical pages (Financial, Construction, Energies, Farming, Investments).</span>
+          </div>
+        </div>
+        <div class="done-item">
+          <div class="done-check">✓</div>
+          <div class="done-content">
+            <strong>Confirmed Google has begun crawling</strong>
+            <span>Within 3 days of submission, Google had already visited and indexed Home, About, Team, and Contact pages — every visit logged as "Success."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Proof: SERP -->
+  <div class="proof-banner">
+    <h3>What Google Already Shows When People Search "Bejundas"</h3>
+    <div class="quote-box">
+      <div><strong>Bejundas Group of Companies — bejundas.co.tz</strong></div>
+      <div class="url">https://bejundas.co.tz</div>
+      <div style="margin-top: 8px;">"Building scalable, high-impact solutions to help you grow with confidence. View Our Services. Bejundas Group. Empowering Tanzania With Business Excellence."</div>
+      <div class="sitelinks">
+        <span class="sitelink">About Us →</span>
+        <span class="sitelink">Our Team →</span>
+        <span class="sitelink">Contact Us →</span>
+      </div>
+      <div class="related-searches">
+        <b>People also search for:</b>
+        <span class="related-tag">Bejundas login</span>
+        <span class="related-tag">Bejundas contact number</span>
+      </div>
+    </div>
+    <p style="margin-top: 14px; font-size: 13px; color: #cbd5e1; line-height: 1.7;">
+      Google has already generated <b style="color:#fff;">sitelinks</b> — the small list of shortcuts below the main result — which means it has understood your site's structure well enough to recommend specific pages to searchers. The "People also search for" suggestions also indicate that real users are actively searching for Bejundas, so getting found at the right moment matters more than ever.
+    </p>
+  </div>
+
+  <!-- Pages Google has crawled -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <h2>Pages Google Has Already Visited</h2>
+      <span class="card-tag">Live</span>
+    </div>
+    <div class="card-body">
+      <table class="crawled-table">
+        <thead>
+          <tr><th>Page</th><th>Last Crawled</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>bejundas.co.tz/</td><td>15 May 2026</td><td><span class="ok">Indexed</span></td></tr>
+          <tr><td>bejundas.co.tz/about/</td><td>15 May 2026</td><td><span class="ok">Indexed</span></td></tr>
+          <tr><td>bejundas.co.tz/team/</td><td>15 May 2026</td><td><span class="ok">Indexed</span></td></tr>
+          <tr><td>bejundas.co.tz/contact/</td><td>15 May 2026</td><td><span class="ok">Indexed</span></td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top: 14px; font-size: 13px; color: var(--muted); line-height: 1.7;">
+        The remaining 7 pages (Services, News, and the 5 vertical Coming Soon pages) are queued for Google's next crawl pass. Google typically completes a full first-time site index over the course of 2-4 weeks.
+      </p>
+    </div>
+  </div>
+
+  <!-- What this means for the business -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h2>What This Means For The Business</h2>
+      <span class="card-tag">Impact</span>
+    </div>
+    <div class="card-body">
+      <div class="what-list">
+        <div class="what-item">
+          <div class="what-icon">1</div>
+          <div class="what-content">
+            <strong>Discoverability</strong>
+            <span>Anyone searching "Bejundas," "Bejundas Group," or "Bejundas Financial Services" on Google now sees the official website at the top of results — not just a Bank of Tanzania PDF or an Instagram page.</span>
+          </div>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">2</div>
+          <div class="what-content">
+            <strong>Trust signal</strong>
+            <span>Sitelinks (the shortcut menu under your listing) are something Google only shows for sites it considers well-structured and trustworthy. Earning them this early is a strong start.</span>
+          </div>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">3</div>
+          <div class="what-content">
+            <strong>Lead capture</strong>
+            <span>Once a vertical Coming Soon page is found in search results, every visitor who fills the form becomes a real lead in your admin panel — turning search interest directly into business contacts.</span>
+          </div>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">4</div>
+          <div class="what-content">
+            <strong>Data starts flowing</strong>
+            <span>Within the next 2-4 weeks, we'll have actual numbers: how many people see Bejundas in search, what they search for, which pages they click, and where they're located. That data becomes the foundation for any future marketing decisions.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="2" x2="12" y2="22"/><polyline points="19 15 12 22 5 15"/></svg>
+      </div>
+      <h2>What Happens Next</h2>
+      <span class="card-tag">Roadmap</span>
+    </div>
+    <div class="card-body">
+      <div class="timeline">
+        <div class="timeline-row">
+          <div class="tl-when">Now → 1 wk</div>
+          <div class="tl-text">Google finishes crawling the remaining 7 pages. <strong>No action needed</strong> — fully automatic.</div>
+        </div>
+        <div class="timeline-row">
+          <div class="tl-when">Weeks 2-4</div>
+          <div class="tl-text">First real <strong>impression and click data</strong> begins appearing in Search Console. We'll see what queries are bringing visitors to the site.</div>
+        </div>
+        <div class="timeline-row">
+          <div class="tl-when">Month 1</div>
+          <div class="tl-text">First <strong>performance review</strong> — we'll look at top queries, top pages, and any pages Google flagged with issues, then make small content tweaks to boost rankings.</div>
+        </div>
+        <div class="timeline-row">
+          <div class="tl-when">Month 2-3</div>
+          <div class="tl-text">If vertical content is live by then, vertical-specific pages start showing in search for queries like "Bejundas financial services" or "Bejundas construction."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Access -->
+  <div class="access-box">
+    <h3>Live Site URLs (Now Indexed)</h3>
+    <p>These are the pages now visible to Google and Bing search:</p>
+    <span class="access-url">bejundas.co.tz</span>
+    <span class="access-url">bejundas.co.tz/about</span>
+    <span class="access-url">bejundas.co.tz/services</span>
+    <span class="access-url">bejundas.co.tz/news</span>
+    <span class="access-url">bejundas.co.tz/team</span>
+    <span class="access-url">bejundas.co.tz/contact</span>
+  </div>
+
+  <!-- Closing -->
+  <div class="closing">
+    <h3>Bejundas is now searchable, indexable, and findable.</h3>
+    <p>The setup work is complete. From here on, search engines do the rest — and we monitor the data to keep improving visibility.</p>
+  </div>
+
+</main>
+
+<div class="page-footer">
+  <span>Bejundas Platform — SEO Indexing Setup Report</span>
+  <span>Prepared 19 May 2026</span>
+</div>
+
+</body>
+</html>

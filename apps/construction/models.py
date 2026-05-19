@@ -143,3 +143,111 @@ class Certification(BaseModel):
 
     def __str__(self):
         return f"{self.name} ({self.issuer})"
+
+
+# ── Quote / RFP Request ─────────────────────────────────────────────
+
+
+BUDGET_CHOICES = [
+    ("under_50m", "Under 50M TZS"),
+    ("50m_200m", "50M – 200M TZS"),
+    ("200m_1b", "200M – 1B TZS"),
+    ("over_1b", "Over 1B TZS"),
+]
+
+TIMELINE_CHOICES = [
+    ("1_3", "1 – 3 months"),
+    ("3_6", "3 – 6 months"),
+    ("6_12", "6 – 12 months"),
+    ("over_12", "12+ months"),
+]
+
+QUOTE_STATUS_CHOICES = [
+    ("new", "New"),
+    ("reviewed", "Reviewed"),
+    ("quoted", "Quoted"),
+    ("won", "Won"),
+    ("lost", "Lost"),
+    ("closed", "Closed"),
+]
+
+
+class QuoteRequest(BaseModel):
+    # Contact
+    full_name = models.CharField(max_length=200)
+    company = models.CharField(max_length=200, blank=True, default="")
+    email = models.EmailField()
+    phone = models.CharField(max_length=30)
+
+    # Project basics
+    project_type = models.CharField(
+        max_length=20,
+        choices=SECTOR_CHOICES,
+        help_text="Sector classification for the requested project.",
+    )
+    location_region = models.CharField(max_length=100)
+    location_district = models.CharField(max_length=100, blank=True, default="")
+    estimated_start = models.DateField(
+        null=True,
+        blank=True,
+        help_text="Approximate start date the client has in mind.",
+    )
+
+    # Scope
+    scope_description = models.TextField(
+        help_text="Free-text scope description (minimum 50 characters).",
+    )
+    budget_range = models.CharField(max_length=20, choices=BUDGET_CHOICES)
+    timeline = models.CharField(max_length=20, choices=TIMELINE_CHOICES)
+
+    # Status workflow
+    status = models.CharField(max_length=20, choices=QUOTE_STATUS_CHOICES, default="new")
+    internal_notes = models.TextField(
+        blank=True,
+        default="",
+        help_text="Admin-only notes — not visible to the client.",
+    )
+
+    class Meta:
+        verbose_name = "Quote Request"
+        verbose_name_plural = "Quote Requests"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        company_or_name = self.company or self.full_name
+        return (
+            f"{company_or_name} — {self.get_project_type_display()} ({self.get_status_display()})"
+        )
+
+
+def _validate_attachment(file_obj):
+    """Validate file size (≤5MB) and extension (PDF/JPG/PNG)."""
+    from django.core.exceptions import ValidationError
+
+    max_size = 5 * 1024 * 1024
+    if file_obj.size > max_size:
+        raise ValidationError("File must be 5MB or smaller.")
+    allowed_extensions = {".pdf", ".jpg", ".jpeg", ".png"}
+    name = file_obj.name.lower()
+    if not any(name.endswith(ext) for ext in allowed_extensions):
+        raise ValidationError("Only PDF, JPG, or PNG files are accepted.")
+
+
+class QuoteAttachment(BaseModel):
+    quote_request = models.ForeignKey(
+        QuoteRequest,
+        on_delete=models.CASCADE,
+        related_name="attachments",
+    )
+    file = models.FileField(
+        upload_to="construction/quote_attachments/%Y/%m/",
+        validators=[_validate_attachment],
+    )
+
+    class Meta:
+        verbose_name = "Quote Attachment"
+        verbose_name_plural = "Quote Attachments"
+        ordering = ["created_at"]
+
+    def __str__(self):
+        return self.file.name.split("/")[-1] if self.file else "(empty)"

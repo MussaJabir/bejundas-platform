@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 
-from apps.construction.forms import ContactForm
+from apps.construction.forms import ContactForm, QuoteRequestForm
 from apps.construction.models import (
     SECTOR_CHOICES,
     Certification,
@@ -78,3 +78,20 @@ class ContactView(View):
                 request, "construction/contact.html", {"form": ContactForm(), "sent": True}
             )
         return render(request, "construction/contact.html", {"form": form})
+
+
+class QuoteRequestView(View):
+    def get(self, request):
+        return render(request, "construction/quote_request.html", {"form": QuoteRequestForm()})
+
+    def post(self, request):
+        form = QuoteRequestForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            form.send_notification(request=request)
+            return render(
+                request,
+                "construction/quote_request.html",
+                {"form": QuoteRequestForm(), "sent": True},
+            )
+        return render(request, "construction/quote_request.html", {"form": form})

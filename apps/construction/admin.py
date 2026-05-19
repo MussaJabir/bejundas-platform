@@ -6,6 +6,8 @@ from apps.construction.models import (
     Certification,
     ConstructionService,
     Project,
+    QuoteAttachment,
+    QuoteRequest,
     Testimonial,
 )
 
@@ -231,3 +233,163 @@ class CertificationAdmin(ModelAdmin):
     @admin.display(description="Status", ordering="is_active")
     def status_pill(self, obj):
         return format_html(_status_pill(obj.is_active))
+
+
+# ── Quote / RFP admin ───────────────────────────────────────────────
+
+
+_QUOTE_STATUS_COLOURS = {
+    "new": ("#fee2e2", "#991b1b"),
+    "reviewed": ("#dbeafe", "#1d4ed8"),
+    "quoted": ("#fef3c7", "#a16207"),
+    "won": ("#dcfce7", "#166534"),
+    "lost": ("#f1f5f9", "#64748b"),
+    "closed": ("#e2e8f0", "#475569"),
+}
+
+
+class QuoteAttachmentInline(admin.TabularInline):
+    model = QuoteAttachment
+    extra = 0
+    readonly_fields = ["file", "created_at"]
+    can_delete = True
+
+
+@admin.register(QuoteRequest)
+class QuoteRequestAdmin(ModelAdmin):
+    list_display = [
+        "submitted_label",
+        "company_or_name",
+        "project_type_pill",
+        "budget_range",
+        "timeline",
+        "status_pill",
+        "created_at",
+    ]
+    list_filter = ["status", "project_type", "budget_range", "timeline", "created_at"]
+    search_fields = [
+        "full_name",
+        "company",
+        "email",
+        "phone",
+        "location_region",
+        "location_district",
+        "scope_description",
+    ]
+    readonly_fields = [
+        "full_name",
+        "company",
+        "email",
+        "phone",
+        "project_type",
+        "location_region",
+        "location_district",
+        "estimated_start",
+        "scope_description",
+        "budget_range",
+        "timeline",
+        "created_at",
+    ]
+    list_per_page = 25
+    actions = [
+        "mark_as_reviewed",
+        "mark_as_quoted",
+        "mark_as_won",
+        "mark_as_lost",
+        "mark_as_closed",
+    ]
+    inlines = [QuoteAttachmentInline]
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": ("status", "internal_notes"),
+                "description": (
+                    "Move the request through the workflow: New → Reviewed → "
+                    "Quoted → Won / Lost / Closed."
+                ),
+            },
+        ),
+        (
+            "Contact",
+            {
+                "fields": ("full_name", "company", "email", "phone"),
+                "description": "Submitted contact details (read-only).",
+            },
+        ),
+        (
+            "Project",
+            {
+                "fields": (
+                    "project_type",
+                    "location_region",
+                    "location_district",
+                    "estimated_start",
+                ),
+            },
+        ),
+        (
+            "Scope",
+            {
+                "fields": ("scope_description", "budget_range", "timeline"),
+            },
+        ),
+        ("Meta", {"fields": ("created_at",)}),
+    )
+
+    @admin.display(description="Submitted", ordering="-created_at")
+    def submitted_label(self, obj):
+        return obj.created_at.strftime("%d %b %Y")
+
+    @admin.display(description="From")
+    def company_or_name(self, obj):
+        return obj.company or obj.full_name
+
+    @admin.display(description="Type", ordering="project_type")
+    def project_type_pill(self, obj):
+        bg, fg = _SECTOR_COLOURS.get(obj.project_type, ("#f1f5f9", "#64748b"))
+        return format_html(
+            '<span style="background:{};color:{};font-size:11px;font-weight:700;'
+            'padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.04em;">{}</span>',
+            bg,
+            fg,
+            obj.get_project_type_display(),
+        )
+
+    @admin.display(description="Status", ordering="status")
+    def status_pill(self, obj):
+        bg, fg = _QUOTE_STATUS_COLOURS.get(obj.status, ("#f1f5f9", "#64748b"))
+        return format_html(
+            '<span style="background:{};color:{};font-size:11px;font-weight:700;'
+            'padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.04em;">{}</span>',
+            bg,
+            fg,
+            obj.get_status_display(),
+        )
+
+    def _bulk_set_status(self, request, queryset, new_status, label):
+        updated = queryset.update(status=new_status)
+        self.message_user(
+            request,
+            f"{updated} quote request{'s' if updated != 1 else ''} marked as {label}.",
+        )
+
+    @admin.action(description="Mark selected as Reviewed")
+    def mark_as_reviewed(self, request, queryset):
+        self._bulk_set_status(request, queryset, "reviewed", "reviewed")
+
+    @admin.action(description="Mark selected as Quoted")
+    def mark_as_quoted(self, request, queryset):
+        self._bulk_set_status(request, queryset, "quoted", "quoted")
+
+    @admin.action(description="Mark selected as Won")
+    def mark_as_won(self, request, queryset):
+        self._bulk_set_status(request, queryset, "won", "won")
+
+    @admin.action(description="Mark selected as Lost")
+    def mark_as_lost(self, request, queryset):
+        self._bulk_set_status(request, queryset, "lost", "lost")
+
+    @admin.action(description="Mark selected as Closed")
+    def mark_as_closed(self, request, queryset):
+        self._bulk_set_status(request, queryset, "closed", "closed")

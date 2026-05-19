@@ -1,0 +1,182 @@
+{% extends "construction/base_construction.html" %}
+{% load static %}
+
+{% block title %}Request a Quote — Bejundas Construction{% endblock %}
+{% block meta_description %}Request a project quote from Bejundas Construction. Tell us about your scope, location, budget and timeline — and attach plans if you have them.{% endblock %}
+
+{% block extra_head %}
+<style>
+  .c-form-section { background: #fff; border: 1px solid var(--construction-border);
+    border-radius: 8px; padding: 30px 32px; margin-bottom: 22px; }
+  .c-form-section h3 { font-size: 13px; font-weight: 700; color: var(--construction-accent);
+    text-transform: uppercase; letter-spacing: .1em; margin: 0 0 8px; }
+  .c-form-section h3 .step { display: inline-block; width: 22px; height: 22px; line-height: 22px;
+    text-align: center; background: var(--construction-accent); color: #fff; border-radius: 50%;
+    font-size: 11px; margin-right: 8px; }
+  .c-form-section .hint { font-size: 13px; color: var(--construction-muted); margin: 0 0 22px; line-height: 1.6; }
+
+  .c-attachments-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 640px) { .c-attachments-row { grid-template-columns: 1fr; } }
+
+  .c-attachment-note { font-size: 12px; color: var(--construction-muted); margin-top: 8px;
+    background: #f8fafc; padding: 10px 14px; border-radius: 4px; border-left: 3px solid var(--construction-border); }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+<section class="c-page-hero">
+  <div class="c-container">
+    <span class="c-eyebrow">Quote / RFP</span>
+    <h1>Request a Project Quote</h1>
+  </div>
+</section>
+
+<!-- Intro + form -->
+<section class="c-section">
+  <div class="c-container" style="max-width: 880px;">
+
+    {% if sent %}
+      <div class="c-form-success" style="font-size: 15px; padding: 22px 28px;">
+        <strong>&#10003; Quote request received.</strong><br>
+        Thanks for the detail. Our team will review your scope and come back to you within two working days with next steps. If we need clarification before then, we'll reach out by email or phone.
+      </div>
+    {% else %}
+      <p style="font-size: 16px; color: var(--construction-muted); line-height: 1.7; margin-bottom: 28px;">
+        Tell us about the project — site, scope, budget range, timeline — and our team will review and respond within two working days. The more detail you provide, the more accurate the proposal. Attach plans, sketches or reference photos if you have them.
+      </p>
+
+      <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div style="background:#fee2e2;color:#991b1b;padding:14px 18px;border-radius:6px;margin-bottom:18px;font-size:14px;">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
+
+        <!-- Section 1: Contact -->
+        <div class="c-form-section">
+          <h3><span class="step">1</span> Your Contact Details</h3>
+          <p class="hint">Who should we get back to?</p>
+
+          <div class="c-form-grid cols-2">
+            <div class="c-form-field">
+              <label for="{{ form.full_name.id_for_label }}">Full Name</label>
+              {{ form.full_name }}
+              {% if form.full_name.errors %}<div class="errors">{{ form.full_name.errors|join:" " }}</div>{% endif %}
+            </div>
+            <div class="c-form-field">
+              <label for="{{ form.company.id_for_label }}">Company (optional)</label>
+              {{ form.company }}
+              {% if form.company.errors %}<div class="errors">{{ form.company.errors|join:" " }}</div>{% endif %}
+            </div>
+          </div>
+
+          <div class="c-form-grid cols-2" style="margin-top: 18px;">
+            <div class="c-form-field">
+              <label for="{{ form.email.id_for_label }}">Email Address</label>
+              {{ form.email }}
+              {% if form.email.errors %}<div class="errors">{{ form.email.errors|join:" " }}</div>{% endif %}
+            </div>
+            <div class="c-form-field">
+              <label for="{{ form.phone.id_for_label }}">Phone Number</label>
+              {{ form.phone }}
+              {% if form.phone.errors %}<div class="errors">{{ form.phone.errors|join:" " }}</div>{% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Project basics -->
+        <div class="c-form-section">
+          <h3><span class="step">2</span> Project Basics</h3>
+          <p class="hint">What kind of project, where, and when?</p>
+
+          <div class="c-form-field" style="margin-bottom: 18px;">
+            <label for="{{ form.project_type.id_for_label }}">Project Type</label>
+            {{ form.project_type }}
+            {% if form.project_type.errors %}<div class="errors">{{ form.project_type.errors|join:" " }}</div>{% endif %}
+          </div>
+
+          <div class="c-form-grid cols-2">
+            <div class="c-form-field">
+              <label for="{{ form.location_region.id_for_label }}">Region</label>
+              {{ form.location_region }}
+              {% if form.location_region.errors %}<div class="errors">{{ form.location_region.errors|join:" " }}</div>{% endif %}
+            </div>
+            <div class="c-form-field">
+              <label for="{{ form.location_district.id_for_label }}">District (optional)</label>
+              {{ form.location_district }}
+              {% if form.location_district.errors %}<div class="errors">{{ form.location_district.errors|join:" " }}</div>{% endif %}
+            </div>
+          </div>
+
+          <div class="c-form-field" style="margin-top: 18px; max-width: 280px;">
+            <label for="{{ form.estimated_start.id_for_label }}">Estimated Start (optional)</label>
+            {{ form.estimated_start }}
+            {% if form.estimated_start.errors %}<div class="errors">{{ form.estimated_start.errors|join:" " }}</div>{% endif %}
+          </div>
+        </div>
+
+        <!-- Section 3: Scope -->
+        <div class="c-form-section">
+          <h3><span class="step">3</span> Scope, Budget &amp; Timeline</h3>
+          <p class="hint">A clear scope helps us give a meaningful number. Minimum 50 characters.</p>
+
+          <div class="c-form-field">
+            <label for="{{ form.scope_description.id_for_label }}">Scope Description</label>
+            {{ form.scope_description }}
+            {% if form.scope_description.errors %}<div class="errors">{{ form.scope_description.errors|join:" " }}</div>{% endif %}
+          </div>
+
+          <div class="c-form-grid cols-2" style="margin-top: 18px;">
+            <div class="c-form-field">
+              <label for="{{ form.budget_range.id_for_label }}">Budget Range</label>
+              {{ form.budget_range }}
+              {% if form.budget_range.errors %}<div class="errors">{{ form.budget_range.errors|join:" " }}</div>{% endif %}
+            </div>
+            <div class="c-form-field">
+              <label for="{{ form.timeline.id_for_label }}">Timeline</label>
+              {{ form.timeline }}
+              {% if form.timeline.errors %}<div class="errors">{{ form.timeline.errors|join:" " }}</div>{% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Attachments -->
+        <div class="c-form-section">
+          <h3><span class="step">4</span> Attachments (Optional)</h3>
+          <p class="hint">Plans, sketches, reference photos. PDF / JPG / PNG only. Maximum 5 MB per file. Up to 3 files.</p>
+
+          <div class="c-attachments-row">
+            <div class="c-form-field">
+              <label for="{{ form.attachment_1.id_for_label }}">File 1</label>
+              {{ form.attachment_1 }}
+              {% if form.attachment_1.errors %}<div class="errors">{{ form.attachment_1.errors|join:" " }}</div>{% endif %}
+            </div>
+            <div class="c-form-field">
+              <label for="{{ form.attachment_2.id_for_label }}">File 2</label>
+              {{ form.attachment_2 }}
+              {% if form.attachment_2.errors %}<div class="errors">{{ form.attachment_2.errors|join:" " }}</div>{% endif %}
+            </div>
+            <div class="c-form-field">
+              <label for="{{ form.attachment_3.id_for_label }}">File 3</label>
+              {{ form.attachment_3 }}
+              {% if form.attachment_3.errors %}<div class="errors">{{ form.attachment_3.errors|join:" " }}</div>{% endif %}
+            </div>
+          </div>
+
+          <p class="c-attachment-note">Your files are uploaded over HTTPS and only visible to the Bejundas Construction project team.</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 28px;">
+          <button type="submit" class="c-btn c-btn-primary">Submit Quote Request</button>
+        </div>
+      </form>
+    {% endif %}
+
+  </div>
+</section>
+
+{% endblock %}

@@ -226,6 +226,11 @@ UNFOLD = {
                         "icon": "verified",
                         "link": reverse_lazy("admin:construction_certification_changelist"),
                     },
+                    {
+                        "title": "Quote Requests",
+                        "icon": "request_quote",
+                        "link": reverse_lazy("admin:construction_quoterequest_changelist"),
+                    },
                 ],
             },
             {

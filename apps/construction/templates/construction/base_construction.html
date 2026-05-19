@@ -2,4 +2,39 @@
 {% load static %}
 {% block demo_css %}
 <link rel="stylesheet" type="text/css" href="{% static 'construction/css/construction.css' %}">
+<style>
+  /* Override Viora construction.css demo-header assumptions.
+     Our core/navbar.html uses a light header — force nav links to a
+     readable color on a light background, with the construction
+     orange (#f47920) for hover and active state. */
+  .header.style-default .main-menu .navigation > li > a,
+  .header.style-default .navigation li > a {
+      color: #2c2c2c !important;
+  }
+  .header.style-default .main-menu .navigation > li > a:hover,
+  .header.style-default .navigation li:hover > a,
+  .header.style-default .navigation li.active > a,
+  .header.style-default .main-menu .current-menu > a,
+  .header.style-default .main-menu .current-menu-item > a {
+      color: #f47920 !important;
+  }
+  .header.style-default .navigation li.has-child::after,
+  .header.style-default .main-menu .navigation > li:hover::after,
+  .header.style-default .main-menu .current-menu::after,
+  .header.style-default .main-menu .current-menu-item::after {
+      color: #2c2c2c;
+  }
+  /* "Get In Touch" CTA — restyle to construction orange. */
+  .header.style-default .tf-btn {
+      background: #f47920;
+      color: #fff;
+  }
+  .header.style-default .tf-btn:hover {
+      background: #d96710;
+  }
+  /* Burger icon on mobile — make bars visible on light header. */
+  .header.style-default .burger span {
+      background: #2c2c2c;
+  }
+</style>
 {% endblock %}

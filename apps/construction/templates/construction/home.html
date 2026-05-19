@@ -13,10 +13,13 @@
     --construction-dark:    #1a1a1a;
   }
   .c-hero {
-    position: relative; min-height: 540px;
+    position: relative; min-height: 600px;
     background: linear-gradient(135deg, rgba(26,26,26,.85) 0%, rgba(44,44,44,.7) 100%),
                 url("{% static 'construction/images/hero-1.jpg' %}") center/cover no-repeat;
-    display: flex; align-items: center; padding: 80px 0;
+    display: flex; align-items: center;
+    /* Top padding clears the fixed header (~90px tall) plus breathing room.
+       Bottom padding stays normal. */
+    padding: 160px 0 80px;
   }
   .c-hero .tag { display: inline-block; background: var(--construction-accent); color: #fff;
     font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;

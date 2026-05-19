@@ -76,7 +76,10 @@ class TestInnerPages:
 
 @pytest.mark.django_db
 class TestProjectsSectorFilter:
+    """Sector filter tests — clear seeded projects first so counts are deterministic."""
+
     def setup_method(self, method):
+        Project.objects.all().delete()
         Project.objects.create(
             title="House A", sector="residential", location_city="Dar", year_completed=2024
         )
@@ -108,6 +111,35 @@ class TestProjectsSectorFilter:
         response = Client().get("/construction/projects/?sector=garbage")
         assert len(response.context["projects"]) == 3
         assert response.context["active_sector"] == ""
+
+
+@pytest.mark.django_db
+class TestSeededContent:
+    """Verify the Phase 5 seed migration populated all 4 model tables."""
+
+    def test_8_services_seeded(self):
+        from apps.construction.models import ConstructionService
+
+        assert ConstructionService.objects.count() == 8
+
+    def test_10_projects_seeded_with_3_featured(self):
+        assert Project.objects.count() == 10
+        assert Project.objects.filter(is_featured=True).count() == 3
+
+    def test_4_testimonials_seeded(self):
+        from apps.construction.models import Testimonial
+
+        assert Testimonial.objects.count() == 4
+
+    def test_4_certifications_seeded(self):
+        from apps.construction.models import Certification
+
+        assert Certification.objects.count() == 4
+
+    def test_seeded_project_detail_url_works(self):
+        response = Client().get("/construction/projects/masaki-residential-tower/")
+        assert response.status_code == 200
+        assert b"Masaki Residential Tower" in response.content
 
 
 @pytest.mark.django_db

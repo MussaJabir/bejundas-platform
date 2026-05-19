@@ -1,3 +1,6 @@
+"""Model tests — use unique names prefixed with 'TestPrefix' to avoid
+collisions with seeded curated content from migration 0003."""
+
 import pytest
 
 from apps.construction.models import (
@@ -12,51 +15,54 @@ from apps.construction.models import (
 class TestConstructionService:
     def test_str(self):
         svc = ConstructionService.objects.create(
-            name="Residential Builds", summary="Custom homes and villas."
+            name="TestPrefix Residential", summary="Custom homes and villas."
         )
-        assert str(svc) == "Residential Builds"
+        assert str(svc) == "TestPrefix Residential"
 
     def test_slug_auto_filled(self):
         svc = ConstructionService.objects.create(
-            name="Civil Works", summary="Heavy civil engineering."
+            name="TestPrefix Civil Engineering", summary="Heavy civil engineering."
         )
-        assert svc.slug == "civil-works"
+        assert svc.slug == "testprefix-civil-engineering"
 
     def test_default_is_active(self):
-        svc = ConstructionService.objects.create(name="MEP", summary="MEP installs.")
+        svc = ConstructionService.objects.create(name="TestPrefix MEP", summary="MEP installs.")
         assert svc.is_active is True
 
     def test_default_ordering(self):
-        ConstructionService.objects.create(name="A", summary="x", order=2)
-        ConstructionService.objects.create(name="B", summary="x", order=1)
-        names = list(ConstructionService.objects.values_list("name", flat=True))
-        assert names == ["B", "A"]
+        # Scope assertion to only test-created rows to avoid collision with seed.
+        svc_a = ConstructionService.objects.create(name="TestPrefix Alpha", summary="x", order=99)
+        svc_b = ConstructionService.objects.create(name="TestPrefix Beta", summary="x", order=98)
+        ours = ConstructionService.objects.filter(name__startswith="TestPrefix").order_by(
+            "order", "name"
+        )
+        assert list(ours) == [svc_b, svc_a]
 
 
 @pytest.mark.django_db
 class TestProject:
     def test_str_includes_year(self):
         p = Project.objects.create(
-            title="Masaki Tower",
+            title="TestPrefix Tower",
             sector="residential",
             location_city="Dar es Salaam",
             year_completed=2024,
         )
-        assert str(p) == "Masaki Tower (2024)"
+        assert str(p) == "TestPrefix Tower (2024)"
 
     def test_slug_auto_filled(self):
         p = Project.objects.create(
-            title="Dodoma Logistics Hub",
+            title="TestPrefix Logistics Hub",
             sector="industrial",
             location_city="Dodoma",
             year_completed=2023,
         )
-        assert p.slug == "dodoma-logistics-hub"
+        assert p.slug == "testprefix-logistics-hub"
 
     def test_sector_choices_enforced(self):
         # Django doesn't enforce at DB level, but get_sector_display() relies on choices
         p = Project.objects.create(
-            title="Ring Road",
+            title="TestPrefix Ring Road",
             sector="civil",
             location_city="Mwanza",
             year_completed=2022,
@@ -65,7 +71,7 @@ class TestProject:
 
     def test_default_not_featured(self):
         p = Project.objects.create(
-            title="X",
+            title="TestPrefix X",
             sector="commercial",
             location_city="Arusha",
             year_completed=2025,
@@ -77,27 +83,29 @@ class TestProject:
 class TestTestimonial:
     def test_str_with_organisation(self):
         t = Testimonial.objects.create(
-            author_name="Amina Hassan",
-            organisation="Hassan Holdings",
+            author_name="TestPrefix Author",
+            organisation="TestPrefix Holdings",
             quote="Outstanding delivery.",
         )
-        assert str(t) == "Amina Hassan — Hassan Holdings"
+        assert str(t) == "TestPrefix Author — TestPrefix Holdings"
 
     def test_str_without_organisation(self):
-        t = Testimonial.objects.create(author_name="John Doe", quote="Great team.")
-        assert str(t) == "John Doe"
+        t = Testimonial.objects.create(author_name="TestPrefix Solo", quote="Great team.")
+        assert str(t) == "TestPrefix Solo"
 
     def test_default_not_featured(self):
-        t = Testimonial.objects.create(author_name="X", quote="y")
+        t = Testimonial.objects.create(author_name="TestPrefix Anon", quote="y")
         assert t.is_featured is False
 
 
 @pytest.mark.django_db
 class TestCertification:
     def test_str(self):
-        c = Certification.objects.create(name="ISO 9001", issuer="ISO", year_awarded=2023)
-        assert str(c) == "ISO 9001 (ISO)"
+        c = Certification.objects.create(
+            name="TestPrefix ISO 9001", issuer="ISO", year_awarded=2023
+        )
+        assert str(c) == "TestPrefix ISO 9001 (ISO)"
 
     def test_default_is_active(self):
-        c = Certification.objects.create(name="NCC Class 1", issuer="NCC", year_awarded=2024)
+        c = Certification.objects.create(name="TestPrefix NCC", issuer="NCC", year_awarded=2024)
         assert c.is_active is True

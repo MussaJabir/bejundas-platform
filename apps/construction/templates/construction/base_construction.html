@@ -1,6 +1,8 @@
 {% extends "core/base.html" %}
 {% load static %}
 
+{% block og_image %}{% static 'construction/images/banner-1.jpg' %}{% endblock %}
+
 {% block navbar %}{% include "construction/navbar.html" %}{% endblock %}
 
 {% block demo_css %}
@@ -170,11 +172,35 @@
   .c-cert-badge .cert-name { font-size: 14px; font-weight: 700; color: var(--construction-primary); margin: 0; }
   .c-cert-badge .cert-meta { font-size: 12px; color: var(--construction-muted); margin-top: 4px; }
 
-  /* Responsive */
+  /* ── Responsive ──────────────────────────────────────────────── */
+
+  /* Tablet (768px and below) */
   @media (max-width: 768px) {
     .c-section { padding: 60px 0; }
     .c-form-grid.cols-2 { grid-template-columns: 1fr; }
     .c-page-hero { padding: 130px 0 50px; min-height: 260px; }
+    .c-row { gap: 16px; }
+    .c-cta-banner { padding: 40px 24px; }
+    .c-stat-strip .stat .num { font-size: 32px; }
+    .c-filter-row { gap: 8px; margin-bottom: 24px; }
+    .c-filter-chip { padding: 7px 14px; font-size: 12px; }
+  }
+
+  /* Mobile (480px and below) */
+  @media (max-width: 480px) {
+    .c-container { padding: 0 16px; }
+    .c-section { padding: 48px 0; }
+    .c-section-title { font-size: 22px; }
+    .c-page-hero { padding: 110px 0 40px; min-height: 220px; }
+    .c-page-hero h1 { font-size: 26px; }
+    .c-col-4, .c-col-3, .c-col-2 { flex: 1 1 100%; min-width: 0; }
+    .c-service-card { padding: 24px 20px; }
+    .c-project-card { height: 220px; }
+    .c-cta-banner h2 { font-size: 22px; }
+    .c-cta-banner p { font-size: 14px; }
+    .c-btn { padding: 12px 22px; font-size: 13px; }
+    .c-stat-strip .stat .num { font-size: 28px; }
+    .c-stat-strip .stat .lbl { font-size: 11px; }
   }
 </style>
 {% endblock %}

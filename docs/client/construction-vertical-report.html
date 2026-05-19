@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Update — Bejundas Platform | Construction Vertical</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:        #1a1a2e;
+    --charcoal:    #2c2c2c;
+    --orange:      #f47920;
+    --orange-d:    #d96710;
+    --orange-lt:   #fff4ec;
+    --green:       #16a34a;
+    --green-lt:    #dcfce7;
+    --amber:       #d97706;
+    --amber-lt:    #fef3c7;
+    --red:         #dc2626;
+    --red-lt:      #fee2e2;
+    --text:        #0f172a;
+    --muted:       #475569;
+    --border:      #e2e8f0;
+    --bg:          #f8fafc;
+    --white:       #ffffff;
+  }
+
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  .header { background: var(--charcoal); color: var(--white); padding: 52px 0 44px; }
+  .inner { max-width: 800px; margin: 0 auto; padding: 0 32px; }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-dot { width: 10px; height: 10px; background: var(--orange); border-radius: 50%; }
+  .brand-name { font-size: 14px; font-weight: 600; color: #94a3b8; letter-spacing: .04em; text-transform: uppercase; }
+  .report-date { font-size: 13px; color: #94a3b8; }
+  .header h1 { font-size: 34px; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 12px; }
+  .header h1 span { color: var(--orange); }
+  .header .subtitle { font-size: 16px; color: #cbd5e1; max-width: 580px; margin-bottom: 24px; }
+  .status-pill { display: inline-flex; align-items: center; gap: 8px; background: var(--green-lt); color: var(--green); font-size: 13px; font-weight: 700; padding: 7px 16px; border-radius: 20px; letter-spacing: .03em; }
+  .status-pill::before { content: ''; width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
+
+  main { max-width: 800px; margin: 0 auto; padding: 40px 32px 64px; display: flex; flex-direction: column; gap: 28px; }
+
+  .intro { background: var(--white); border: 1px solid var(--border); border-left: 4px solid var(--orange); border-radius: 10px; padding: 24px 28px; font-size: 15px; color: var(--muted); line-height: 1.8; }
+  .intro strong { color: var(--charcoal); }
+
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .card-header { display: flex; align-items: center; gap: 14px; padding: 20px 28px; border-bottom: 1px solid var(--border); background: var(--orange-lt); }
+  .card-icon { width: 38px; height: 38px; background: var(--orange); border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .card-icon svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .card-header h2 { font-size: 16px; font-weight: 700; color: var(--charcoal); }
+  .card-header .card-tag { margin-left: auto; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--orange-d); background: var(--orange-lt); padding: 3px 10px; border-radius: 4px; border: 1px solid #fcd9b6; }
+  .card-body { padding: 28px; }
+
+  .phase-list { display: flex; flex-direction: column; gap: 14px; }
+  .phase-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; }
+  .phase-num { width: 32px; height: 32px; background: var(--orange); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .phase-content strong { font-size: 15px; font-weight: 700; color: var(--charcoal); display: block; margin-bottom: 4px; }
+  .phase-content p { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0; }
+
+  .what-list { display: flex; flex-direction: column; gap: 14px; }
+  .what-item { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; }
+  .what-icon { width: 28px; height: 28px; background: var(--orange-lt); color: var(--orange-d); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .what-content strong { font-size: 14px; font-weight: 600; color: var(--charcoal); display: block; margin-bottom: 2px; }
+  .what-content span { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .stat-box { background: var(--orange-lt); border: 1px solid #fcd9b6; border-radius: 10px; padding: 18px 12px; text-align: center; }
+  .stat-box .num { font-size: 28px; font-weight: 700; color: var(--orange-d); line-height: 1; margin-bottom: 6px; }
+  .stat-box .lbl { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+
+  .pages-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .page-link { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .page-link .name { font-size: 14px; font-weight: 600; color: var(--charcoal); }
+  .page-link .url { font-family: 'Courier New', monospace; font-size: 11px; color: var(--orange-d); background: var(--orange-lt); padding: 2px 8px; border-radius: 4px; }
+
+  .impact-banner { background: linear-gradient(135deg, var(--charcoal) 0%, #3d3d3d 100%); color: var(--white); border-radius: 14px; padding: 28px 32px; position: relative; overflow: hidden; }
+  .impact-banner::before { content: ''; position: absolute; right: -60px; top: -60px; width: 240px; height: 240px; background: var(--orange); opacity: .12; border-radius: 50%; }
+  .impact-banner h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; position: relative; }
+  .impact-banner p { font-size: 14px; color: #cbd5e1; line-height: 1.7; position: relative; }
+
+  .access-box { background: var(--orange-lt); border: 1px solid #fcd9b6; border-radius: 10px; padding: 22px 26px; }
+  .access-box h3 { font-size: 14px; font-weight: 700; color: var(--charcoal); margin-bottom: 10px; text-transform: uppercase; letter-spacing: .04em; }
+  .access-box p { font-size: 14px; color: var(--muted); margin-bottom: 12px; }
+  .access-url { display: inline-block; font-family: 'Courier New', monospace; font-size: 12px; color: var(--orange-d); background: var(--white); padding: 6px 14px; border-radius: 6px; margin-right: 6px; margin-bottom: 6px; border: 1px solid #fcd9b6; }
+
+  .closing { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 28px; text-align: center; }
+  .closing h3 { font-size: 16px; font-weight: 700; color: var(--charcoal); margin-bottom: 8px; }
+  .closing p { font-size: 14px; color: var(--muted); }
+
+  .page-footer { max-width: 800px; margin: 0 auto; padding: 24px 32px 40px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); }
+
+  /* ── Print / PDF styles ── */
+  @media print {
+    body { background: white; font-size: 12px; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+    .card, .impact-banner, .closing, .access-box, .stat-row { break-inside: avoid; }
+    @page { margin: 15mm; size: A4; }
+  }
+
+  @media (max-width: 600px) {
+    .pages-list, .stat-row { grid-template-columns: 1fr 1fr; }
+    .header h1 { font-size: 26px; }
+    .page-footer { flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="inner">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-dot"></div>
+        <div class="brand-name">Bejundas Construction</div>
+      </div>
+      <div class="report-date">May 19, 2026</div>
+    </div>
+    <h1>Bejundas Construction <span>Is Live</span></h1>
+    <p class="subtitle">Your construction vertical is built, themed, and ready to capture leads. From homepage to project portfolio to quote requests — the full site is shipped and editable through your admin panel.</p>
+    <span class="status-pill">SHIPPED — Live at bejundas.co.tz/construction/</span>
+  </div>
+</div>
+
+<main>
+
+  <!-- Intro -->
+  <div class="intro">
+    Five focused phases. One construction website. Bejundas Construction now has a full website — not a "coming soon" page — with a homepage, services page, project portfolio, individual project pages, contact form, and a structured quote request form. Everything is themed in your charcoal-and-orange palette, looks professional out of the box, and is <strong>fully editable through the admin panel</strong> — no developer needed for content updates.
+  </div>
+
+  <!-- Stats -->
+  <div class="stat-row">
+    <div class="stat-box"><div class="num">7</div><div class="lbl">Public pages</div></div>
+    <div class="stat-box"><div class="num">10</div><div class="lbl">Featured projects</div></div>
+    <div class="stat-box"><div class="num">8</div><div class="lbl">Service areas</div></div>
+    <div class="stat-box"><div class="num">88/88</div><div class="lbl">Tests passing</div></div>
+  </div>
+
+  <!-- 5 phases -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      </div>
+      <h2>How We Built It — Five Phases</h2>
+      <span class="card-tag">Story</span>
+    </div>
+    <div class="card-body">
+      <div class="phase-list">
+        <div class="phase-item">
+          <div class="phase-num">1</div>
+          <div class="phase-content">
+            <strong>Scaffold &amp; Homepage</strong>
+            <p>Created the construction app, handed off URL routing, ported the Viora construction homepage and re-skinned it in your charcoal-and-orange palette.</p>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">2</div>
+          <div class="phase-content">
+            <strong>Models &amp; Admin</strong>
+            <p>Built the data structures behind the site — Services, Projects, Testimonials, Certifications — each with its own admin panel section, thumbnails, status pills, and ordering controls.</p>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">3</div>
+          <div class="phase-content">
+            <strong>Inner Pages</strong>
+            <p>Added About, Services, Projects (with sector filtering), individual Project pages, and Contact. Each page pulls live data from the admin so updates appear instantly.</p>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">4</div>
+          <div class="phase-content">
+            <strong>Quote Request Flow</strong>
+            <p>Built a full RFP form — contact details, project type, location, scope, budget, timeline, and up to three file attachments. Every submission lands in your admin with a workflow: New → Reviewed → Quoted → Won/Lost/Closed. Email notification on every submission.</p>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">5</div>
+          <div class="phase-content">
+            <strong>Content, Polish &amp; This Report</strong>
+            <p>Seeded the site with 10 realistic Tanzania-flavoured projects, 8 services, 4 testimonials, and 4 certifications. Mobile-tested across phone and tablet widths. SEO meta tags + Open Graph images set. Sitemap updated.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pages live -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>What's Live Right Now</h2>
+      <span class="card-tag">7 Pages</span>
+    </div>
+    <div class="card-body">
+      <div class="pages-list">
+        <div class="page-link"><span class="name">Home</span><span class="url">/construction/</span></div>
+        <div class="page-link"><span class="name">About</span><span class="url">/construction/about/</span></div>
+        <div class="page-link"><span class="name">Services</span><span class="url">/construction/services/</span></div>
+        <div class="page-link"><span class="name">Projects</span><span class="url">/construction/projects/</span></div>
+        <div class="page-link"><span class="name">Project Detail</span><span class="url">/projects/&lt;slug&gt;/</span></div>
+        <div class="page-link"><span class="name">Contact</span><span class="url">/construction/contact/</span></div>
+        <div class="page-link"><span class="name">Quote Request</span><span class="url">/construction/quote/</span></div>
+        <div class="page-link"><span class="name">Admin</span><span class="url">/admin/ → Construction</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- What you can do -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h2>What You Can Do Right Now</h2>
+      <span class="card-tag">No Code Needed</span>
+    </div>
+    <div class="card-body">
+      <div class="what-list">
+        <div class="what-item">
+          <div class="what-icon">1</div>
+          <div class="what-content">
+            <strong>Replace any project with real content</strong>
+            <span>Edit any of the 10 seeded projects in the admin — change title, description, location, year, upload a real cover image. Changes appear on the site instantly.</span>
+          </div>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">2</div>
+          <div class="what-content">
+            <strong>Add new projects, services, testimonials</strong>
+            <span>Use the "Construction" group in the admin sidebar. Each section has its own form. New entries appear in the right place on the site automatically — no developer required.</span>
+          </div>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">3</div>
+          <div class="what-content">
+            <strong>Receive quote requests via email</strong>
+            <span>Anyone filling the quote form sends a notification to your leads email. The submission also appears in the admin where you can move it through your workflow (Reviewed → Quoted → Won/Lost).</span>
+          </div>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">4</div>
+          <div class="what-content">
+            <strong>Feature your best projects on the homepage</strong>
+            <span>Tick the "Featured" checkbox on a project, and it appears on the homepage. Untick it, and it goes back to just the portfolio page. Simple as that.</span>
+          </div>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">5</div>
+          <div class="what-content">
+            <strong>Manage incoming RFP attachments</strong>
+            <span>When a client uploads plans or sketches with their quote request, those files are attached to the record in the admin — viewable, downloadable, archived alongside the submission.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Banner -->
+  <div class="impact-banner">
+    <h3>Built for Growth From Day One</h3>
+    <p>This isn't a static brochure — it's a working business tool. Every project you complete can be uploaded as a portfolio entry. Every client testimonial can be added to the About page. Every quote request becomes a tracked lead. The infrastructure to grow with your construction business is already in place.</p>
+  </div>
+
+  <!-- Access -->
+  <div class="access-box">
+    <h3>Live URLs</h3>
+    <p>Share these freely. All pages indexed by Google &amp; Bing.</p>
+    <span class="access-url">bejundas.co.tz/construction</span>
+    <span class="access-url">bejundas.co.tz/construction/projects</span>
+    <span class="access-url">bejundas.co.tz/construction/services</span>
+    <span class="access-url">bejundas.co.tz/construction/quote</span>
+  </div>
+
+  <!-- Closing -->
+  <div class="closing">
+    <h3>Bejundas Construction has a real home on the web.</h3>
+    <p>Replace the placeholder content with real photos and stories at your pace. The site grows with you.</p>
+  </div>
+
+</main>
+
+<div class="page-footer">
+  <span>Bejundas Platform — Construction Vertical Report</span>
+  <span>Prepared 19 May 2026</span>
+</div>
+
+</body>
+</html>

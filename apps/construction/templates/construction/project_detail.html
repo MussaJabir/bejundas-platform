@@ -3,6 +3,7 @@
 
 {% block title %}{{ project.title }} — Bejundas Construction{% endblock %}
 {% block meta_description %}{{ project.title }} — {{ project.get_sector_display }} project in {{ project.location_city }}, completed {{ project.year_completed }}.{% endblock %}
+{% block og_image %}{% if project.cover_image %}{{ project.cover_image.url }}{% else %}{% static 'construction/images/banner-1.jpg' %}{% endif %}{% endblock %}
 
 {% block extra_head %}
 <style>

@@ -52,11 +52,11 @@
     <div id="page">
         <div id="site-content">
 
-            {% include "core/navbar.html" %}
+            {% block navbar %}{% include "core/navbar.html" %}{% endblock %}
 
             {% block content %}{% endblock %}
 
-            {% include "core/footer.html" %}
+            {% block footer %}{% include "core/footer.html" %}{% endblock %}
 
         </div>
     </div>

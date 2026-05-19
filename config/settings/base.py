@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "apps.core",
     "apps.hub",
     "apps.leads",
+    "apps.construction",
 ]
 
 MIDDLEWARE = [
@@ -197,6 +198,38 @@ UNFOLD = {
                         "title": "Vertical Placeholders",
                         "icon": "category",
                         "link": reverse_lazy("admin:leads_verticalplaceholder_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": "Construction",
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": "Services",
+                        "icon": "engineering",
+                        "link": reverse_lazy("admin:construction_constructionservice_changelist"),
+                    },
+                    {
+                        "title": "Projects",
+                        "icon": "domain",
+                        "link": reverse_lazy("admin:construction_project_changelist"),
+                    },
+                    {
+                        "title": "Testimonials",
+                        "icon": "format_quote",
+                        "link": reverse_lazy("admin:construction_testimonial_changelist"),
+                    },
+                    {
+                        "title": "Certifications",
+                        "icon": "verified",
+                        "link": reverse_lazy("admin:construction_certification_changelist"),
+                    },
+                    {
+                        "title": "Quote Requests",
+                        "icon": "request_quote",
+                        "link": reverse_lazy("admin:construction_quoterequest_changelist"),
                     },
                 ],
             },

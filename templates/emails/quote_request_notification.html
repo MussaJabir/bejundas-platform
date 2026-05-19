@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>New Quote Request</title>
+</head>
+<body style="margin:0;padding:0;background:#f8fafc;font-family:'Helvetica Neue',Arial,sans-serif;color:#0f172a;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f8fafc;padding:24px 0;">
+  <tr><td align="center">
+    <table width="640" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;">
+
+      <!-- Header -->
+      <tr><td style="background:#2c2c2c;padding:24px 28px;">
+        <div style="font-size:11px;font-weight:700;color:#f47920;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;">Bejundas Construction</div>
+        <h1 style="font-size:22px;font-weight:800;color:#ffffff;margin:0;letter-spacing:-.01em;">New Quote Request</h1>
+        <div style="font-size:13px;color:#cbd5e1;margin-top:6px;">{{ quote.created_at|date:"d M Y, H:i" }}</div>
+      </td></tr>
+
+      <!-- Contact -->
+      <tr><td style="padding:24px 28px;border-bottom:1px solid #e2e8f0;">
+        <div style="font-size:11px;font-weight:700;color:#f47920;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Contact</div>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size:14px;">
+          <tr><td width="120" style="padding:4px 0;color:#64748b;">Name</td><td style="padding:4px 0;font-weight:600;">{{ quote.full_name }}</td></tr>
+          {% if quote.company %}<tr><td style="padding:4px 0;color:#64748b;">Company</td><td style="padding:4px 0;font-weight:600;">{{ quote.company }}</td></tr>{% endif %}
+          <tr><td style="padding:4px 0;color:#64748b;">Email</td><td style="padding:4px 0;"><a href="mailto:{{ quote.email }}" style="color:#2563eb;text-decoration:none;">{{ quote.email }}</a></td></tr>
+          <tr><td style="padding:4px 0;color:#64748b;">Phone</td><td style="padding:4px 0;"><a href="tel:{{ quote.phone }}" style="color:#2563eb;text-decoration:none;">{{ quote.phone }}</a></td></tr>
+        </table>
+      </td></tr>
+
+      <!-- Project -->
+      <tr><td style="padding:24px 28px;border-bottom:1px solid #e2e8f0;">
+        <div style="font-size:11px;font-weight:700;color:#f47920;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Project</div>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size:14px;">
+          <tr><td width="120" style="padding:4px 0;color:#64748b;">Type</td>
+              <td style="padding:4px 0;">
+                <span style="display:inline-block;background:#fff4ec;color:#c2410c;font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;text-transform:uppercase;letter-spacing:.04em;">{{ quote.get_project_type_display }}</span>
+              </td></tr>
+          <tr><td style="padding:4px 0;color:#64748b;">Location</td><td style="padding:4px 0;font-weight:600;">{{ quote.location_region }}{% if quote.location_district %} ({{ quote.location_district }}){% endif %}</td></tr>
+          {% if quote.estimated_start %}<tr><td style="padding:4px 0;color:#64748b;">Estimated start</td><td style="padding:4px 0;font-weight:600;">{{ quote.estimated_start|date:"d M Y" }}</td></tr>{% endif %}
+          <tr><td style="padding:4px 0;color:#64748b;">Budget</td><td style="padding:4px 0;font-weight:600;">{{ quote.get_budget_range_display }}</td></tr>
+          <tr><td style="padding:4px 0;color:#64748b;">Timeline</td><td style="padding:4px 0;font-weight:600;">{{ quote.get_timeline_display }}</td></tr>
+        </table>
+      </td></tr>
+
+      <!-- Scope -->
+      <tr><td style="padding:24px 28px;border-bottom:1px solid #e2e8f0;">
+        <div style="font-size:11px;font-weight:700;color:#f47920;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Scope Description</div>
+        <div style="font-size:14px;line-height:1.7;color:#0f172a;background:#f8fafc;padding:14px 16px;border-radius:6px;border-left:3px solid #f47920;white-space:pre-wrap;">{{ quote.scope_description }}</div>
+      </td></tr>
+
+      <!-- Attachments -->
+      <tr><td style="padding:24px 28px;border-bottom:1px solid #e2e8f0;">
+        <div style="font-size:11px;font-weight:700;color:#f47920;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Attachments</div>
+        {% if quote.attachments.all %}
+          <ul style="margin:0;padding-left:18px;font-size:14px;line-height:1.8;">
+            {% for att in quote.attachments.all %}
+              <li><code style="background:#f1f5f9;padding:2px 6px;border-radius:3px;font-size:12px;">{{ att.file.name|cut:"construction/quote_attachments/" }}</code></li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <div style="font-size:13px;color:#64748b;font-style:italic;">No attachments provided.</div>
+        {% endif %}
+      </td></tr>
+
+      <!-- Action -->
+      <tr><td style="padding:24px 28px;text-align:center;background:#f8fafc;">
+        <a href="{{ site_url }}admin/construction/quoterequest/{{ quote.id }}/change/"
+           style="display:inline-block;background:#f47920;color:#ffffff;font-size:14px;font-weight:700;padding:12px 28px;border-radius:4px;text-decoration:none;text-transform:uppercase;letter-spacing:.04em;">
+          Review in Admin
+        </a>
+      </td></tr>
+
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>

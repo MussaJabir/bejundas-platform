@@ -1,0 +1,51 @@
+{% load static %}
+<header class="header style-default header-fixed">
+    <div class="tf-container">
+        <div class="header-inner">
+            <a href="{% url 'construction:home' %}" class="site-logo">
+                <span class="h5 fw-7" style="color:#2c2c2c;">
+                    {{ company.company_name|default:"Bejundas" }}
+                    <span style="color:#f47920;font-weight:800;letter-spacing:.04em;">CONSTRUCTION</span>
+                </span>
+            </a>
+
+            <nav class="main-menu">
+                <ul class="navigation">
+                    <li class="text-menu{% if request.resolver_match.url_name == 'home' %} active{% endif %}">
+                        <a href="{% url 'construction:home' %}" class="toggle">Home</a>
+                    </li>
+                    <li class="text-menu{% if request.resolver_match.url_name == 'about' %} active{% endif %}">
+                        <a href="{% url 'construction:about' %}" class="toggle">About</a>
+                    </li>
+                    <li class="text-menu{% if request.resolver_match.url_name == 'services' %} active{% endif %}">
+                        <a href="{% url 'construction:services' %}" class="toggle">Services</a>
+                    </li>
+                    <li class="text-menu{% if 'project' in request.resolver_match.url_name %} active{% endif %}">
+                        <a href="{% url 'construction:projects' %}" class="toggle">Projects</a>
+                    </li>
+                    <li class="text-menu{% if request.resolver_match.url_name == 'contact' %} active{% endif %}">
+                        <a href="{% url 'construction:contact' %}" class="toggle">Contact</a>
+                    </li>
+                    <li class="text-menu">
+                        <a href="{% url 'hub:home' %}" class="toggle" style="color:#94a3b8;font-size:13px;">&larr; Bejundas Group</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="header-right d-flex align-items-center gap_20">
+                <a href="{% url 'construction:quote_request' %}" class="tf-btn btn-hover-animate-2">
+                    <span>Request a Quote</span>
+                    <span class="bg-effect"></span>
+                </a>
+                <div class="mobile-button d-lg-none" data-bs-toggle="offcanvas"
+                    data-bs-target="#menu-mobile" aria-controls="menu-mobile">
+                    <div class="burger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

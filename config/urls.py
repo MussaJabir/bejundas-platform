@@ -4,11 +4,14 @@ from django.contrib.sitemaps.views import sitemap
 from django.http import HttpResponse
 from django.urls import include, path
 
+from apps.construction.sitemaps import ConstructionStaticSitemap, ProjectSitemap
 from apps.hub.sitemaps import HubStaticSitemap, NewsSitemap
 
 sitemaps = {
     "static": HubStaticSitemap,
     "news": NewsSitemap,
+    "construction": ConstructionStaticSitemap,
+    "construction_projects": ProjectSitemap,
 }
 
 
@@ -30,6 +33,7 @@ urlpatterns = [
         "sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django.contrib.sitemaps.views.sitemap"
     ),
     path("robots.txt", robots_txt, name="robots_txt"),
+    path("construction/", include("apps.construction.urls")),
     path("", include("apps.leads.urls")),
     path("", include("apps.hub.urls")),
 ]

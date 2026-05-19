@@ -14,6 +14,8 @@ def app_theme(request):
     vertical = ""
     if getattr(request, "resolver_match", None):
         vertical = request.resolver_match.kwargs.get("vertical", "") or ""
+        if not vertical:
+            vertical = request.resolver_match.app_name or ""
 
     theme_map = {
         "financial": {"primary": "#0a2342", "accent": "#c9a84c", "label": "Financial Services"},

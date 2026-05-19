@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technical Report — Construction Vertical — Bejundas Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:        #1a1a2e;
+    --charcoal:    #2c2c2c;
+    --orange:      #f47920;
+    --orange-d:    #d96710;
+    --orange-lt:   #fff4ec;
+    --green:       #16a34a;
+    --green-lt:    #dcfce7;
+    --amber:       #d97706;
+    --amber-lt:    #fef3c7;
+    --red:         #dc2626;
+    --red-lt:      #fee2e2;
+    --text:        #0f172a;
+    --muted:       #475569;
+    --border:      #e2e8f0;
+    --bg:          #f8fafc;
+    --white:       #ffffff;
+  }
+
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+
+  .header { background: var(--charcoal); color: var(--white); padding: 48px 0 40px; }
+  .header .inner { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+  .header-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .logo-chip { background: var(--orange); color: var(--white); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; }
+  .date-chip { font-size: 13px; color: #94a3b8; }
+  .header h1 { font-size: 30px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 8px; }
+  .header h1 span { color: var(--orange); }
+  .header p { font-size: 15px; color: #94a3b8; max-width: 720px; }
+  .header p code { background: rgba(244,121,32,.15); color: #fdba74; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+  .status-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; background: var(--green-lt); color: var(--green); font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 20px; }
+  .status-badge::before { content: ''; width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
+
+  main { max-width: 880px; margin: 0 auto; padding: 40px 24px 64px; display: flex; flex-direction: column; gap: 24px; }
+
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .card-header { display: flex; align-items: center; gap: 12px; padding: 20px 24px; border-bottom: 1px solid var(--border); background: var(--orange-lt); }
+  .card-icon { width: 36px; height: 36px; background: var(--orange); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .card-icon svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .card-header h2 { font-size: 16px; font-weight: 700; color: var(--charcoal); }
+  .card-header .section-num { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--orange-d); background: var(--white); padding: 2px 8px; border-radius: 4px; border: 1px solid #fcd9b6; }
+  .card-body { padding: 24px; }
+  .card-body p { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+  .card-body p + p { margin-top: 10px; }
+
+  code { font-size: 12px; background: var(--orange-lt); color: var(--orange-d); padding: 1px 6px; border-radius: 4px; font-family: 'Courier New', monospace; }
+  pre { background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 16px 20px; font-size: 12px; line-height: 1.7; overflow-x: auto; font-family: 'Courier New', monospace; margin: 12px 0; }
+  pre .c { color: #64748b; }
+  pre .k { color: #fdba74; }
+  pre .s { color: #86efac; }
+  pre .d { color: #f87171; }
+  pre .n { color: #fbbf24; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .stat-box { background: var(--orange-lt); border: 1px solid #fcd9b6; border-radius: 10px; padding: 16px 12px; text-align: center; }
+  .stat-box .num { font-size: 26px; font-weight: 700; color: var(--orange-d); line-height: 1; margin-bottom: 4px; }
+  .stat-box .lbl { font-size: 11px; color: var(--muted); font-weight: 500; }
+
+  table.std { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.std th { text-align: left; padding: 10px 14px; background: var(--orange-lt); color: var(--charcoal); font-weight: 600; font-size: 12px; border-bottom: 1px solid var(--border); }
+  table.std td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--muted); vertical-align: top; }
+  table.std tr:last-child td { border-bottom: none; }
+  table.std .ok { display: inline-flex; align-items: center; gap: 5px; color: var(--green); font-weight: 600; font-size: 12px; }
+  table.std .ok::before { content: ''; width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
+
+  .phase-table .pr-pill { display: inline-block; background: var(--orange-lt); color: var(--orange-d); font-family: 'Courier New', monospace; font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 700; border: 1px solid #fcd9b6; }
+  .phase-table .ph-num { display: inline-block; background: var(--charcoal); color: var(--white); font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 700; min-width: 24px; text-align: center; }
+
+  .built-list { display: flex; flex-direction: column; gap: 12px; }
+  .built-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 8px; }
+  .built-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); margin-top: 6px; flex-shrink: 0; }
+  .built-item strong { font-size: 14px; font-weight: 600; color: var(--charcoal); display: block; margin-bottom: 2px; }
+  .built-item span { font-size: 13px; color: var(--muted); }
+
+  .checklist { display: flex; flex-direction: column; gap: 8px; }
+  .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
+  .check-mark { width: 18px; height: 18px; border-radius: 4px; background: var(--green); color: var(--white); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .check-mark.todo { background: var(--white); border: 1.5px solid var(--border); color: transparent; }
+  .check-item span { font-size: 13px; color: var(--text); }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill { display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 10px; text-transform: uppercase; letter-spacing: .04em; }
+  .pill.new { background: #fee2e2; color: #991b1b; }
+  .pill.reviewed { background: #dbeafe; color: #1d4ed8; }
+  .pill.quoted { background: #fef3c7; color: #a16207; }
+  .pill.won { background: #dcfce7; color: #166534; }
+  .pill.lost { background: #f1f5f9; color: #64748b; }
+  .pill.closed { background: #e2e8f0; color: #475569; }
+
+  .pf { padding: 20px 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); max-width: 880px; margin: 0 auto; }
+
+  /* ── Print / PDF styles ── */
+  @media print {
+    body { background: white; font-size: 12px; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+    .card, .stat-row, table.std { break-inside: avoid; }
+    @page { margin: 15mm; size: A4; }
+  }
+
+  @media (max-width: 600px) {
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="inner">
+    <div class="header-meta">
+      <span class="logo-chip">Bejundas Construction</span>
+      <span class="date-chip">19 May 2026</span>
+    </div>
+    <h1>Construction Vertical — <span>Technical Build</span></h1>
+    <p>Five-PR construction vertical build. New Django app <code>apps.construction</code> with 6 models, 7 public views, full RFP/quote flow with file attachments + email notification, branded Unfold admin with 5 sidebar entries and a 6-state status workflow. Seeded with 26 placeholder content rows. 88/88 tests green.</p>
+    <div class="status-badge">SHIPPED — PRs #42 → #43 → #44 → #45 → #46 merged</div>
+  </div>
+</div>
+
+<main>
+
+  <!-- Stats -->
+  <div class="stat-row">
+    <div class="stat-box"><div class="num">5</div><div class="lbl">Sub-phase PRs</div></div>
+    <div class="stat-box"><div class="num">6</div><div class="lbl">Django models</div></div>
+    <div class="stat-box"><div class="num">7</div><div class="lbl">Public views</div></div>
+    <div class="stat-box"><div class="num">88/88</div><div class="lbl">Tests passing</div></div>
+  </div>
+
+  <!-- Phase summary -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      </div>
+      <h2>Sub-Phase Summary</h2>
+      <span class="section-num">§1</span>
+    </div>
+    <div class="card-body">
+      <table class="std phase-table">
+        <thead>
+          <tr><th>#</th><th>PR</th><th>Title</th><th>Lines</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="ph-num">1</span></td>
+            <td><span class="pr-pill">#42</span></td>
+            <td><strong>Scaffold + homepage shell</strong> — <code>apps.construction</code> created, routing handed off from <code>apps.leads</code>, Viora <code>demo-construction</code> assets copied to <code>static/construction/</code>, charcoal/orange themed homepage. Refactored <code>core/base.html</code> to expose <code>{% block navbar %}</code> for app-level swap.</td>
+            <td>+369 / −7</td>
+          </tr>
+          <tr>
+            <td><span class="ph-num">2</span></td>
+            <td><span class="pr-pill">#43</span></td>
+            <td><strong>Models + Unfold admin</strong> — 4 core models (<code>ConstructionService</code>, <code>Project</code>, <code>Testimonial</code>, <code>Certification</code>) with thumbnails, colour-coded sector pills (6 variants), featured pills, prepopulated slugs. New "Construction" sidebar group (collapsible).</td>
+            <td>+764 / −2</td>
+          </tr>
+          <tr>
+            <td><span class="ph-num">3</span></td>
+            <td><span class="pr-pill">#44</span></td>
+            <td><strong>5 inner pages</strong> — About, Services, Projects (sector filter), Project Detail (with related), Contact (with form). Construction-specific navbar with backlink to hub. Dedicated <code>ConstructionStaticSitemap</code> + <code>ProjectSitemap</code> registered in <code>config/urls.py</code>. Shared CSS consolidated into <code>base_construction.html</code>.</td>
+            <td>+1,126 / −149</td>
+          </tr>
+          <tr>
+            <td><span class="ph-num">4</span></td>
+            <td><span class="pr-pill">#45</span></td>
+            <td><strong>RFP / Quote flow</strong> — <code>QuoteRequest</code> + <code>QuoteAttachment</code> models, 3-attachment form (PDF/JPG/PNG ≤5MB), multi-section template, plain-text + branded HTML email to <code>LEADS_EMAIL</code>, 6-state admin workflow with 5 bulk actions. Navbar CTA changed to "Request a Quote".</td>
+            <td>+1,082 / −3</td>
+          </tr>
+          <tr>
+            <td><span class="ph-num">5</span></td>
+            <td><span class="pr-pill">#46</span></td>
+            <td><strong>Content seed + polish + reports</strong> — RunPython data migration seeds 8 services + 10 projects + 4 testimonials + 4 certifications (idempotent via <code>update_or_create</code>). OG image override per app + project covers. Mobile breakpoints @480px + @768px audited and tightened. This report + client report generated.</td>
+            <td>+770 (seed)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Models -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>
+      </div>
+      <h2>Data Model</h2>
+      <span class="section-num">§2</span>
+    </div>
+    <div class="card-body">
+      <p>All 6 models inherit <code>apps.core.models.BaseModel</code> (UUID pk + <code>created_at</code> + <code>updated_at</code>).</p>
+      <table class="std" style="margin-top: 12px;">
+        <thead>
+          <tr><th>Model</th><th>Notable fields</th><th>Constraints</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>ConstructionService</code></td><td>name, slug, summary, description, icon (Material name), is_active, order</td><td>slug unique, auto-filled from name</td></tr>
+          <tr><td><code>Project</code></td><td>title, slug, sector (6 choices), location_city/region, year_completed, description, cover_image, is_featured, order</td><td>slug unique; <code>__str__</code> includes year</td></tr>
+          <tr><td><code>Testimonial</code></td><td>author_name, author_role, organisation, quote, is_featured, order</td><td><code>__test__ = False</code> to opt out of pytest collection</td></tr>
+          <tr><td><code>Certification</code></td><td>name, issuer, year_awarded, certificate_image, is_active, order</td><td>—</td></tr>
+          <tr><td><code>QuoteRequest</code></td><td>full_name, company, email, phone, project_type, location_region/district, estimated_start, scope_description, budget_range (4 bands), timeline (4 bands), status (6 states), internal_notes</td><td>scope ≥50 chars enforced at form level</td></tr>
+          <tr><td><code>QuoteAttachment</code></td><td>FK quote_request, file (FileField)</td><td><code>_validate_attachment</code>: ≤5MB, PDF/JPG/PNG only</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Quote workflow -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <h2>Quote Request Workflow</h2>
+      <span class="section-num">§3</span>
+    </div>
+    <div class="card-body">
+      <p>Status field on <code>QuoteRequest</code> is colour-coded across 6 states. Each state has a corresponding bulk admin action.</p>
+      <div class="pill-row" style="margin: 14px 0;">
+        <span class="pill new">New</span>
+        <span class="pill reviewed">Reviewed</span>
+        <span class="pill quoted">Quoted</span>
+        <span class="pill won">Won</span>
+        <span class="pill lost">Lost</span>
+        <span class="pill closed">Closed</span>
+      </div>
+      <p style="margin-top: 14px;">Submitted contact / project / scope fields are read-only in the admin. Only <code>status</code> and <code>internal_notes</code> are editable. Inline <code>QuoteAttachment</code> editor shows uploaded files.</p>
+      <pre><span class="c"># apps/construction/forms.py — file validation</span>
+<span class="k">def</span> _validate_attachment(file_obj):
+    max_size = <span class="n">5</span> * <span class="n">1024</span> * <span class="n">1024</span>
+    <span class="k">if</span> file_obj.size > max_size:
+        <span class="k">raise</span> ValidationError(<span class="s">"File must be 5MB or smaller."</span>)
+    allowed = {<span class="s">".pdf"</span>, <span class="s">".jpg"</span>, <span class="s">".jpeg"</span>, <span class="s">".png"</span>}
+    <span class="k">if</span> <span class="k">not</span> <span class="k">any</span>(file_obj.name.lower().endswith(ext) <span class="k">for</span> ext <span class="k">in</span> allowed):
+        <span class="k">raise</span> ValidationError(<span class="s">"Only PDF, JPG, or PNG files are accepted."</span>)</pre>
+    </div>
+  </div>
+
+  <!-- Routing & sitemap -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+      </div>
+      <h2>Routing &amp; Sitemap</h2>
+      <span class="section-num">§4</span>
+    </div>
+    <div class="card-body">
+      <table class="std">
+        <thead><tr><th>URL</th><th>View</th><th>Sitemap entry</th></tr></thead>
+        <tbody>
+          <tr><td><code>/construction/</code></td><td><code>HomeView</code></td><td><span class="ok">Yes (priority 0.7, weekly)</span></td></tr>
+          <tr><td><code>/construction/about/</code></td><td><code>AboutView</code></td><td><span class="ok">Yes (priority 0.6)</span></td></tr>
+          <tr><td><code>/construction/services/</code></td><td><code>ServicesView</code></td><td><span class="ok">Yes (priority 0.7)</span></td></tr>
+          <tr><td><code>/construction/projects/</code></td><td><code>ProjectsView</code> + sector filter</td><td><span class="ok">Yes (priority 0.7, weekly)</span></td></tr>
+          <tr><td><code>/construction/projects/&lt;slug&gt;/</code></td><td><code>ProjectDetailView</code></td><td><span class="ok"><code>ProjectSitemap</code> (dynamic)</span></td></tr>
+          <tr><td><code>/construction/contact/</code></td><td><code>ContactView</code></td><td><span class="ok">Yes (priority 0.5)</span></td></tr>
+          <tr><td><code>/construction/quote/</code></td><td><code>QuoteRequestView</code></td><td>No (form, not content)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Seeded content -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      </div>
+      <h2>Seeded Content (Phase 5)</h2>
+      <span class="section-num">§5</span>
+    </div>
+    <div class="card-body">
+      <p>Single data migration <code>0003_seed_curated_content.py</code> using <code>RunPython</code> with idempotent <code>update_or_create</code>. Reverse migration removes only the seeded rows by slug/name. Safe to re-run.</p>
+      <table class="std" style="margin-top: 12px;">
+        <thead><tr><th>Model</th><th>Rows</th><th>Spread</th></tr></thead>
+        <tbody>
+          <tr><td><code>ConstructionService</code></td><td>8</td><td>Residential, Commercial, Civil, MEP, Fit-out, PM, Design-build, Renovations</td></tr>
+          <tr><td><code>Project</code></td><td>10 (3 featured)</td><td>Dar es Salaam · Dodoma · Mwanza · Zanzibar · Mbeya · Arusha · Bagamoyo · Iringa · Tanga — years 2021-2025, all 6 sectors covered</td></tr>
+          <tr><td><code>Testimonial</code></td><td>4</td><td>Plausible TZ business names — Hassan Holdings, TZ Logistics Corp, Mbeya Secondary School, Arusha Highland Coffee</td></tr>
+          <tr><td><code>Certification</code></td><td>4</td><td>NCC Class 1, ISO 9001:2015, ISO 14001:2015, OSHA</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Tests -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>Test Coverage</h2>
+      <span class="section-num">§6</span>
+    </div>
+    <div class="card-body">
+      <table class="std">
+        <thead><tr><th>File</th><th>Tests</th><th>Scope</th></tr></thead>
+        <tbody>
+          <tr><td><code>test_views.py</code></td><td>26</td><td>Home + 5 inner pages + sector filter + ContactForm + sitemap + seeded content checks</td></tr>
+          <tr><td><code>test_models.py</code></td><td>13</td><td>str, slug auto-fill, defaults, ordering, sector display — all use "TestPrefix" names to avoid seed collision</td></tr>
+          <tr><td><code>test_admin.py</code></td><td>4</td><td>Each construction model's changelist loads for staff user</td></tr>
+          <tr><td><code>test_quote.py</code></td><td>21</td><td>Model defaults, form validation (each required field + scope min + file size + extension), view (GET/POST/email/attachment), admin status actions</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top: 14px;">Plus 24 prior tests across <code>apps.core</code>, <code>apps.hub</code>, <code>apps.leads</code>. Total: <strong>88/88 passing</strong> in 14 seconds. Ruff + black clean.</p>
+    </div>
+  </div>
+
+  <!-- Decisions -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <h2>Key Decisions &amp; Trade-offs</h2>
+      <span class="section-num">§7</span>
+    </div>
+    <div class="card-body">
+      <div class="built-list">
+        <div class="built-item"><div class="built-dot"></div><div>
+          <strong>Option A (lean core, 4 models) over Option B (7 models)</strong>
+          <span>Honoured ADR-002 — no abandoned-shell anti-pattern. <code>Property</code>, <code>Product</code>, <code>Equipment</code> deferred until real content exists; each is a ~1-day follow-up PR when triggered by a client need.</span>
+        </div></div>
+        <div class="built-item"><div class="built-dot"></div><div>
+          <strong>3 separate optional FileField inputs instead of a custom MultipleFileField widget</strong>
+          <span>Django 5's <code>multiple=True</code> on FileField still requires custom widget gymnastics. Three explicit slots is pragmatic, validates per-file at form level, and produces a flat <code>QuoteAttachment</code> table that's easy to query.</span>
+        </div></div>
+        <div class="built-item"><div class="built-dot"></div><div>
+          <strong>Construction-specific navbar with hub backlink</strong>
+          <span>Refactored <code>core/base.html</code> to wrap navbar in <code>{% block navbar %}</code>. <code>base_construction.html</code> overrides with a dedicated nav. Adds a small "← Bejundas Group" backlink so users don't feel trapped in the vertical.</span>
+        </div></div>
+        <div class="built-item"><div class="built-dot"></div><div>
+          <strong>Email as EmailMultiAlternatives (plain + HTML)</strong>
+          <span>Recipients on text-only mail clients still get the data; everyone else gets the branded notification with "Review in Admin" CTA. Templates split into <code>.txt</code> and <code>.html</code> partials in <code>templates/emails/</code>.</span>
+        </div></div>
+        <div class="built-item"><div class="built-dot"></div><div>
+          <strong>Idempotent RunPython seed migration with update_or_create</strong>
+          <span>Re-running the migration won't duplicate rows. Reverse code removes only the seeded entries by slug/name. Safe to re-run on staging/dev DBs that already have the seed.</span>
+        </div></div>
+        <div class="built-item"><div class="built-dot"></div><div>
+          <strong>Tests use "TestPrefix" names; sector filter test wipes Project table first</strong>
+          <span>Seed migration loads 10 projects into every test DB. Model tests now use unique prefixed names; the sector-filter test deletes all projects in <code>setup_method</code> so counts are deterministic.</span>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Deploy checklist -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>Production Deploy Checklist</h2>
+      <span class="section-num">§8</span>
+    </div>
+    <div class="card-body">
+      <div class="checklist">
+        <div class="check-item"><div class="check-mark">✓</div><span>Merge PRs #42 → #43 → #44 → #45 → #46 into <code>develop</code> (sequential)</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>Open PR <code>develop</code> → <code>main</code></span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>GitHub webhook fires deploy on cPanel</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>On server: <code>python manage.py migrate</code> applies <code>construction.0002</code> + <code>construction.0003</code></span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span><code>python manage.py collectstatic --noinput</code> picks up Viora assets + construction CSS</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span><code>touch tmp/restart.txt</code> to recycle Passenger</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>Verify <code>/construction/</code> serves real homepage (not Coming Soon)</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>Submit updated sitemap.xml to Google Search Console (10 new project URLs)</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>Send a test submission via <code>/construction/quote/</code> and verify email lands at <code>LEADS_EMAIL</code></span></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="pf">
+  <span>Bejundas Platform — Technical Report — Construction Vertical</span>
+  <span>Generated 19 May 2026</span>
+</div>
+
+</body>
+</html>

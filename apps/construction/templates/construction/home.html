@@ -1,0 +1,202 @@
+{% extends "construction/base_construction.html" %}
+{% load static %}
+
+{% block title %}Bejundas Construction — Building Tanzania's Future{% endblock %}
+{% block meta_description %}Bejundas Construction delivers residential, commercial, civil and industrial projects across Tanzania — design-build, fit-out, project management.{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* Hero — specific to the homepage. Shared classes live in base_construction.html. */
+  .c-hero {
+    position: relative; min-height: 600px;
+    background: linear-gradient(135deg, rgba(26,26,26,.85) 0%, rgba(44,44,44,.7) 100%),
+                url("{% static 'construction/images/hero-1.jpg' %}") center/cover no-repeat;
+    display: flex; align-items: center;
+    padding: 160px 0 80px;
+  }
+  .c-hero .tag { display: inline-block; background: var(--construction-accent); color: #fff;
+    font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    padding: 6px 14px; border-radius: 4px; margin-bottom: 18px; }
+  .c-hero h1 { color: #fff; font-size: clamp(34px, 5vw, 58px); font-weight: 800;
+    line-height: 1.15; letter-spacing: -.02em; margin-bottom: 18px; max-width: 720px; }
+  .c-hero h1 span { color: var(--construction-accent); }
+  .c-hero p.lead { color: #e2e8f0; font-size: 17px; line-height: 1.65; max-width: 620px; margin-bottom: 30px; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+<section class="c-hero">
+  <div class="c-container">
+    <span class="tag">Bejundas Construction</span>
+    <h1>Building Tanzania's <span>Future</span> — One Project at a Time</h1>
+    <p class="lead">From residential developments in Dar es Salaam to civil works across Mwanza and industrial fit-outs in Dodoma, Bejundas Construction delivers end-to-end project execution with the precision and reliability Tanzanian businesses depend on.</p>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+      <a href="{% url 'construction:projects' %}" class="c-btn c-btn-primary">View Our Projects</a>
+      <a href="{% url 'construction:contact' %}" class="c-btn c-btn-ghost">Request a Quote</a>
+    </div>
+  </div>
+</section>
+
+<!-- Stat strip -->
+<section class="c-stat-strip">
+  <div class="c-container">
+    <div class="c-row">
+      <div class="c-col-4 stat"><div class="num">120+</div><div class="lbl">Projects Completed</div></div>
+      <div class="c-col-4 stat"><div class="num">15</div><div class="lbl">Years Experience</div></div>
+      <div class="c-col-4 stat"><div class="num">5</div><div class="lbl">Regions Served</div></div>
+      <div class="c-col-4 stat"><div class="num">98%</div><div class="lbl">On-time Delivery</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- About brief -->
+<section class="c-section">
+  <div class="c-container">
+    <div class="c-row" style="align-items: center;">
+      <div style="flex: 1 1 480px;">
+        <span class="c-eyebrow">Who We Are</span>
+        <h2 class="c-section-title">A Construction Partner Built on Trust, Engineered for Tanzania</h2>
+        <p class="c-section-sub">Bejundas Construction is the construction arm of Bejundas Group of Companies — a multidisciplinary contractor delivering design-build, civil works, MEP installation, and project management services across mainland Tanzania and Zanzibar.</p>
+        <p class="c-section-sub" style="margin-top: 14px;">Our approach combines local market expertise with international quality standards — every site we run is registered with the NCC, supervised by certified engineers, and delivered against agreed timelines and budgets.</p>
+        <div style="margin-top: 28px;">
+          <a href="{% url 'construction:about' %}" class="c-btn c-btn-outline">Learn More About Us</a>
+        </div>
+      </div>
+      <div style="flex: 1 1 380px;">
+        <img src="{% static 'construction/images/thumbs-about-1.jpg' %}" alt="Bejundas Construction site" style="width: 100%; height: auto; border-radius: 6px; box-shadow: 0 16px 40px rgba(0,0,0,.12);">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services preview -->
+<section class="c-section c-section-soft">
+  <div class="c-container">
+    <div style="text-align: center; margin-bottom: 50px;">
+      <span class="c-eyebrow">What We Do</span>
+      <h2 class="c-section-title">End-to-End Construction Services</h2>
+      <p class="c-section-sub" style="margin: 0 auto;">From single-villa builds to multi-phase infrastructure — we cover the full project lifecycle under one accountable contractor.</p>
+    </div>
+    <div class="c-row">
+      {% for service in services %}
+        <div class="c-col-4">
+          <div class="c-service-card">
+            <div class="c-service-icon">&#9632;</div>
+            <h3>{{ service.name }}</h3>
+            <p>{{ service.summary }}</p>
+          </div>
+        </div>
+      {% empty %}
+        <div class="c-col-4">
+          <div class="c-service-card">
+            <div class="c-service-icon">&#9632;</div>
+            <h3>Residential Builds</h3>
+            <p>Custom homes, villas, and multi-unit residential developments built to your specification — turnkey or staged.</p>
+          </div>
+        </div>
+        <div class="c-col-4">
+          <div class="c-service-card">
+            <div class="c-service-icon">&#9698;</div>
+            <h3>Commercial Construction</h3>
+            <p>Office buildings, retail, warehouses, and hospitality — designed and delivered for working environments.</p>
+          </div>
+        </div>
+        <div class="c-col-4">
+          <div class="c-service-card">
+            <div class="c-service-icon">&#9650;</div>
+            <h3>Civil Works</h3>
+            <p>Roads, bridges, drainage, and site infrastructure — heavy civil engineering executed to NCC Class standards.</p>
+          </div>
+        </div>
+        <div class="c-col-4">
+          <div class="c-service-card">
+            <div class="c-service-icon">&#9670;</div>
+            <h3>MEP &amp; Fit-out</h3>
+            <p>Mechanical, electrical, plumbing, and interior fit-out — coordinated installation under one project manager.</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="{% url 'construction:services' %}" class="c-btn c-btn-outline">View All Services</a>
+    </div>
+  </div>
+</section>
+
+<!-- Featured projects -->
+<section class="c-section">
+  <div class="c-container">
+    <div style="text-align: center; margin-bottom: 50px;">
+      <span class="c-eyebrow">Our Work</span>
+      <h2 class="c-section-title">Featured Projects</h2>
+      <p class="c-section-sub" style="margin: 0 auto;">A snapshot of recent work across Tanzania.</p>
+    </div>
+    <div class="c-row">
+      {% for project in featured_projects %}
+        <div class="c-col-3">
+          <a href="{% url 'construction:project_detail' slug=project.slug %}" class="c-project-card">
+            {% if project.cover_image %}
+              <img src="{{ project.cover_image.url }}" alt="{{ project.title }}">
+            {% else %}
+              <img src="{% static 'construction/images/service-item-1.jpg' %}" alt="{{ project.title }}">
+            {% endif %}
+            <div class="overlay">
+              <span class="sector">{{ project.get_sector_display }}</span>
+              <h3 class="ptitle">{{ project.title }}</h3>
+              <p class="pmeta">{{ project.location_city }} · {{ project.year_completed }}</p>
+            </div>
+          </a>
+        </div>
+      {% empty %}
+        <div class="c-col-3">
+          <div class="c-project-card">
+            <img src="{% static 'construction/images/service-item-1.jpg' %}" alt="Masaki Tower">
+            <div class="overlay">
+              <span class="sector">Residential</span>
+              <h3 class="ptitle">Masaki Residential Tower</h3>
+              <p class="pmeta">Dar es Salaam · 2024</p>
+            </div>
+          </div>
+        </div>
+        <div class="c-col-3">
+          <div class="c-project-card">
+            <img src="{% static 'construction/images/service-item-2.jpg' %}" alt="Dodoma Logistics Hub">
+            <div class="overlay">
+              <span class="sector">Industrial</span>
+              <h3 class="ptitle">Dodoma Logistics Hub</h3>
+              <p class="pmeta">Dodoma · 2023</p>
+            </div>
+          </div>
+        </div>
+        <div class="c-col-3">
+          <div class="c-project-card">
+            <img src="{% static 'construction/images/service-item-3.jpg' %}" alt="Mwanza Ring Road">
+            <div class="overlay">
+              <span class="sector">Civil Works</span>
+              <h3 class="ptitle">Mwanza Ring Road · Section 4</h3>
+              <p class="pmeta">Mwanza · 2022</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="{% url 'construction:projects' %}" class="c-btn c-btn-outline">View Full Portfolio</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="c-section c-section-soft">
+  <div class="c-container">
+    <div class="c-cta-banner">
+      <h2>Have a Project in Mind?</h2>
+      <p>Tell us about your build — site, scope, budget, timeline — and our team will get back to you within two working days with a structured proposal.</p>
+      <a href="{% url 'construction:contact' %}" class="c-btn c-btn-primary">Start a Conversation</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

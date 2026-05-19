@@ -1,0 +1,31 @@
+NEW QUOTE REQUEST — Bejundas Construction
+==========================================
+
+Submitted: {{ quote.created_at|date:"d M Y, H:i" }}
+
+CONTACT
+-------
+Name:     {{ quote.full_name }}
+{% if quote.company %}Company:  {{ quote.company }}
+{% endif %}Email:    {{ quote.email }}
+Phone:    {{ quote.phone }}
+
+PROJECT
+-------
+Type:           {{ quote.get_project_type_display }}
+Location:       {{ quote.location_region }}{% if quote.location_district %} ({{ quote.location_district }}){% endif %}
+{% if quote.estimated_start %}Estimated start: {{ quote.estimated_start|date:"d M Y" }}
+{% endif %}Budget range:   {{ quote.get_budget_range_display }}
+Timeline:       {{ quote.get_timeline_display }}
+
+SCOPE
+-----
+{{ quote.scope_description }}
+
+ATTACHMENTS
+-----------
+{% for att in quote.attachments.all %}- {{ att.file.name|cut:"construction/quote_attachments/" }}
+{% empty %}(none)
+{% endfor %}
+---
+Review and respond in the admin: {{ site_url }}admin/construction/quoterequest/{{ quote.id }}/change/

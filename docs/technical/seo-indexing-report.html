@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technical Report — SEO Indexing Setup — Bejundas Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #1a1a2e;
+    --blue:   #2563eb;
+    --blue-md:#1d4ed8;
+    --blue-lt:#dbeafe;
+    --blue-xs:#eff6ff;
+    --green:  #16a34a;
+    --green-lt:#dcfce7;
+    --amber:  #d97706;
+    --amber-lt:#fef3c7;
+    --red:    #dc2626;
+    --red-lt: #fee2e2;
+    --text:   #0f172a;
+    --muted:  #475569;
+    --border: #e2e8f0;
+    --bg:     #f8fafc;
+    --white:  #ffffff;
+  }
+
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+
+  .header { background: var(--navy); color: var(--white); padding: 48px 0 40px; }
+  .header .inner { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+  .header-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .logo-chip { background: var(--blue); color: var(--white); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; }
+  .date-chip { font-size: 13px; color: #94a3b8; }
+  .header h1 { font-size: 30px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 8px; }
+  .header h1 span { color: #60a5fa; }
+  .header p { font-size: 15px; color: #94a3b8; max-width: 700px; }
+  .header p code { background: rgba(96,165,250,.15); color: #93c5fd; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+  .status-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; background: var(--green-lt); color: var(--green); font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 20px; }
+  .status-badge::before { content: ''; width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
+
+  main { max-width: 880px; margin: 0 auto; padding: 40px 24px 64px; display: flex; flex-direction: column; gap: 24px; }
+
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .card-header { display: flex; align-items: center; gap: 12px; padding: 20px 24px; border-bottom: 1px solid var(--border); background: var(--blue-xs); }
+  .card-icon { width: 36px; height: 36px; background: var(--blue); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .card-icon svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .card-header h2 { font-size: 16px; font-weight: 700; color: var(--navy); }
+  .card-header .section-num { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--blue); background: var(--blue-lt); padding: 2px 8px; border-radius: 4px; }
+  .card-body { padding: 24px; }
+  .card-body > p + p { margin-top: 10px; }
+  .card-body p { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+
+  code { font-size: 12px; background: var(--blue-lt); color: var(--blue-md); padding: 1px 6px; border-radius: 4px; font-family: 'Courier New', monospace; }
+  pre { background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 16px 20px; font-size: 12px; line-height: 1.7; overflow-x: auto; font-family: 'Courier New', monospace; margin: 12px 0; }
+  pre .c { color: #64748b; }
+  pre .k { color: #60a5fa; }
+  pre .s { color: #86efac; }
+  pre .d { color: #f87171; }
+  pre .n { color: #fbbf24; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .stat-box { background: var(--blue-xs); border: 1px solid var(--blue-lt); border-radius: 10px; padding: 16px 12px; text-align: center; }
+  .stat-box .num { font-size: 26px; font-weight: 700; color: var(--blue); line-height: 1; margin-bottom: 4px; }
+  .stat-box .lbl { font-size: 11px; color: var(--muted); font-weight: 500; }
+
+  table.std { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.std th { text-align: left; padding: 10px 14px; background: var(--blue-xs); color: var(--navy); font-weight: 600; font-size: 12px; border-bottom: 1px solid var(--border); }
+  table.std td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--muted); vertical-align: top; }
+  table.std tr:last-child td { border-bottom: none; }
+  table.std td code { font-size: 11.5px; }
+  table.std .ok { display: inline-flex; align-items: center; gap: 5px; color: var(--green); font-weight: 600; font-size: 12px; }
+  table.std .ok::before { content: ''; width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
+  table.std .warn { display: inline-flex; align-items: center; gap: 5px; color: var(--amber); font-weight: 600; font-size: 12px; }
+  table.std .warn::before { content: ''; width: 6px; height: 6px; background: var(--amber); border-radius: 50%; }
+  table.std .pending { display: inline-flex; align-items: center; gap: 5px; color: var(--muted); font-weight: 600; font-size: 12px; }
+  table.std .pending::before { content: ''; width: 6px; height: 6px; background: var(--muted); border-radius: 50%; }
+
+  .checklist { display: flex; flex-direction: column; gap: 8px; }
+  .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
+  .check-mark { width: 18px; height: 18px; border-radius: 4px; background: var(--green); color: var(--white); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .check-mark.todo { background: var(--white); border: 1.5px solid var(--border); color: transparent; }
+  .check-item span { font-size: 13px; color: var(--text); }
+  .check-item span code { font-size: 11.5px; }
+
+  .built-list { display: flex; flex-direction: column; gap: 12px; }
+  .built-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 8px; }
+  .built-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); margin-top: 6px; flex-shrink: 0; }
+  .built-item strong { font-size: 14px; font-weight: 600; color: var(--navy); display: block; margin-bottom: 2px; }
+  .built-item span { font-size: 13px; color: var(--muted); }
+
+  .info-card { border: 1px solid var(--blue-lt); border-radius: 10px; overflow: hidden; }
+  .info-header { background: var(--blue-xs); padding: 12px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--blue-lt); }
+  .info-tag { font-size: 11px; font-weight: 700; color: var(--blue-md); text-transform: uppercase; letter-spacing: .06em; }
+  .info-title { font-size: 14px; font-weight: 600; color: var(--navy); }
+  .info-body { padding: 16px; }
+  .info-body p { font-size: 13px; color: var(--muted); margin-bottom: 8px; line-height: 1.7; }
+  .info-body strong { color: var(--navy); }
+  .info-body ul { margin: 10px 0 4px 20px; }
+  .info-body li { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .info-body li code { font-size: 11.5px; }
+
+  .pf { padding: 20px 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+
+  /* ── Print / PDF styles ── */
+  @media print {
+    body { background: white; font-size: 12px; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+    .card, .stat-row, table.std, .info-card { break-inside: avoid; }
+    @page { margin: 15mm; size: A4; }
+  }
+
+  @media (max-width: 600px) {
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="inner">
+    <div class="header-meta">
+      <span class="logo-chip">Bejundas Platform</span>
+      <span class="date-chip">19 May 2026</span>
+    </div>
+    <h1>SEO Indexing <span>Setup</span></h1>
+    <p>Search engine registration milestone for <code>bejundas.co.tz</code>. Site verified with Google Search Console (DNS TXT via cPanel Zone Editor) and Bing Webmaster Tools (imported from GSC). Sitemap submitted at <code>/sitemap.xml</code>; robots.txt advertises the sitemap and disallows admin/deploy paths. Google has already crawled 4 of 11 submitted URLs with "Success" status.</p>
+    <div class="status-badge">SHIPPED — both engines verified, sitemap indexing in progress</div>
+  </div>
+</div>
+
+<main>
+
+  <!-- Stats row -->
+  <div class="stat-row">
+    <div class="stat-box"><div class="num">2</div><div class="lbl">Search engines</div></div>
+    <div class="stat-box"><div class="num">11</div><div class="lbl">Sitemap URLs</div></div>
+    <div class="stat-box"><div class="num">4/11</div><div class="lbl">Crawled (so far)</div></div>
+    <div class="stat-box"><div class="num">0</div><div class="lbl">Indexing errors</div></div>
+  </div>
+
+  <!-- Verification methods -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3z" transform="scale(0)"/><circle cx="12" cy="12" r="10"/></svg>
+      </div>
+      <h2>Site Verification</h2>
+      <span class="section-num">§1</span>
+    </div>
+    <div class="card-body">
+      <table class="std">
+        <thead>
+          <tr><th>Engine</th><th>Method</th><th>Anchor</th><th>Date</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Google Search Console</strong></td>
+            <td><code>DNS TXT</code></td>
+            <td>cPanel Zone Editor (<code>bejundas.co.tz</code> root zone)</td>
+            <td>15 May 2026</td>
+            <td><span class="ok">Verified</span></td>
+          </tr>
+          <tr>
+            <td><strong>Bing Webmaster Tools</strong></td>
+            <td><code>Import from GSC</code></td>
+            <td>Bing OAuth → Google Search Console</td>
+            <td>15 May 2026</td>
+            <td><span class="ok">Verified</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="info-card" style="margin-top: 18px;">
+        <div class="info-header">
+          <span class="info-tag">Why DNS TXT</span>
+          <span class="info-title">Most resilient verification anchor</span>
+        </div>
+        <div class="info-body">
+          <p>Of the five verification methods Google offers (HTML file, HTML meta tag, GA, GTM, DNS TXT), DNS TXT is the only one decoupled from the web application. It survives:</p>
+          <ul>
+            <li>Django template rewrites that strip <code>&lt;meta&gt;</code> tags</li>
+            <li>Whitenoise <code>CompressedManifestStaticFilesStorage</code> hash-renaming the verification HTML file</li>
+            <li>Full server re-deploys or even a hosting move</li>
+          </ul>
+          <p>The TXT record lives in cPanel's Zone Editor, scoped to the root <code>bejundas.co.tz</code> zone. Bing then re-uses the same trust chain via OAuth import, so no second DNS record is needed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sitemap architecture -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <h2>Sitemap Architecture</h2>
+      <span class="section-num">§2</span>
+    </div>
+    <div class="card-body">
+      <p>Two <code>django.contrib.sitemaps.Sitemap</code> subclasses are mounted under a single <code>/sitemap.xml</code> endpoint via the <code>sitemaps</code> dict in <code>config/urls.py</code>. Output validated against Google Search Console schema — "Discovered pages: 11" matches the static sitemap's <code>STATIC_PAGES</code> length exactly, confirming no News items are currently published.</p>
+
+      <pre><span class="c"># apps/hub/sitemaps.py</span>
+<span class="k">from</span> django.contrib.sitemaps <span class="k">import</span> Sitemap
+<span class="k">from</span> django.urls <span class="k">import</span> reverse
+<span class="k">from</span> apps.hub.models <span class="k">import</span> News
+
+STATIC_PAGES = [
+    (<span class="s">"hub:home"</span>,             <span class="n">1.0</span>, <span class="s">"weekly"</span>),
+    (<span class="s">"hub:about"</span>,            <span class="n">0.8</span>, <span class="s">"monthly"</span>),
+    (<span class="s">"hub:services"</span>,         <span class="n">0.9</span>, <span class="s">"monthly"</span>),
+    (<span class="s">"hub:news"</span>,             <span class="n">0.7</span>, <span class="s">"weekly"</span>),
+    (<span class="s">"hub:team"</span>,             <span class="n">0.6</span>, <span class="s">"monthly"</span>),
+    (<span class="s">"hub:contact"</span>,          <span class="n">0.8</span>, <span class="s">"monthly"</span>),
+    (<span class="s">"leads:financial"</span>,      <span class="n">0.7</span>, <span class="s">"monthly"</span>),
+    (<span class="s">"leads:construction"</span>,   <span class="n">0.7</span>, <span class="s">"monthly"</span>),
+    (<span class="s">"leads:energies"</span>,       <span class="n">0.7</span>, <span class="s">"monthly"</span>),
+    (<span class="s">"leads:farming"</span>,        <span class="n">0.7</span>, <span class="s">"monthly"</span>),
+    (<span class="s">"leads:investments"</span>,    <span class="n">0.7</span>, <span class="s">"monthly"</span>),
+]
+
+<span class="k">class</span> <span class="n">NewsSitemap</span>(Sitemap):
+    changefreq = <span class="s">"weekly"</span>
+    priority   = <span class="n">0.6</span>
+
+    <span class="k">def</span> items(self):
+        <span class="k">return</span> News.objects.filter(published=<span class="d">True</span>).order_by(<span class="s">"-published_at"</span>)</pre>
+
+      <p style="margin-top: 14px;">Static pages get <strong>hand-tuned priorities</strong> — home at <code>1.0</code>, Services at <code>0.9</code> (primary commercial intent), About + Contact at <code>0.8</code>, vertical landing pages at <code>0.7</code>, Team at <code>0.6</code>. The News sitemap is dynamic and filters on <code>published=True</code> so unpublished drafts are never exposed to crawlers.</p>
+    </div>
+  </div>
+
+  <!-- robots.txt -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
+      </div>
+      <h2>robots.txt</h2>
+      <span class="section-num">§3</span>
+    </div>
+    <div class="card-body">
+      <p>Served by a function-based view in <code>config/urls.py</code> — <em>not</em> a static file. This lets the host be read dynamically from the request, so the sitemap URL line stays correct across local dev (<code>127.0.0.1:8000</code>) and production (<code>bejundas.co.tz</code>) without an env-var swap.</p>
+
+      <pre><span class="c"># config/urls.py</span>
+<span class="k">def</span> robots_txt(request):
+    lines = [
+        <span class="s">"User-agent: *"</span>,
+        <span class="s">"Allow: /"</span>,
+        <span class="s">"Disallow: /admin/"</span>,
+        <span class="s">"Disallow: /deploy/"</span>,
+        <span class="s">f"Sitemap: https://{request.get_host()}/sitemap.xml"</span>,
+    ]
+    <span class="k">return</span> HttpResponse(<span class="s">"\n"</span>.join(lines), content_type=<span class="s">"text/plain"</span>)</pre>
+
+      <p style="margin-top: 14px;"><strong>Disallow rationale:</strong></p>
+      <ul style="margin: 8px 0 0 20px; font-size: 13.5px; color: var(--muted); line-height: 1.8;">
+        <li><code>/admin/</code> — Django admin login surface. No SEO value, just a probing target for bots if indexed.</li>
+        <li><code>/deploy/</code> — webhook endpoint (<code>apps.core.urls_webhook</code>). Crawling it triggers HMAC mismatch responses; pointless to surface.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Crawl status -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <h2>Crawl Status — Snapshot</h2>
+      <span class="section-num">§4</span>
+    </div>
+    <div class="card-body">
+      <table class="std">
+        <thead>
+          <tr><th>URL</th><th>Submitted</th><th>Last Crawled</th><th>Indexing</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>https://bejundas.co.tz/</code></td><td>15 May 2026</td><td>15 May 2026</td><td><span class="ok">Indexed</span></td></tr>
+          <tr><td><code>https://bejundas.co.tz/about/</code></td><td>15 May 2026</td><td>15 May 2026</td><td><span class="ok">Indexed</span></td></tr>
+          <tr><td><code>https://bejundas.co.tz/team/</code></td><td>15 May 2026</td><td>15 May 2026</td><td><span class="ok">Indexed</span></td></tr>
+          <tr><td><code>https://bejundas.co.tz/contact/</code></td><td>15 May 2026</td><td>15 May 2026</td><td><span class="ok">Indexed</span></td></tr>
+          <tr><td><code>https://bejundas.co.tz/services/</code></td><td>15 May 2026</td><td>—</td><td><span class="pending">Discovered, queued</span></td></tr>
+          <tr><td><code>https://bejundas.co.tz/news/</code></td><td>15 May 2026</td><td>—</td><td><span class="pending">Discovered, queued</span></td></tr>
+          <tr><td><code>https://bejundas.co.tz/financial/</code></td><td>15 May 2026</td><td>—</td><td><span class="pending">Discovered, queued</span></td></tr>
+          <tr><td><code>https://bejundas.co.tz/construction/</code></td><td>15 May 2026</td><td>—</td><td><span class="pending">Discovered, queued</span></td></tr>
+          <tr><td><code>https://bejundas.co.tz/energies/</code></td><td>15 May 2026</td><td>—</td><td><span class="pending">Discovered, queued</span></td></tr>
+          <tr><td><code>https://bejundas.co.tz/farming/</code></td><td>15 May 2026</td><td>—</td><td><span class="pending">Discovered, queued</span></td></tr>
+          <tr><td><code>https://bejundas.co.tz/investments/</code></td><td>15 May 2026</td><td>—</td><td><span class="pending">Discovered, queued</span></td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top: 14px;"><strong>Sitemap meta:</strong> Submitted 15 May 2026 · Last re-read by Googlebot 18 May 2026 · Status <em>Success</em> · Discovered pages 11 · Discovered videos 0. HTTPS coverage check passed for all 4 indexed URLs.</p>
+    </div>
+  </div>
+
+  <!-- SERP visibility -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <h2>SERP Visibility — Already Earned</h2>
+      <span class="section-num">§5</span>
+    </div>
+    <div class="card-body">
+      <p>Google query <code>bejundas</code> (logged-out, no personalization) on 19 May 2026 returns:</p>
+      <ul style="margin: 10px 0 12px 20px; font-size: 13.5px; color: var(--muted); line-height: 1.8;">
+        <li><strong>Position #1</strong> — <code>bejundas.co.tz</code> with site title "Bejundas Group of Companies" + hero subtitle as meta description</li>
+        <li><strong>Sitelinks generated</strong> — About Us, Our Team, Contact Us (Google's algorithm-assigned, not configurable)</li>
+        <li><strong>Image pack</strong> — homepage hero image surfaced under "Images" carousel</li>
+        <li><strong>"People also search for"</strong> — <code>Bejundas login</code>, <code>Bejundas contact number</code></li>
+        <li><strong>GitHub repo listed</strong> on the same SERP — the new About description we wrote is now Google's snippet for the repo result</li>
+      </ul>
+      <p>Sitelinks appearing within 4 days of submission is a strong early signal — Google typically only generates these after determining that a site has clean internal navigation and consistent <code>&lt;title&gt;</code>/<code>&lt;h1&gt;</code> hierarchy. Confirms our base template structure is being parsed correctly.</p>
+    </div>
+  </div>
+
+  <!-- What to monitor -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <h2>What to Monitor</h2>
+      <span class="section-num">§6</span>
+    </div>
+    <div class="card-body">
+      <div class="built-list">
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Search Console → Performance → Queries</strong>
+            <span>Watch for branded vs non-branded query split. High branded share early is normal; non-branded ("financial services tanzania", "construction company dar es salaam") should grow over months 2-4 as page authority builds.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Search Console → Coverage → Pages with issues</strong>
+            <span>Any URL that lands in "Crawled — currently not indexed" or "Excluded by 'noindex' tag" should be triaged within a week. Empty 404s from old subdomain bookmarks (we deleted those — see ADR-007) will surface here and can be safely ignored.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Search Console → Experience → Core Web Vitals</strong>
+            <span>LCP, FID, CLS over 75th-percentile real-user data. Whitenoise + manifest hashing already gives us cache-friendly static delivery, but watch for vertical Coming Soon pages as they ship — hero images need to stay under 200KB.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Bing Webmaster → Crawl Information</strong>
+            <span>Bing crawls less aggressively than Google. Expect a 2-3 week lag before Bing's reported coverage matches Google's. No action needed unless errors appear.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Future improvements -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+      </div>
+      <h2>Future Improvements (Backlog)</h2>
+      <span class="section-num">§7</span>
+    </div>
+    <div class="card-body">
+      <div class="checklist">
+        <div class="check-item">
+          <div class="check-mark todo"></div>
+          <span><strong>JSON-LD structured data</strong> — add <code>Organization</code> + <code>WebSite</code> schema in <code>core/base.html</code>. Unlocks Knowledge Panel eligibility ("Bejundas Group of Companies" on right side of Google results).</span>
+        </div>
+        <div class="check-item">
+          <div class="check-mark todo"></div>
+          <span><strong>Open Graph + Twitter Card audit</strong> — verify <code>og:image</code>, <code>og:title</code>, <code>twitter:card</code> are populated from <code>SiteSettings</code> on every page. Affects how the site looks when shared in WhatsApp, Twitter, LinkedIn.</span>
+        </div>
+        <div class="check-item">
+          <div class="check-mark todo"></div>
+          <span><strong>Image <code>alt</code> text pass</strong> — currently many Viora template images carry generic alts. Replace with descriptive copy bound to <code>SiteSettings</code> fields.</span>
+        </div>
+        <div class="check-item">
+          <div class="check-mark todo"></div>
+          <span><strong>Vertical-specific metadata when verticals ship</strong> — each new vertical (Financial first per §13) needs its own <code>{% block title %}</code> + <code>{% block meta_description %}</code> blocks tuned for local intent ("Bejundas Financial Services — Loans in Dar es Salaam").</span>
+        </div>
+        <div class="check-item">
+          <div class="check-mark todo"></div>
+          <span><strong>Sitemap <code>lastmod</code> on static pages</strong> — currently only News sitemap emits <code>lastmod</code>. Adding it to static entries (tied to <code>SiteSettings.updated_at</code>) lets crawlers prioritize edited pages faster.</span>
+        </div>
+        <div class="check-item">
+          <div class="check-mark todo"></div>
+          <span><strong>Google Business Profile</strong> — out of code scope but high-leverage. Local search "bejundas dar es salaam" should surface a Maps panel with hours and phone.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decisions log -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <h2>Decisions &amp; Trade-offs</h2>
+      <span class="section-num">§8</span>
+    </div>
+    <div class="card-body">
+      <div class="built-list">
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>DNS TXT over HTML file verification</strong>
+            <span>Trade-off: requires DNS edit access. Win: survives Whitenoise's manifest hashing which would rename any verification HTML file and break trust.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Bing import from GSC over separate verification</strong>
+            <span>Trade-off: couples Bing's trust chain to the Google account. Win: one less DNS record to manage, sitemap re-shared automatically.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>robots.txt as a view, not a static file</strong>
+            <span>Trade-off: tiny per-request cost (negligible). Win: the <code>Sitemap:</code> line is host-aware. Same code works in dev, staging, and prod without environment-specific files.</span>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-dot"></div>
+          <div>
+            <strong>Vertical Coming Soon pages included in sitemap</strong>
+            <span>Trade-off: indexes pages that don't have unique content yet (they share one template). Win: when a vertical ships, Google has already crawled the URL — replacement content is picked up in the next pass rather than waiting for fresh discovery.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Operational checklist -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>Operational Checklist</h2>
+      <span class="section-num">§9</span>
+    </div>
+    <div class="card-body">
+      <div class="checklist">
+        <div class="check-item"><div class="check-mark">✓</div><span>DNS TXT record added to <code>bejundas.co.tz</code> zone in cPanel Zone Editor</span></div>
+        <div class="check-item"><div class="check-mark">✓</div><span>Google Search Console property <code>bejundas.co.tz</code> verified</span></div>
+        <div class="check-item"><div class="check-mark">✓</div><span>Bing Webmaster Tools site added via Import from GSC</span></div>
+        <div class="check-item"><div class="check-mark">✓</div><span>Sitemap submitted: <code>https://bejundas.co.tz/sitemap.xml</code></span></div>
+        <div class="check-item"><div class="check-mark">✓</div><span><code>robots.txt</code> live at <code>/robots.txt</code> with <code>Sitemap:</code> directive</span></div>
+        <div class="check-item"><div class="check-mark">✓</div><span>HTTPS confirmed on all sample URLs (no mixed content warnings)</span></div>
+        <div class="check-item"><div class="check-mark">✓</div><span>4 / 11 URLs indexed in first crawl pass</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>Wait 2-4 weeks for remaining 7 URLs to be crawled and indexed</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>First Search Console performance review at 30 days</span></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="pf">
+  <span>Bejundas Platform — Technical Report — SEO Indexing Setup</span>
+  <span>Generated 19 May 2026</span>
+</div>
+
+</body>
+</html>

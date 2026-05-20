@@ -57,10 +57,6 @@
   .f-filter-chip.active { background:var(--fin-primary); color:#fff; border-color:var(--fin-primary); }
 </style>
 
-<aside class="f-disclaimer">
-  <div class="f-container">
-    <p style="margin:0;"><strong>Regulatory notice.</strong> BEJUNDAS FINANCIAL SERVICES LTD is a privately-held Tanzanian limited company. Loan, investment, and securities-related services are subject to internal due diligence and applicable Tanzanian law.</p>
-  </div>
-</aside>
+{% include "financial/_disclaimer.html" with variant="services" %}
 
 {% endblock %}

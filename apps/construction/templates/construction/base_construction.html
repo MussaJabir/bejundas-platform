@@ -51,6 +51,19 @@
       background: var(--construction-primary);
   }
 
+  /* Brand legal-entity wordmark (two-line treatment) */
+  .c-brand-legal { display: inline-flex; flex-direction: column; line-height: 1.05;
+      text-decoration: none; padding: 6px 0; }
+  .c-brand-legal:hover { text-decoration: none; }
+  .c-brand-legal__name { color: var(--construction-primary); font-weight: 800;
+      font-size: 17px; letter-spacing: .02em; }
+  .c-brand-legal__sub  { color: var(--construction-accent); font-weight: 700;
+      font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; margin-top: 2px; }
+  @media (max-width: 768px) {
+      .c-brand-legal__name { font-size: 14px; }
+      .c-brand-legal__sub  { font-size: 9px; letter-spacing: .1em; }
+  }
+
   /* ── Layout primitives shared across construction pages ─────────── */
   .c-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
   .c-row { display: flex; flex-wrap: wrap; gap: 24px; }

@@ -2,11 +2,9 @@
 <header class="header style-default header-fixed">
     <div class="tf-container">
         <div class="header-inner">
-            <a href="{% url 'construction:home' %}" class="site-logo">
-                <span class="h5 fw-7" style="color:#2c2c2c;">
-                    {{ company.company_name|default:"Bejundas" }}
-                    <span style="color:#f47920;font-weight:800;letter-spacing:.04em;">CONSTRUCTION</span>
-                </span>
+            <a href="{% url 'construction:home' %}" class="site-logo c-brand-legal" aria-label="{{ app_theme.legal_name }}">
+                <span class="c-brand-legal__name">BEJUS SERVICES</span>
+                <span class="c-brand-legal__sub">ENGINEERING &amp; CONSTRUCTION (T) LTD</span>
             </a>
 
             <nav class="main-menu">

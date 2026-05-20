@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>New Investment Inquiry</title>
+</head>
+<body style="margin:0;padding:0;background:#f6f8fb;font-family:'Helvetica Neue',Arial,sans-serif;color:#0a2342;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f6f8fb;padding:24px 0;">
+  <tr><td align="center">
+    <table width="640" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border:1px solid #e4e8ee;border-radius:8px;overflow:hidden;">
+
+      <!-- Header -->
+      <tr><td style="background:#0a2342;padding:24px 28px;border-bottom:4px solid #c9a84c;">
+        <div style="font-size:11px;font-weight:700;color:#c9a84c;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;">Bejundas Financial Services</div>
+        <h1 style="font-size:22px;font-weight:800;color:#ffffff;margin:0;letter-spacing:-.01em;">New Investment Inquiry</h1>
+        <div style="font-size:13px;color:#cbd5e1;margin-top:6px;">{{ inquiry.created_at|date:"d M Y, H:i" }}</div>
+      </td></tr>
+
+      <!-- Prospect -->
+      <tr><td style="padding:24px 28px;border-bottom:1px solid #e4e8ee;">
+        <div style="font-size:11px;font-weight:700;color:#a98a35;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Prospect</div>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size:14px;">
+          <tr><td width="140" style="padding:4px 0;color:#5b6b7d;">Name</td><td style="padding:4px 0;font-weight:600;">{{ inquiry.full_name }}</td></tr>
+          <tr><td style="padding:4px 0;color:#5b6b7d;">Email</td><td style="padding:4px 0;"><a href="mailto:{{ inquiry.email }}" style="color:#0a2342;text-decoration:none;">{{ inquiry.email }}</a></td></tr>
+          <tr><td style="padding:4px 0;color:#5b6b7d;">Phone</td><td style="padding:4px 0;"><a href="tel:{{ inquiry.phone }}" style="color:#0a2342;text-decoration:none;">{{ inquiry.phone }}</a></td></tr>
+          <tr><td style="padding:4px 0;color:#5b6b7d;">Channel</td><td style="padding:4px 0;font-weight:600;">{{ inquiry.get_preferred_contact_display }}</td></tr>
+        </table>
+      </td></tr>
+
+      <!-- Investment Intent -->
+      <tr><td style="padding:24px 28px;border-bottom:1px solid #e4e8ee;">
+        <div style="font-size:11px;font-weight:700;color:#a98a35;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Investment Intent</div>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size:14px;">
+          <tr><td width="140" style="padding:4px 0;color:#5b6b7d;">Capital Band</td>
+              <td style="padding:4px 0;">
+                <span style="display:inline-block;background:#fdf8e9;color:#a98a35;font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;text-transform:uppercase;letter-spacing:.04em;">{{ inquiry.get_capital_band_display }}</span>
+              </td></tr>
+          <tr><td style="padding:4px 0;color:#5b6b7d;">Preferred Tenure</td><td style="padding:4px 0;font-weight:600;">{{ inquiry.get_preferred_tenure_display }}</td></tr>
+          <tr><td style="padding:4px 0;color:#5b6b7d;">Funding Source</td><td style="padding:4px 0;font-weight:600;">{{ inquiry.get_funding_source_display }}</td></tr>
+          {% if inquiry.offering %}
+          <tr><td style="padding:4px 0;color:#5b6b7d;">Round</td>
+              <td style="padding:4px 0;">
+                <code style="font-size:12px;background:#fdf8e9;color:#a98a35;padding:2px 8px;border-radius:4px;">{{ inquiry.offering.reference_id }}</code>
+                <span style="font-size:13px;color:#0a2342;margin-left:6px;">{{ inquiry.offering.title }}</span>
+              </td></tr>
+          {% endif %}
+        </table>
+      </td></tr>
+
+      <!-- Notes -->
+      <tr><td style="padding:24px 28px;border-bottom:1px solid #e4e8ee;">
+        <div style="font-size:11px;font-weight:700;color:#a98a35;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Notes</div>
+        {% if inquiry.notes %}
+          <div style="font-size:14px;line-height:1.7;color:#1a1a1a;background:#f6f8fb;padding:14px 16px;border-radius:6px;border-left:3px solid #c9a84c;white-space:pre-wrap;">{{ inquiry.notes }}</div>
+        {% else %}
+          <div style="font-size:13px;color:#5b6b7d;font-style:italic;">(none provided)</div>
+        {% endif %}
+      </td></tr>
+
+      <!-- Action -->
+      <tr><td style="padding:24px 28px;text-align:center;background:#fdf8e9;">
+        <a href="{{ site_url }}admin/financial/investmentinquiry/{{ inquiry.id }}/change/"
+           style="display:inline-block;background:#0a2342;color:#ffffff;font-size:14px;font-weight:700;padding:12px 28px;border-radius:4px;text-decoration:none;text-transform:uppercase;letter-spacing:.04em;">
+          Review in Admin
+        </a>
+      </td></tr>
+
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>

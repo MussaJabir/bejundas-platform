@@ -1,0 +1,24 @@
+[Bejundas Financial — Investment Inquiry]
+
+Submitted: {{ inquiry.created_at|date:"d M Y, H:i" }}
+
+PROSPECT
+────────
+Name:     {{ inquiry.full_name }}
+Email:    {{ inquiry.email }}
+Phone:    {{ inquiry.phone }}
+Channel:  {{ inquiry.get_preferred_contact_display }}
+
+INVESTMENT INTENT
+─────────────────
+Capital:  {{ inquiry.get_capital_band_display }}
+Tenure:   {{ inquiry.get_preferred_tenure_display }}
+Source:   {{ inquiry.get_funding_source_display }}
+{% if inquiry.offering %}Round:    {{ inquiry.offering.reference_id }} — {{ inquiry.offering.title }}
+{% endif %}
+NOTES
+─────
+{% if inquiry.notes %}{{ inquiry.notes }}{% else %}(none provided){% endif %}
+
+Review in admin:
+{{ site_url }}admin/financial/investmentinquiry/{{ inquiry.id }}/change/

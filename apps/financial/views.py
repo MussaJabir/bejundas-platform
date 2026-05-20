@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 
-from apps.financial.forms import ContactForm
+from apps.financial.forms import ContactForm, InvestmentInquiryForm, LoanInquiryForm
 from apps.financial.models import (
     OFFERING_STATUS_CHOICES,
     SERVICE_CATEGORY_CHOICES,
@@ -96,3 +96,62 @@ class ContactView(View):
                 {"form": ContactForm(), "sent": True},
             )
         return render(request, "financial/contact.html", {"form": form})
+
+
+class LoanApplyView(View):
+    def get(self, request):
+        return render(
+            request,
+            "financial/loan_apply.html",
+            {"form": LoanInquiryForm()},
+        )
+
+    def post(self, request):
+        form = LoanInquiryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            form.send_notification(request=request)
+            return render(
+                request,
+                "financial/loan_apply.html",
+                {"form": LoanInquiryForm(), "sent": True},
+            )
+        return render(request, "financial/loan_apply.html", {"form": form})
+
+
+class InvestmentInquireView(View):
+    """Optional ?offering=<slug> query string prefills the offering FK
+    server-side so the prospect doesn't see the raw FK field."""
+
+    def _resolve_offering(self, request):
+        slug = (request.GET.get("offering") or request.POST.get("offering_slug") or "").strip()
+        if not slug:
+            return None
+        return InvestmentOffering.objects.filter(slug=slug).first()
+
+    def get(self, request):
+        offering = self._resolve_offering(request)
+        return render(
+            request,
+            "financial/investment_inquire.html",
+            {"form": InvestmentInquiryForm(), "offering": offering},
+        )
+
+    def post(self, request):
+        offering = self._resolve_offering(request)
+        form = InvestmentInquiryForm(request.POST)
+        if form.is_valid():
+            inquiry = form.save(commit=False)
+            inquiry.offering = offering
+            inquiry.save()
+            form.send_notification(request=request)
+            return render(
+                request,
+                "financial/investment_inquire.html",
+                {"form": InvestmentInquiryForm(), "offering": offering, "sent": True},
+            )
+        return render(
+            request,
+            "financial/investment_inquire.html",
+            {"form": form, "offering": offering},
+        )

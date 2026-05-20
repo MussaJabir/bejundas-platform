@@ -15,4 +15,6 @@ urlpatterns = [
         name="investment_detail",
     ),
     path("contact/", views.ContactView.as_view(), name="contact"),
+    path("loans/apply/", views.LoanApplyView.as_view(), name="loan_apply"),
+    path("invest/inquire/", views.InvestmentInquireView.as_view(), name="invest_inquire"),
 ]

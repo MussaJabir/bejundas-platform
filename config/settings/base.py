@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "apps.hub",
     "apps.leads",
     "apps.construction",
+    "apps.financial",
 ]
 
 MIDDLEWARE = [

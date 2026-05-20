@@ -34,6 +34,7 @@ urlpatterns = [
     ),
     path("robots.txt", robots_txt, name="robots_txt"),
     path("construction/", include("apps.construction.urls")),
+    path("financial/", include("apps.financial.urls")),
     path("", include("apps.leads.urls")),
     path("", include("apps.hub.urls")),
 ]

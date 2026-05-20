@@ -1,0 +1,66 @@
+{% extends "financial/base_financial.html" %}
+{% load static %}
+
+{% block title %}Services — Bejundas Financial Services Ltd{% endblock %}
+{% block meta_description %}Microfinance, agency banking, government securities, DSE stock market business, mutual funds, and auto/asset services — from BEJUNDAS FINANCIAL SERVICES LTD.{% endblock %}
+
+{% block content %}
+
+<section class="f-page-hero">
+  <div class="f-container">
+    <span class="f-eyebrow">Our Services</span>
+    <h1>What We Do</h1>
+  </div>
+</section>
+
+<section class="f-section">
+  <div class="f-container">
+
+    <div class="c-filter-row" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:36px;">
+      <a href="{% url 'financial:services' %}" class="f-filter-chip{% if not active_category %} active{% endif %}">All</a>
+      {% for code, label in category_choices %}
+        <a href="?category={{ code }}" class="f-filter-chip{% if active_category == code %} active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    {% if services %}
+      <div class="f-row">
+        {% for service in services %}
+          <div class="f-col-3">
+            <div class="f-card">
+              {% if service.icon %}
+                <div class="f-card-icon"><span class="material-symbols-outlined">{{ service.icon }}</span></div>
+              {% else %}
+                <div class="f-card-icon">&#9733;</div>
+              {% endif %}
+              <h3>{{ service.name }}</h3>
+              <p>{{ service.summary }}</p>
+              <p style="margin-top:10px;font-size:11px;font-weight:700;color:var(--fin-accent-d);text-transform:uppercase;letter-spacing:.06em;">{{ service.get_category_display }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div style="text-align:center;padding:60px 20px;color:var(--fin-muted);">
+        <p>No services available in this category yet.</p>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<style>
+  .f-filter-chip { display:inline-flex; padding:9px 18px; font-size:13px; font-weight:600;
+    border-radius:24px; border:1.5px solid var(--fin-border); color:var(--fin-primary);
+    background:#fff; text-decoration:none; transition:all .2s; }
+  .f-filter-chip:hover { border-color:var(--fin-accent); color:var(--fin-accent-d); }
+  .f-filter-chip.active { background:var(--fin-primary); color:#fff; border-color:var(--fin-primary); }
+</style>
+
+<aside class="f-disclaimer">
+  <div class="f-container">
+    <p style="margin:0;"><strong>Regulatory notice.</strong> BEJUNDAS FINANCIAL SERVICES LTD is a privately-held Tanzanian limited company. Loan, investment, and securities-related services are subject to internal due diligence and applicable Tanzanian law.</p>
+  </div>
+</aside>
+
+{% endblock %}

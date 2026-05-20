@@ -9,6 +9,8 @@ STATIC_PAGES = [
     ("financial:services", 0.8, "monthly"),
     ("financial:investments", 0.8, "weekly"),
     ("financial:contact", 0.7, "monthly"),
+    ("financial:loan_apply", 0.8, "monthly"),
+    ("financial:invest_inquire", 0.8, "monthly"),
 ]
 
 

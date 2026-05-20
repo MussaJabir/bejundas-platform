@@ -13,8 +13,8 @@
     <h1>Your Financing <span class="accent">Solutions</span> Partner.</h1>
     <p class="lead">A privately-held Tanzanian financial services provider offering microfinance, mobile network &amp; banking agency, government securities access, and private investment partnerships — built on trust, profit, and safety.</p>
     <div class="cta-row">
-      <a href="{% url 'financial:investments' %}" class="f-btn f-btn-primary">Explore Investments</a>
-      <a href="{% url 'financial:contact' %}" class="f-btn f-btn-ghost">Get In Touch</a>
+      <a href="{% url 'financial:invest_inquire' %}" class="f-btn f-btn-primary">Invest With Us</a>
+      <a href="{% url 'financial:loan_apply' %}" class="f-btn f-btn-ghost">Apply for a Loan</a>
     </div>
   </div>
 </section>
@@ -117,8 +117,11 @@
   <div class="f-container">
     <div class="f-cta-banner">
       <h2>Ready to Discuss a Partnership?</h2>
-      <p>Speak with us about loans, investment rounds, or agency banking. Direct WhatsApp or schedule a call back.</p>
-      <a href="https://wa.me/255764764011" class="f-btn f-btn-primary" target="_blank" rel="noopener">WhatsApp 0764 76 40 11</a>
+      <p>Speak with us about loans, investment rounds, or agency banking. Apply online or reach us directly on WhatsApp.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;position:relative;">
+        <a href="{% url 'financial:loan_apply' %}" class="f-btn f-btn-primary">Apply for a Loan</a>
+        <a href="{% url 'financial:invest_inquire' %}" class="f-btn f-btn-ghost">Inquire About Investing</a>
+      </div>
     </div>
   </div>
 </section>

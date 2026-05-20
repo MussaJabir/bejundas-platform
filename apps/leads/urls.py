@@ -6,7 +6,6 @@ from apps.leads import views
 app_name = "leads"
 
 urlpatterns = [
-    path("financial/", views.coming_soon, {"vertical": "financial"}, name="financial"),
     path("energies/", views.coming_soon, {"vertical": "energies"}, name="energies"),
     path("farming/", views.coming_soon, {"vertical": "farming"}, name="farming"),
     path(

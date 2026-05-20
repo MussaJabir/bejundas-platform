@@ -1,0 +1,76 @@
+{% extends "financial/base_financial.html" %}
+{% load static %}
+
+{% block title %}Bejundas Financial Services Ltd — Your Financing Solutions Partner{% endblock %}
+{% block meta_description %}BEJUNDAS FINANCIAL SERVICES LTD — Tanzanian financial services provider offering microfinance, mobile network & banking agency, government securities, and private investment partnerships. Dar es Salaam.{% endblock %}
+
+{% block content %}
+
+<!-- ── Hero ────────────────────────────────────────────────────────── -->
+<section class="f-hero">
+  <div class="f-container" style="position:relative;z-index:2;">
+    <span class="eyebrow">BEJUNDAS FINANCIAL SERVICES LTD</span>
+    <h1>Your Financing <span class="accent">Solutions</span> Partner.</h1>
+    <p class="lead">A privately-held Tanzanian financial services provider offering microfinance, mobile network &amp; banking agency, government securities access, and private investment partnerships — built on trust, profit, and safety.</p>
+    <div class="cta-row">
+      <a href="#values" class="f-btn f-btn-primary">Discover Our Approach</a>
+      <a href="{% url 'hub:contact' %}" class="f-btn f-btn-ghost">Get In Touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Values strip (Salama · Faida · Uaminifu) ───────────────────── -->
+<section class="f-values-strip" id="values">
+  <div class="f-container">
+    <div class="f-row" style="justify-content:center;text-align:center;">
+      <div class="f-col-3 value">
+        <div class="sw">Salama</div>
+        <div class="en">Safety</div>
+      </div>
+      <div class="f-col-3 value">
+        <div class="sw">Faida</div>
+        <div class="en">Profit</div>
+      </div>
+      <div class="f-col-3 value">
+        <div class="sw">Uaminifu</div>
+        <div class="en">Trust</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Brief about ─────────────────────────────────────────────────── -->
+<section class="f-section">
+  <div class="f-container">
+    <div class="f-row">
+      <div class="f-col-2">
+        <span class="f-eyebrow">Who We Are</span>
+        <h2 class="f-section-title">A Tanzanian Financial Services Provider, Privately Held.</h2>
+      </div>
+      <div class="f-col-2">
+        <p class="f-section-sub">BEJUNDAS FINANCIAL SERVICES LTD is a private company headquartered at Msakuzi - Mbezi, Ubungo Municipality in Dar es Salaam. We fund mixed business ventures and offer microfinance, agency banking, government securities access, and private investment partnerships to clients across Tanzania.</p>
+        <p class="f-section-sub" style="margin-top:14px;">Our services, products, and rounds are detailed in the sections being added in the coming weeks. In the meantime, reach us directly using the contact details below.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Build-in-progress note ──────────────────────────────────────── -->
+<section class="f-section f-section-soft">
+  <div class="f-container">
+    <div class="f-cta-banner">
+      <h2>Full Services Catalogue Coming Soon</h2>
+      <p>Loan products, investment offerings (BFS/IO/2026/01 &amp; /02), agency banking partnerships, and online applications are being added shortly. Speak with us directly today.</p>
+      <a href="https://wa.me/255764764011" class="f-btn f-btn-primary" target="_blank" rel="noopener">WhatsApp 0764 76 40 11</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Regulatory disclaimer ──────────────────────────────────────── -->
+<aside class="f-disclaimer">
+  <div class="f-container">
+    <p style="margin:0;"><strong>Regulatory notice.</strong> BEJUNDAS FINANCIAL SERVICES LTD is a privately-held Tanzanian limited company. Investment opportunities offered are private placements and are not deposits, are not insured by the Bank of Tanzania or the Deposit Insurance Board, and are not securities registered with the Capital Markets and Securities Authority. Projected returns are indicative, not guaranteed.</p>
+  </div>
+</aside>
+
+{% endblock %}

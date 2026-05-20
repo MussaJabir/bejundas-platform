@@ -1,0 +1,204 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block navbar %}{% include "financial/navbar.html" %}{% endblock %}
+
+{% block demo_css %}
+<style>
+  /* ── Financial brand palette ───────────────────────────────────── */
+  :root {
+    --fin-primary:   #0a2342;
+    --fin-primary-d: #061831;
+    --fin-accent:    #c9a84c;
+    --fin-accent-d:  #a98a35;
+    --fin-soft:      #fdf8e9;
+    --fin-blue-soft: #eaf1fb;
+    --fin-text:      #1a1a1a;
+    --fin-muted:     #5b6b7d;
+    --fin-border:    #e4e8ee;
+    --fin-bg:        #f6f8fb;
+  }
+
+  /* ── Navbar — override Viora demo-insurance defaults to navy/gold ── */
+  .header.style-default .main-menu .navigation > li > a,
+  .header.style-default .navigation li > a {
+      color: var(--fin-primary) !important;
+  }
+  .header.style-default .main-menu .navigation > li > a:hover,
+  .header.style-default .navigation li:hover > a,
+  .header.style-default .navigation li.active > a,
+  .header.style-default .main-menu .current-menu > a,
+  .header.style-default .main-menu .current-menu-item > a {
+      color: var(--fin-accent) !important;
+  }
+  .header.style-default .tf-btn {
+      background: var(--fin-accent);
+      color: var(--fin-primary);
+  }
+  .header.style-default .tf-btn:hover {
+      background: var(--fin-accent-d);
+      color: #fff;
+  }
+  .header.style-default .burger span {
+      background: var(--fin-primary);
+  }
+
+  /* Brand legal-entity wordmark (two-line treatment) */
+  .f-brand-legal { display: inline-flex; flex-direction: column; line-height: 1.05;
+      text-decoration: none; padding: 6px 0; }
+  .f-brand-legal:hover { text-decoration: none; }
+  .f-brand-legal__name { color: var(--fin-primary); font-weight: 800;
+      font-size: 17px; letter-spacing: .02em; }
+  .f-brand-legal__sub  { color: var(--fin-accent-d); font-weight: 700;
+      font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; margin-top: 2px; }
+  @media (max-width: 768px) {
+      .f-brand-legal__name { font-size: 14px; }
+      .f-brand-legal__sub  { font-size: 9px; letter-spacing: .1em; }
+  }
+
+  /* ── Shared layout primitives ──────────────────────────────────── */
+  .f-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .f-row { display: flex; flex-wrap: wrap; gap: 24px; }
+  .f-col-4 { flex: 1 1 calc(25% - 18px); min-width: 220px; }
+  .f-col-3 { flex: 1 1 calc(33.333% - 16px); min-width: 260px; }
+  .f-col-2 { flex: 1 1 calc(50% - 12px); min-width: 320px; }
+
+  .f-section { padding: 90px 0; }
+  .f-section-soft { background: var(--fin-bg); }
+  .f-section-blue-soft { background: var(--fin-blue-soft); }
+  .f-section-dark { background: var(--fin-primary); color: #fff; }
+
+  .f-eyebrow { display: inline-block; color: var(--fin-accent-d); font-size: 12px;
+    font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 14px; }
+  .f-section-title { font-size: clamp(28px, 4vw, 40px); font-weight: 800;
+    color: var(--fin-primary); line-height: 1.2; letter-spacing: -.015em; margin-bottom: 18px; }
+  .f-section-dark .f-section-title { color: #fff; }
+  .f-section-sub { font-size: 16px; color: var(--fin-muted); line-height: 1.7; max-width: 640px; }
+  .f-section-dark .f-section-sub { color: #cbd5e1; }
+
+  /* Buttons */
+  .f-btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px;
+    font-size: 14px; font-weight: 700; letter-spacing: .03em; border-radius: 4px;
+    text-transform: uppercase; text-decoration: none; transition: all .2s; border: none; cursor: pointer; }
+  .f-btn-primary { background: var(--fin-accent); color: var(--fin-primary); }
+  .f-btn-primary:hover { background: var(--fin-accent-d); color: #fff; transform: translateY(-2px); }
+  .f-btn-navy { background: var(--fin-primary); color: #fff; }
+  .f-btn-navy:hover { background: var(--fin-primary-d); color: #fff; }
+  .f-btn-ghost { background: transparent; color: #fff; border: 2px solid #fff; }
+  .f-btn-ghost:hover { background: #fff; color: var(--fin-primary); }
+  .f-btn-outline { background: transparent; color: var(--fin-primary); border: 2px solid var(--fin-primary); }
+  .f-btn-outline:hover { background: var(--fin-primary); color: #fff; }
+
+  /* Hero */
+  .f-hero { position: relative; min-height: 600px;
+    background: linear-gradient(135deg, rgba(10,35,66,.92) 0%, rgba(6,24,49,.85) 60%, rgba(10,35,66,.65) 100%);
+    display: flex; align-items: center;
+    padding: 160px 0 80px;
+    color: #fff;
+    overflow: hidden;
+  }
+  .f-hero::before { content: ''; position: absolute; right: -120px; top: -120px;
+    width: 460px; height: 460px; background: var(--fin-accent); opacity: .07; border-radius: 50%; }
+  .f-hero::after { content: ''; position: absolute; left: -80px; bottom: -160px;
+    width: 380px; height: 380px; background: var(--fin-accent); opacity: .05; border-radius: 50%; }
+  .f-hero .eyebrow { color: var(--fin-accent); font-size: 13px; font-weight: 700;
+    letter-spacing: .18em; text-transform: uppercase; display: inline-block; margin-bottom: 18px;
+    border-left: 3px solid var(--fin-accent); padding-left: 14px; }
+  .f-hero h1 { color: #fff; font-size: clamp(36px, 5.5vw, 64px); font-weight: 800;
+    line-height: 1.1; letter-spacing: -.025em; margin: 0 0 20px; max-width: 820px; }
+  .f-hero h1 .accent { color: var(--fin-accent); }
+  .f-hero .lead { font-size: 17px; line-height: 1.7; color: #cbd5e1; max-width: 580px; margin-bottom: 36px; }
+  .f-hero .cta-row { display: flex; flex-wrap: wrap; gap: 14px; }
+
+  /* Slim page hero for inner pages (Phase 3) */
+  .f-page-hero { position: relative; min-height: 320px;
+    background: linear-gradient(135deg, rgba(10,35,66,.92) 0%, rgba(6,24,49,.78) 100%);
+    display: flex; align-items: center;
+    padding: 160px 0 60px;
+    color: #fff;
+  }
+  .f-page-hero .f-eyebrow { color: var(--fin-accent); }
+  .f-page-hero h1 { color: #fff; font-size: clamp(34px, 4.5vw, 50px); font-weight: 800;
+    line-height: 1.15; letter-spacing: -.02em; margin: 0; }
+
+  /* Values strip (Salama · Faida · Uaminifu) */
+  .f-values-strip { background: var(--fin-primary); color: #fff; padding: 36px 0;
+    border-top: 4px solid var(--fin-accent); }
+  .f-values-strip .value { text-align: center; padding: 12px; }
+  .f-values-strip .value .sw { font-size: 28px; font-weight: 800; color: var(--fin-accent); line-height: 1;
+    letter-spacing: .04em; text-transform: uppercase; }
+  .f-values-strip .value .en { font-size: 13px; color: #cbd5e1; letter-spacing: .12em;
+    text-transform: uppercase; margin-top: 8px; }
+
+  /* Service / offering card */
+  .f-card { background: #fff; border: 1px solid var(--fin-border); border-radius: 8px;
+    padding: 32px 26px; height: 100%; transition: all .25s; border-top: 3px solid transparent; }
+  .f-card:hover { border-top-color: var(--fin-accent);
+    box-shadow: 0 12px 36px rgba(10,35,66,.10); transform: translateY(-4px); }
+  .f-card-icon { width: 56px; height: 56px; background: var(--fin-soft);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    color: var(--fin-accent-d); font-size: 28px; margin-bottom: 20px; }
+  .f-card h3 { font-size: 18px; font-weight: 700; color: var(--fin-primary); margin-bottom: 10px; }
+  .f-card p  { font-size: 14px; color: var(--fin-muted); line-height: 1.6; margin: 0; }
+
+  /* Forms */
+  .f-form-grid { display: grid; gap: 18px; }
+  .f-form-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .f-form-field label { display: block; font-size: 13px; font-weight: 600; color: var(--fin-primary);
+    margin-bottom: 6px; text-transform: uppercase; letter-spacing: .04em; }
+  .f-form-field input, .f-form-field textarea, .f-form-field select {
+    width: 100%; padding: 12px 14px; font-size: 14px; border: 1.5px solid var(--fin-border);
+    border-radius: 4px; background: #fff; color: var(--fin-primary); font-family: inherit; }
+  .f-form-field input:focus, .f-form-field textarea:focus, .f-form-field select:focus {
+    outline: none; border-color: var(--fin-accent); }
+  .f-form-field textarea { min-height: 140px; resize: vertical; }
+  .f-form-field .errors { color: #b91c1c; font-size: 12px; margin-top: 4px; }
+  .f-form-success { background: #dcfce7; border: 1px solid #86efac; color: #166534;
+    padding: 16px 20px; border-radius: 6px; margin-bottom: 20px; font-size: 14px; font-weight: 600; }
+
+  /* CTA banner */
+  .f-cta-banner { background: linear-gradient(135deg, var(--fin-primary) 0%, var(--fin-primary-d) 100%);
+    color: #fff; padding: 60px 40px; border-radius: 8px; text-align: center; position: relative; overflow: hidden; }
+  .f-cta-banner::before { content: ''; position: absolute; right: -60px; top: -60px;
+    width: 240px; height: 240px; background: var(--fin-accent); opacity: .12; border-radius: 50%; }
+  .f-cta-banner h2 { font-size: clamp(24px, 3.5vw, 34px); font-weight: 800; margin-bottom: 12px;
+    position: relative; color: #fff; }
+  .f-cta-banner p { color: #cbd5e1; font-size: 15px; margin-bottom: 24px; position: relative;
+    max-width: 580px; margin-left: auto; margin-right: auto; }
+  .f-cta-banner .f-btn-primary { position: relative; }
+
+  /* Regulatory disclaimer */
+  .f-disclaimer { background: #fff8e1; border-top: 1px solid #f5e6a8;
+    color: #5a4a18; padding: 18px 0; font-size: 12px; line-height: 1.65; }
+  .f-disclaimer strong { color: #3a2f10; }
+
+  /* ── Responsive ──────────────────────────────────────────────── */
+
+  @media (max-width: 768px) {
+    .f-section { padding: 60px 0; }
+    .f-form-grid.cols-2 { grid-template-columns: 1fr; }
+    .f-hero { padding: 130px 0 60px; min-height: 500px; }
+    .f-page-hero { padding: 130px 0 50px; min-height: 260px; }
+    .f-row { gap: 16px; }
+    .f-cta-banner { padding: 40px 24px; }
+    .f-values-strip .value .sw { font-size: 22px; }
+  }
+
+  @media (max-width: 480px) {
+    .f-container { padding: 0 16px; }
+    .f-section { padding: 48px 0; }
+    .f-section-title { font-size: 22px; }
+    .f-hero { padding: 110px 0 50px; min-height: 460px; }
+    .f-hero h1 { font-size: 30px; }
+    .f-hero .lead { font-size: 15px; }
+    .f-page-hero { padding: 110px 0 40px; min-height: 220px; }
+    .f-page-hero h1 { font-size: 26px; }
+    .f-col-4, .f-col-3, .f-col-2 { flex: 1 1 100%; min-width: 0; }
+    .f-card { padding: 24px 20px; }
+    .f-cta-banner h2 { font-size: 22px; }
+    .f-btn { padding: 12px 22px; font-size: 13px; }
+    .f-values-strip .value .sw { font-size: 20px; }
+    .f-values-strip .value .en { font-size: 11px; }
+  }
+</style>
+{% endblock %}

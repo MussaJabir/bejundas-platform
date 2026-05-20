@@ -175,6 +175,38 @@ class TestContactForm:
 
 
 @pytest.mark.django_db
+class TestLegalEntityNameRendering:
+    """The construction navbar must show the BEJUS legal entity, and the
+    shared footer copyright must show it too when on a construction URL."""
+
+    def test_navbar_shows_bejus_legal_entity(self):
+        response = Client().get("/construction/")
+        body = response.content.decode()
+        assert "BEJUS SERVICES" in body
+        assert "ENGINEERING &amp; CONSTRUCTION (T) LTD" in body
+
+    def test_navbar_does_not_show_old_bejundas_construction_brand(self):
+        response = Client().get("/construction/")
+        body = response.content.decode()
+        # The old inline label had this literal pair
+        assert ">Bejundas\n" not in body
+        assert "Bejundas CONSTRUCTION" not in body
+
+    def test_footer_copyright_uses_bejus_legal_entity(self):
+        response = Client().get("/construction/")
+        body = response.content.decode()
+        # Footer copyright now reads {{ app_theme.legal_name }}
+        assert "BEJUS SERVICES ENGINEERING &amp; CONSTRUCTION (T) LTD" in body
+
+    def test_app_theme_legal_name_in_context(self):
+        response = Client().get("/construction/")
+        assert (
+            response.context["app_theme"]["legal_name"]
+            == "BEJUS SERVICES ENGINEERING & CONSTRUCTION (T) LTD"
+        )
+
+
+@pytest.mark.django_db
 class TestConstructionSitemap:
     def test_sitemap_includes_construction_pages(self):
         response = Client().get("/sitemap.xml")

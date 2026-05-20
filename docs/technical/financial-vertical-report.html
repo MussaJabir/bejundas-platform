@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technical Report — Financial Vertical — Bejundas Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:        #0a2342;
+    --navy-d:      #061831;
+    --gold:        #c9a84c;
+    --gold-d:      #a98a35;
+    --gold-lt:     #fdf8e9;
+    --blue-lt:     #eaf1fb;
+    --green:       #16a34a;
+    --green-lt:    #dcfce7;
+    --amber:       #d97706;
+    --amber-lt:    #fef3c7;
+    --red:         #dc2626;
+    --red-lt:      #fee2e2;
+    --text:        #0f172a;
+    --muted:       #475569;
+    --border:      #e4e8ee;
+    --bg:          #f6f8fb;
+    --white:       #ffffff;
+  }
+
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+
+  .header { background: var(--navy); color: var(--white); padding: 48px 0 40px; border-bottom: 4px solid var(--gold); }
+  .header .inner { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+  .header-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .logo-chip { background: var(--gold); color: var(--navy); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; }
+  .date-chip { font-size: 13px; color: #94a3b8; }
+  .header h1 { font-size: 30px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 8px; }
+  .header h1 span { color: var(--gold); }
+  .header p { font-size: 15px; color: #94a3b8; max-width: 720px; }
+  .header p code { background: rgba(201,168,76,.18); color: #f0d488; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+  .status-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; background: var(--green-lt); color: var(--green); font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 20px; }
+  .status-badge::before { content: ''; width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
+
+  main { max-width: 880px; margin: 0 auto; padding: 40px 24px 64px; display: flex; flex-direction: column; gap: 24px; }
+
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .card-header { display: flex; align-items: center; gap: 12px; padding: 20px 24px; border-bottom: 1px solid var(--border); background: var(--gold-lt); }
+  .card-icon { width: 36px; height: 36px; background: var(--navy); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .card-icon svg { width: 18px; height: 18px; stroke: var(--gold); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .card-header h2 { font-size: 16px; font-weight: 700; color: var(--navy); }
+  .card-header .section-num { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--gold-d); background: var(--white); padding: 2px 8px; border-radius: 4px; border: 1px solid #f0e0a8; }
+  .card-body { padding: 24px; }
+  .card-body p { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+  .card-body p + p { margin-top: 10px; }
+
+  code { font-size: 12px; background: var(--gold-lt); color: var(--gold-d); padding: 1px 6px; border-radius: 4px; font-family: 'Courier New', monospace; }
+  pre { background: var(--navy); color: #e2e8f0; border-radius: 8px; padding: 16px 20px; font-size: 12px; line-height: 1.7; overflow-x: auto; font-family: 'Courier New', monospace; margin: 12px 0; }
+  pre .c { color: #64748b; }
+  pre .k { color: #f0d488; }
+  pre .s { color: #86efac; }
+  pre .d { color: #f87171; }
+  pre .n { color: #fbbf24; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .stat-box { background: var(--gold-lt); border: 1px solid #f0e0a8; border-radius: 10px; padding: 16px 12px; text-align: center; }
+  .stat-box .num { font-size: 26px; font-weight: 700; color: var(--gold-d); line-height: 1; margin-bottom: 4px; }
+  .stat-box .lbl { font-size: 11px; color: var(--muted); font-weight: 500; }
+
+  table.std { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.std th { text-align: left; padding: 10px 14px; background: var(--gold-lt); color: var(--navy); font-weight: 600; font-size: 12px; border-bottom: 1px solid var(--border); }
+  table.std td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--muted); vertical-align: top; }
+  table.std tr:last-child td { border-bottom: none; }
+  table.std .ok { display: inline-flex; align-items: center; gap: 5px; color: var(--green); font-weight: 600; font-size: 12px; }
+  table.std .ok::before { content: ''; width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
+
+  .phase-table .pr-pill { display: inline-block; background: var(--gold-lt); color: var(--gold-d); font-family: 'Courier New', monospace; font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 700; border: 1px solid #f0e0a8; }
+  .phase-table .ph-num { display: inline-block; background: var(--navy); color: var(--gold); font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 700; min-width: 24px; text-align: center; }
+
+  .built-list { display: flex; flex-direction: column; gap: 12px; }
+  .built-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 8px; }
+  .built-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); margin-top: 6px; flex-shrink: 0; }
+  .built-item strong { font-size: 14px; font-weight: 600; color: var(--navy); display: block; margin-bottom: 2px; }
+  .built-item span { font-size: 13px; color: var(--muted); }
+
+  .checklist { display: flex; flex-direction: column; gap: 8px; }
+  .check-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
+  .check-mark { width: 18px; height: 18px; border-radius: 4px; background: var(--green); color: var(--white); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .check-mark.todo { background: var(--white); border: 1.5px solid var(--border); color: transparent; }
+  .check-item span { font-size: 13px; color: var(--text); }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill { display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 10px; text-transform: uppercase; letter-spacing: .04em; }
+  .pill.new       { background: #fee2e2; color: #991b1b; }
+  .pill.reviewed  { background: #dbeafe; color: #1d4ed8; }
+  .pill.approved  { background: #fef3c7; color: #a16207; }
+  .pill.disbursed { background: #dcfce7; color: #166534; }
+  .pill.declined  { background: #f1f5f9; color: #64748b; }
+  .pill.closed    { background: #e2e8f0; color: #475569; }
+  .pill.contacted { background: #dbeafe; color: #1d4ed8; }
+  .pill.committed { background: #fef3c7; color: #a16207; }
+  .pill.funded    { background: #fdf8e9; color: #a98a35; }
+  .pill.active    { background: #dcfce7; color: #166534; }
+  .pill.matured   { background: #e2e8f0; color: #475569; }
+  .pill.lost      { background: #f1f5f9; color: #64748b; }
+
+  .pf { padding: 20px 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); max-width: 880px; margin: 0 auto; }
+
+  @media print {
+    body { background: white; font-size: 12px; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+    .card, .stat-row, table.std { break-inside: avoid; }
+    @page { margin: 15mm; size: A4; }
+  }
+
+  @media (max-width: 600px) {
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="inner">
+    <div class="header-meta">
+      <span class="logo-chip">Bejundas Financial</span>
+      <span class="date-chip">20 May 2026</span>
+    </div>
+    <h1>Financial Vertical — <span>Technical Build</span></h1>
+    <p>Five-PR financial vertical build. New Django app <code>apps.financial</code> with 6 models, 8 public views, two lead-capture funnels (loans + investments) with branded HTML email notifications, Unfold admin with 6 sidebar entries spanning two distinct status workflows. Seeded with 9 services + 2 productised investment rounds (BFS/IO/2026/01, /02) + 4 testimonials. 193/193 tests green.</p>
+    <div class="status-badge">SHIPPED — PRs #49 → #50 → #51 → #52 merged · Phase 5 in this PR</div>
+  </div>
+</div>
+
+<main>
+
+  <!-- Stats -->
+  <div class="stat-row">
+    <div class="stat-box"><div class="num">5</div><div class="lbl">Sub-phase PRs</div></div>
+    <div class="stat-box"><div class="num">6</div><div class="lbl">Django models</div></div>
+    <div class="stat-box"><div class="num">8</div><div class="lbl">Public views</div></div>
+    <div class="stat-box"><div class="num">193/193</div><div class="lbl">Tests passing</div></div>
+  </div>
+
+  <!-- Phase summary -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      </div>
+      <h2>Sub-Phase Summary</h2>
+      <span class="section-num">§1</span>
+    </div>
+    <div class="card-body">
+      <table class="std phase-table">
+        <thead>
+          <tr><th>#</th><th>PR</th><th>Title</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="ph-num">0</span></td>
+            <td><span class="pr-pill">#48</span></td>
+            <td><strong>Per-vertical legal entity names</strong> — Pre-flight fix. Added <code>legal_name</code> to <code>app_theme</code> context processor (BEJUS for construction, BFS for financial, empty slots for not-yet-shipped verticals). Construction navbar refactored to two-line wordmark; core footer copyright now reads <code>{{ app_theme.legal_name|default:company.company_name }}</code>.</td>
+          </tr>
+          <tr>
+            <td><span class="ph-num">1</span></td>
+            <td><span class="pr-pill">#49</span></td>
+            <td><strong>Scaffold + navy/gold base</strong> — <code>apps.financial</code> created, routing handed off from <code>apps.leads</code>, base_financial.html with palette + shared CSS primitives, two-line BFS wordmark in navbar, home placeholder with Salama/Faida/Uaminifu values strip + regulatory disclaimer.</td>
+          </tr>
+          <tr>
+            <td><span class="ph-num">2</span></td>
+            <td><span class="pr-pill">#50</span></td>
+            <td><strong>Models + Unfold admin</strong> — 6 models (FinancialService, InvestmentOffering, Testimonial, Certification, LoanInquiry, InvestmentInquiry) with colour-coded status pills, autocomplete on offering FK, 11 bulk actions across two inquiry models. New "Financial" sidebar group (collapsible).</td>
+          </tr>
+          <tr>
+            <td><span class="ph-num">3</span></td>
+            <td><span class="pr-pill">#51</span></td>
+            <td><strong>5 inner pages + sitemap + ContactForm</strong> — About, Services (category filter), Investments (status filter), Investment Detail (terms table + payout calendar), Contact (with email). Dedicated <code>FinancialStaticSitemap</code> + <code>InvestmentOfferingSitemap</code>. Home rewired to pull live featured services + offerings.</td>
+          </tr>
+          <tr>
+            <td><span class="ph-num">4</span></td>
+            <td><span class="pr-pill">#52</span></td>
+            <td><strong>Two lead funnels</strong> — LoanInquiryForm + InvestmentInquiryForm (ModelForm, server-side phone + amount validation), LoanApplyView + InvestmentInquireView (with <code>?offering=&lt;slug&gt;</code> prefill), 4 email templates (text + branded HTML), <code>django.contrib.humanize</code> registered for <code>intcomma</code>.</td>
+          </tr>
+          <tr>
+            <td><span class="ph-num">5</span></td>
+            <td><span class="pr-pill">this</span></td>
+            <td><strong>Content seed + polish + reports</strong> — RunPython data migration seeds 9 FinancialService + 2 InvestmentOffering (BFS/IO/2026/01 16.5% 12mo + /02 18.0% 24mo, both featured/open) + 4 Testimonial (idempotent via <code>update_or_create</code>). Disclaimer DRYed into <code>_disclaimer.html</code> partial with 5 variants. Organization JSON-LD on home page. This report + client report generated.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Models -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>
+      </div>
+      <h2>Data Model</h2>
+      <span class="section-num">§2</span>
+    </div>
+    <div class="card-body">
+      <p>All 6 models inherit <code>apps.core.models.BaseModel</code> (UUID pk + <code>created_at</code> + <code>updated_at</code>). 10 choice catalogues centralised in <code>apps/financial/models.py</code>.</p>
+      <table class="std" style="margin-top: 12px;">
+        <thead>
+          <tr><th>Model</th><th>Notable fields</th><th>Constraints</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>FinancialService</code></td><td>name, slug, category (5 choices), summary, description, icon, is_active, order</td><td>slug unique, auto-filled</td></tr>
+          <tr><td><code>InvestmentOffering</code></td><td>reference_id, title, slug, tenure_months, indicative_rate_pct (Decimal 5,2), min_capital (Decimal 12,2), payout_cadence, opens_at, closes_at, settlement_date, status (3 choices), description, payout_calendar_notes, is_featured</td><td>reference_id unique; slug auto-filled by slugifying ref (BFS/IO/2026/01 → bfs-io-2026-01)</td></tr>
+          <tr><td><code>Testimonial</code></td><td>author_name, author_role, organisation, quote, is_featured, order</td><td><code>__test__ = False</code></td></tr>
+          <tr><td><code>Certification</code></td><td>name, issuer, reference_number, year_awarded, certificate_image, is_active, order</td><td>year_awarded nullable</td></tr>
+          <tr><td><code>LoanInquiry</code></td><td>full_name, business_name, email, phone, loan_purpose (4), amount_requested (Decimal 12,2), tenure_band (4), preferred_contact (3), notes, status (6), internal_notes</td><td>phone ≥9 digits + amount &gt; 0 enforced at form level</td></tr>
+          <tr><td><code>InvestmentInquiry</code></td><td>full_name, email, phone, capital_band (4), preferred_tenure (3), funding_source (4), <strong>offering</strong> (FK SET_NULL), preferred_contact, notes, status (7), internal_notes</td><td>offering FK set server-side from ?offering= query string — never user-controlled</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Workflow pipelines -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <h2>Workflow Pipelines</h2>
+      <span class="section-num">§3</span>
+    </div>
+    <div class="card-body">
+      <p><strong>LoanInquiry</strong> — 6 states, 5 bulk actions on the admin changelist:</p>
+      <div class="pill-row" style="margin: 10px 0 18px;">
+        <span class="pill new">New</span>
+        <span class="pill reviewed">Reviewed</span>
+        <span class="pill approved">Approved</span>
+        <span class="pill disbursed">Disbursed</span>
+        <span class="pill declined">Declined</span>
+        <span class="pill closed">Closed</span>
+      </div>
+      <p><strong>InvestmentInquiry</strong> — 7 states, 6 bulk actions:</p>
+      <div class="pill-row" style="margin: 10px 0 18px;">
+        <span class="pill new">New</span>
+        <span class="pill contacted">Contacted</span>
+        <span class="pill committed">Committed</span>
+        <span class="pill funded">Funded</span>
+        <span class="pill active">Active</span>
+        <span class="pill matured">Matured</span>
+        <span class="pill lost">Lost</span>
+      </div>
+      <p>Submitter fields are read-only on the admin change form. Only <code>status</code> and <code>internal_notes</code> are editable.</p>
+      <pre><span class="c"># apps/financial/forms.py — shared phone validator</span>
+<span class="k">def</span> _validate_phone(value: str) -&gt; str:
+    cleaned = (value <span class="k">or</span> <span class="s">""</span>).strip()
+    digits = <span class="s">""</span>.join(ch <span class="k">for</span> ch <span class="k">in</span> cleaned <span class="k">if</span> ch.isdigit())
+    <span class="k">if</span> <span class="k">len</span>(digits) &lt; <span class="n">9</span>:
+        <span class="k">raise</span> ValidationError(<span class="s">"Enter a valid phone number (minimum 9 digits)."</span>)
+    <span class="k">return</span> cleaned</pre>
+    </div>
+  </div>
+
+  <!-- Routing & sitemap -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+      </div>
+      <h2>Routing &amp; Sitemap</h2>
+      <span class="section-num">§4</span>
+    </div>
+    <div class="card-body">
+      <table class="std">
+        <thead><tr><th>URL</th><th>View</th><th>Sitemap entry</th></tr></thead>
+        <tbody>
+          <tr><td><code>/financial/</code></td><td><code>HomeView</code></td><td><span class="ok">Yes (0.9, weekly)</span></td></tr>
+          <tr><td><code>/financial/about/</code></td><td><code>AboutView</code></td><td><span class="ok">Yes (0.7)</span></td></tr>
+          <tr><td><code>/financial/services/</code></td><td><code>ServicesView</code> + category filter</td><td><span class="ok">Yes (0.8)</span></td></tr>
+          <tr><td><code>/financial/investments/</code></td><td><code>InvestmentsListView</code> + status filter</td><td><span class="ok">Yes (0.8, weekly)</span></td></tr>
+          <tr><td><code>/financial/investments/&lt;slug&gt;/</code></td><td><code>InvestmentDetailView</code></td><td><span class="ok"><code>InvestmentOfferingSitemap</code> (dynamic, lastmod from updated_at)</span></td></tr>
+          <tr><td><code>/financial/contact/</code></td><td><code>ContactView</code></td><td><span class="ok">Yes (0.7)</span></td></tr>
+          <tr><td><code>/financial/loans/apply/</code></td><td><code>LoanApplyView</code></td><td><span class="ok">Yes (0.8)</span></td></tr>
+          <tr><td><code>/financial/invest/inquire/</code></td><td><code>InvestmentInquireView</code> + offering prefill</td><td><span class="ok">Yes (0.8)</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Seeded content -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      </div>
+      <h2>Seeded Content (Phase 5)</h2>
+      <span class="section-num">§5</span>
+    </div>
+    <div class="card-body">
+      <p>Single data migration <code>0002_seed_curated_content.py</code> using <code>RunPython</code> with idempotent <code>update_or_create</code>. Reverse migration removes only the seeded rows by slug / reference_id / author_name. Safe to re-run.</p>
+      <table class="std" style="margin-top: 12px;">
+        <thead><tr><th>Model</th><th>Rows</th><th>Spread</th></tr></thead>
+        <tbody>
+          <tr><td><code>FinancialService</code></td><td>9</td><td>4 loans (Personal, SME, Group, Asset Refinancing) · 2 agency (Banking Agency, Branch Franchise) · 2 securities (T-Bills, DSE/Mutual Funds) · 1 auto</td></tr>
+          <tr><td><code>InvestmentOffering</code></td><td>2 (both featured, both open)</td><td><code>BFS/IO/2026/01</code> — 12mo · 16.50% p.a. · TZS 250k min · settles 30 Jun 2027<br><code>BFS/IO/2026/02</code> — 24mo · 18.00% p.a. · TZS 250k min · settles 30 Jun 2028. Payout calendars verbatim from the May 2026 posters.</td></tr>
+          <tr><td><code>Testimonial</code></td><td>4 (3 featured)</td><td>Plausible TZ names — Halima Mwakipesile (Mwanza SME), Joseph Mwakatobe (Dar investor), Neema Kapinga (women's cooperative), Emmanuel Rwambali (logistics director)</td></tr>
+          <tr><td><code>Certification</code></td><td>0</td><td>Intentionally empty — add when client supplies BoT / CMSA / BRELA references</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Test coverage -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>Test Coverage</h2>
+      <span class="section-num">§6</span>
+    </div>
+    <div class="card-body">
+      <table class="std">
+        <thead><tr><th>File</th><th>Tests</th><th>Scope</th></tr></thead>
+        <tbody>
+          <tr><td><code>test_views.py</code></td><td>31</td><td>Home + 5 inner pages + offering detail + 404 + services category filter + investments status filter + ContactForm + sitemap</td></tr>
+          <tr><td><code>test_models.py</code></td><td>23</td><td>__str__, slug auto-fill, defaults, choices, ordering, FK SET_NULL — all use "TestPrefix" names to avoid seed collision</td></tr>
+          <tr><td><code>test_admin.py</code></td><td>8</td><td>Each admin changelist + rate / capital formatting + 2 bulk actions verified end-to-end</td></tr>
+          <tr><td><code>test_inquiries.py</code></td><td>21</td><td>LoanInquiryForm + InvestmentInquiryForm validation, view GET/POST/email/offering-prefill, sitemap inclusion</td></tr>
+          <tr><td><code>test_seed.py</code></td><td>9</td><td>Counts (9 / 2 / 4), categories spread, offering terms match posters, slugs URL-safe, seeded detail URL renders</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top: 14px;">Plus 101 prior tests across <code>apps.core</code>, <code>apps.hub</code>, <code>apps.leads</code>, <code>apps.construction</code>. Total: <strong>193/193 passing</strong> in 25 seconds. Ruff + black clean.</p>
+    </div>
+  </div>
+
+  <!-- Key decisions -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <h2>Key Decisions &amp; Trade-offs</h2>
+      <span class="section-num">§7</span>
+    </div>
+    <div class="card-body">
+      <div class="built-list">
+        <div class="built-item"><div class="built-dot"></div><div>
+          <strong>Two lead models (LoanInquiry + InvestmentInquiry), not one discriminated model</strong>
+          <span>The funnels are fundamentally different — loan: applied→reviewed→approved→disbursed; investment: inquired→contacted→committed→funded→active→matured. Separate models keep admin pipelines clean and per-funnel bulk actions readable. Worth the slight code duplication.</span>
+        </div></div>
+        <div class="built-item"><div class="built-dot"></div><div>
+          <strong>Offering FK on InvestmentInquiry set server-side from ?offering= — never a form field</strong>
+          <span>Prospects can't tamper with which round they're inquiring about. The view's <code>_resolve_offering</code> reads the query string, validates the slug against the DB, and attaches the FK on POST. The "Inquire About This Round" CTA on the detail page passes the slug through; the standalone form page accepts an unattached inquiry.</span>
+        </div></div>
+        <div class="built-item"><div class="built-dot"></div><div>
+          <strong>Safe regulatory wording on every page — private placement, not deposit, not insured, indicative not guaranteed</strong>
+          <span>Public website is more permanent than WhatsApp Status. Every page footer carries the disclaimer; the Investments and Loans funnels carry funnel-specific variants. If BFS later obtains a CMSA/BoT/TIRA licence, swap to the regulator-badge variant in <code>_disclaimer.html</code>.</span>
+        </div></div>
+        <div class="built-item"><div class="built-dot"></div><div>
+          <strong>Disclaimer extracted into a partial with 5 variants — DRY</strong>
+          <span><code>_disclaimer.html</code> with <code>{% include … with variant="loan" %}</code> replaces 8 hardcoded blocks. Single source of truth for legal wording; copy changes happen in one place. Uses <code>{% comment %}</code> (not <code>{# ... #}</code>) for multi-line comments — the latter is single-line only and silently breaks.</span>
+        </div></div>
+        <div class="built-item"><div class="built-dot"></div><div>
+          <strong>EmailMultiAlternatives (plain + branded HTML) for both lead funnels</strong>
+          <span>Plain-text always sends; HTML alternative attached. Templates split into <code>templates/emails/loan_inquiry_notification.{txt,html}</code> + <code>investment_inquiry_notification.{txt,html}</code>. Amount formatting uses <code>django.contrib.humanize</code> intcomma (TZS 5,000,000 not 5000000) — registered in INSTALLED_APPS as part of this work.</span>
+        </div></div>
+        <div class="built-item"><div class="built-dot"></div><div>
+          <strong>Slug-based offering detail URLs (not reference_id with slashes)</strong>
+          <span>"BFS/IO/2026/01" has slashes — illegal in a path-based URL. Model save() override slugifies the ref into <code>bfs-io-2026-01</code>. SlugField unique; sitemap and detail view use the slug.</span>
+        </div></div>
+        <div class="built-item"><div class="built-dot"></div><div>
+          <strong>Idempotent RunPython seed with update_or_create + targeted reverse</strong>
+          <span>Re-running 0002 won't duplicate; reverse removes only seeded slugs/refs/names. Admin-added rows survive a migrate-zero scenario. Seed runs automatically on every <code>manage.py migrate</code> — no separate seed command on cPanel.</span>
+        </div></div>
+        <div class="built-item"><div class="built-dot"></div><div>
+          <strong>Organization JSON-LD on the home page only</strong>
+          <span>FinancialService schema with address, phone, parentOrganization link to bejundas.co.tz. Only on the home page (per ldjson best practice — don't fragment entity definitions across the site).</span>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Deploy checklist -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>Production Deploy Checklist</h2>
+      <span class="section-num">§8</span>
+    </div>
+    <div class="card-body">
+      <div class="checklist">
+        <div class="check-item"><div class="check-mark">✓</div><span>Merge PRs #48 → #49 → #50 → #51 → #52 + this PR into <code>develop</code> (sequential)</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>Open PR <code>develop</code> → <code>main</code></span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>GitHub webhook fires deploy on cPanel</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>On server: <code>python manage.py migrate</code> applies <code>financial.0001_initial</code> + <code>financial.0002_seed_curated_content</code></span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span><code>python manage.py collectstatic --noinput</code> picks up financial CSS / images</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span><code>touch tmp/restart.txt</code> to recycle Passenger</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>Verify <code>/financial/</code> serves the real home (featured services + offerings strips visible)</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>Verify admin Financial group has 6 entries and seed populated 9 services + 2 offerings + 4 testimonials</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>Submit a test loan + a test investment inquiry, confirm both rows in admin + both emails in <code>LEADS_EMAIL</code> inbox</span></div>
+        <div class="check-item"><div class="check-mark todo"></div><span>Re-submit sitemap.xml to Google Search Console (8 financial pages + 2 offering detail URLs)</span></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="pf">
+  <span>Bejundas Platform — Technical Report — Financial Vertical</span>
+  <span>Generated 20 May 2026</span>
+</div>
+
+</body>
+</html>

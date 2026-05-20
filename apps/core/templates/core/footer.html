@@ -75,7 +75,7 @@
     </div>
     <div class="footer-bottom">
         <div class="wrap-footer-bottom tf-container medium d-flex align-items-center justify-content-between">
-            <p class="text_white text-caption-1">&copy;{% now "Y" %} <a href="{% url 'hub:home' %}" class="text_white link">{{ company.company_name }}</a>. All Rights Reserved.</p>
+            <p class="text_white text-caption-1">&copy;{% now "Y" %} <a href="{% url 'hub:home' %}" class="text_white link">{{ app_theme.legal_name|default:company.company_name }}</a>. All Rights Reserved.</p>
             <ul class="wrap">
                 <li><a href="{% url 'hub:contact' %}" class="text-caption-1 link text_white">Contact Us</a></li>
             </ul>

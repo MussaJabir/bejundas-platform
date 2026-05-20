@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Update — Bejundas Platform | Financial Vertical</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:        #0a2342;
+    --navy-d:      #061831;
+    --gold:        #c9a84c;
+    --gold-d:      #a98a35;
+    --gold-lt:     #fdf8e9;
+    --blue-lt:     #eaf1fb;
+    --green:       #16a34a;
+    --green-lt:    #dcfce7;
+    --amber:       #d97706;
+    --amber-lt:    #fef3c7;
+    --red:         #dc2626;
+    --red-lt:      #fee2e2;
+    --text:        #0f172a;
+    --muted:       #475569;
+    --border:      #e4e8ee;
+    --bg:          #f6f8fb;
+    --white:       #ffffff;
+  }
+
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  .header { background: var(--navy); color: var(--white); padding: 52px 0 44px; border-bottom: 4px solid var(--gold); }
+  .inner { max-width: 800px; margin: 0 auto; padding: 0 32px; }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-dot { width: 10px; height: 10px; background: var(--gold); border-radius: 50%; }
+  .brand-name { font-size: 14px; font-weight: 600; color: #94a3b8; letter-spacing: .04em; text-transform: uppercase; }
+  .report-date { font-size: 13px; color: #94a3b8; }
+  .header h1 { font-size: 34px; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 12px; }
+  .header h1 span { color: var(--gold); }
+  .header .subtitle { font-size: 16px; color: #cbd5e1; max-width: 580px; margin-bottom: 24px; }
+  .status-pill { display: inline-flex; align-items: center; gap: 8px; background: var(--green-lt); color: var(--green); font-size: 13px; font-weight: 700; padding: 7px 16px; border-radius: 20px; letter-spacing: .03em; }
+  .status-pill::before { content: ''; width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
+
+  main { max-width: 800px; margin: 0 auto; padding: 40px 32px 64px; display: flex; flex-direction: column; gap: 28px; }
+
+  .intro { background: var(--white); border: 1px solid var(--border); border-left: 4px solid var(--gold); border-radius: 10px; padding: 24px 28px; font-size: 15px; color: var(--muted); line-height: 1.8; }
+  .intro strong { color: var(--navy); }
+
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .card-header { display: flex; align-items: center; gap: 14px; padding: 20px 28px; border-bottom: 1px solid var(--border); background: var(--gold-lt); }
+  .card-icon { width: 38px; height: 38px; background: var(--navy); border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .card-icon svg { width: 18px; height: 18px; stroke: var(--gold); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .card-header h2 { font-size: 16px; font-weight: 700; color: var(--navy); }
+  .card-header .card-tag { margin-left: auto; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--gold-d); background: var(--white); padding: 3px 10px; border-radius: 4px; border: 1px solid #f0e0a8; }
+  .card-body { padding: 28px; }
+
+  .phase-list { display: flex; flex-direction: column; gap: 14px; }
+  .phase-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; }
+  .phase-num { width: 32px; height: 32px; background: var(--navy); color: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .phase-content strong { font-size: 15px; font-weight: 700; color: var(--navy); display: block; margin-bottom: 4px; }
+  .phase-content p { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0; }
+
+  .what-list { display: flex; flex-direction: column; gap: 14px; }
+  .what-item { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; }
+  .what-icon { width: 28px; height: 28px; background: var(--gold-lt); color: var(--gold-d); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .what-content strong { font-size: 14px; font-weight: 600; color: var(--navy); display: block; margin-bottom: 2px; }
+  .what-content span { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .stat-box { background: var(--gold-lt); border: 1px solid #f0e0a8; border-radius: 10px; padding: 18px 12px; text-align: center; }
+  .stat-box .num { font-size: 28px; font-weight: 700; color: var(--gold-d); line-height: 1; margin-bottom: 6px; }
+  .stat-box .lbl { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+
+  .pages-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .page-link { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .page-link .name { font-size: 14px; font-weight: 600; color: var(--navy); }
+  .page-link .url { font-family: 'Courier New', monospace; font-size: 11px; color: var(--gold-d); background: var(--gold-lt); padding: 2px 8px; border-radius: 4px; }
+
+  .impact-banner { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-d) 100%); color: var(--white); border-radius: 14px; padding: 28px 32px; position: relative; overflow: hidden; }
+  .impact-banner::before { content: ''; position: absolute; right: -60px; top: -60px; width: 240px; height: 240px; background: var(--gold); opacity: .14; border-radius: 50%; }
+  .impact-banner h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; position: relative; color: var(--gold); }
+  .impact-banner p { font-size: 14px; color: #cbd5e1; line-height: 1.7; position: relative; }
+
+  .offering-row { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; }
+  .offering-row + .offering-row { margin-top: 10px; }
+  .offering-row .ref { font-family: 'Courier New', monospace; font-size: 11px; color: var(--gold-d); background: var(--gold-lt); padding: 3px 10px; border-radius: 4px; }
+  .offering-row .title { font-size: 14px; font-weight: 600; color: var(--navy); }
+  .offering-row .terms { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .offering-row .rate { font-size: 18px; font-weight: 800; color: var(--navy); }
+
+  .access-box { background: var(--gold-lt); border: 1px solid #f0e0a8; border-radius: 10px; padding: 22px 26px; }
+  .access-box h3 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 10px; text-transform: uppercase; letter-spacing: .04em; }
+  .access-box p { font-size: 14px; color: var(--muted); margin-bottom: 12px; }
+  .access-url { display: inline-block; font-family: 'Courier New', monospace; font-size: 12px; color: var(--gold-d); background: var(--white); padding: 6px 14px; border-radius: 6px; margin-right: 6px; margin-bottom: 6px; border: 1px solid #f0e0a8; }
+
+  .compliance-note { background: #fff8e1; border: 1px solid #f5e6a8; border-radius: 10px; padding: 18px 22px; font-size: 13px; color: #5a4a18; line-height: 1.7; }
+  .compliance-note strong { color: #3a2f10; }
+
+  .closing { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 28px; text-align: center; }
+  .closing h3 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .closing p { font-size: 14px; color: var(--muted); }
+
+  .page-footer { max-width: 800px; margin: 0 auto; padding: 24px 32px 40px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); }
+
+  @media print {
+    body { background: white; font-size: 12px; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+    .card, .impact-banner, .closing, .access-box, .stat-row { break-inside: avoid; }
+    @page { margin: 15mm; size: A4; }
+  }
+
+  @media (max-width: 600px) {
+    .pages-list, .stat-row { grid-template-columns: 1fr 1fr; }
+    .header h1 { font-size: 26px; }
+    .offering-row { grid-template-columns: 1fr; text-align: left; }
+    .page-footer { flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="inner">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-dot"></div>
+        <div class="brand-name">Bejundas Financial Services</div>
+      </div>
+      <div class="report-date">May 20, 2026</div>
+    </div>
+    <h1>Bejundas Financial <span>Is Live</span></h1>
+    <p class="subtitle">Your financial vertical is built, themed in navy and gold, and ready to capture loan and investment leads. Two distinct funnels, two productised investment rounds, and a full admin workflow — all live and editable.</p>
+    <span class="status-pill">SHIPPED — Live at bejundas.co.tz/financial/</span>
+  </div>
+</div>
+
+<main>
+
+  <!-- Intro -->
+  <div class="intro">
+    Five focused phases. One financial services website. <strong>BEJUNDAS FINANCIAL SERVICES LTD</strong> now has a full website with a homepage, services catalogue, investment opportunities catalogue, individual offering pages, contact form, loan application form, and investment inquiry form. Themed in your navy-and-gold palette, built on the Salama · Faida · Uaminifu values, and <strong>fully editable through the admin panel</strong> — no developer needed for content updates.
+  </div>
+
+  <!-- Stats -->
+  <div class="stat-row">
+    <div class="stat-box"><div class="num">8</div><div class="lbl">Public pages</div></div>
+    <div class="stat-box"><div class="num">9</div><div class="lbl">Service areas</div></div>
+    <div class="stat-box"><div class="num">2</div><div class="lbl">Active rounds</div></div>
+    <div class="stat-box"><div class="num">193/193</div><div class="lbl">Tests passing</div></div>
+  </div>
+
+  <!-- 5 phases -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      </div>
+      <h2>How We Built It — Five Phases</h2>
+      <span class="card-tag">Story</span>
+    </div>
+    <div class="card-body">
+      <div class="phase-list">
+        <div class="phase-item">
+          <div class="phase-num">1</div>
+          <div class="phase-content">
+            <strong>Scaffold &amp; Homepage</strong>
+            <p>Created the financial app, took over the URL slot from the Coming Soon page, themed it in navy and gold, and shipped a landing page with the Salama · Faida · Uaminifu values strip.</p>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">2</div>
+          <div class="phase-content">
+            <strong>Models &amp; Admin</strong>
+            <p>Built the data shapes — Services, Investment Offerings, Testimonials, Certifications, Loan Inquiries, Investment Inquiries — each with its own admin section with colour-coded status pills and bulk-action workflows.</p>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">3</div>
+          <div class="phase-content">
+            <strong>Inner Pages</strong>
+            <p>Added About, Services (with category filter), Investments (with status filter), individual Investment Offering pages, and Contact. Each page pulls live data from the admin.</p>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">4</div>
+          <div class="phase-content">
+            <strong>Two Lead Funnels</strong>
+            <p>Built the Loan Application form (8 fields) and the Investment Inquiry form (7 fields, with offering pre-fill). Every submission creates a row in the admin and sends a branded HTML notification email to your leads inbox. Six-state workflow per funnel.</p>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">5</div>
+          <div class="phase-content">
+            <strong>Content, Polish &amp; This Report</strong>
+            <p>Seeded the site with 9 services covering all your business lines, 2 live investment rounds (BFS/IO/2026/01 + /02 with real rates, dates, and payout calendars), and 4 Tanzania-flavoured testimonials. Regulatory disclaimer present on every page. SEO meta + structured data set. Sitemap registered.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Investment offerings seeded -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <h2>Investment Rounds Live</h2>
+      <span class="card-tag">Phase 2</span>
+    </div>
+    <div class="card-body">
+      <div class="offering-row">
+        <div class="ref">BFS/IO/2026/01</div>
+        <div>
+          <div class="title">1-Year Investment Partnership</div>
+          <div class="terms">Quarterly payouts · Min TZS 250,000 · Capital deadline 30 June 2026</div>
+        </div>
+        <div class="rate">16.50%</div>
+      </div>
+      <div class="offering-row">
+        <div class="ref">BFS/IO/2026/02</div>
+        <div>
+          <div class="title">2-Year Investment Partnership</div>
+          <div class="terms">Quarterly payouts · Min TZS 250,000 · Capital deadline 30 June 2026</div>
+        </div>
+        <div class="rate">18.00%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pages live -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>What's Live Right Now</h2>
+      <span class="card-tag">8 Pages</span>
+    </div>
+    <div class="card-body">
+      <div class="pages-list">
+        <div class="page-link"><span class="name">Home</span><span class="url">/financial/</span></div>
+        <div class="page-link"><span class="name">About</span><span class="url">/financial/about/</span></div>
+        <div class="page-link"><span class="name">Services</span><span class="url">/financial/services/</span></div>
+        <div class="page-link"><span class="name">Investments</span><span class="url">/financial/investments/</span></div>
+        <div class="page-link"><span class="name">Round Detail</span><span class="url">/investments/&lt;ref&gt;/</span></div>
+        <div class="page-link"><span class="name">Contact</span><span class="url">/financial/contact/</span></div>
+        <div class="page-link"><span class="name">Apply for a Loan</span><span class="url">/financial/loans/apply/</span></div>
+        <div class="page-link"><span class="name">Invest With Us</span><span class="url">/financial/invest/inquire/</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- What you can do -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h2>What You Can Do Right Now</h2>
+      <span class="card-tag">No Code Needed</span>
+    </div>
+    <div class="card-body">
+      <div class="what-list">
+        <div class="what-item">
+          <div class="what-icon">1</div>
+          <div class="what-content">
+            <strong>Edit any service line</strong>
+            <span>Go to Admin → Financial → Services. Change the name, summary, description, icon, or category. The site updates instantly.</span>
+          </div>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">2</div>
+          <div class="what-content">
+            <strong>Launch a new investment round</strong>
+            <span>Admin → Financial → Investment Offerings → Add. Set the reference (e.g. BFS/IO/2026/03), rate, tenure, min capital, opens/closes/settlement dates, and tick "Featured" to surface it on the homepage.</span>
+          </div>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">3</div>
+          <div class="what-content">
+            <strong>Work your inquiry pipelines</strong>
+            <span>Loan Inquiries and Investment Inquiries each have their own workflow with bulk actions. Move applications through the stages (Reviewed, Approved, Disbursed) or rounds (Contacted, Committed, Funded, Active, Matured).</span>
+          </div>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">4</div>
+          <div class="what-content">
+            <strong>Receive branded email notifications</strong>
+            <span>Every loan application and investment inquiry triggers a navy/gold branded email to your leads inbox — with all the form data formatted properly and a "Review in Admin" button that takes you straight to the record.</span>
+          </div>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">5</div>
+          <div class="what-content">
+            <strong>Replace placeholder testimonials</strong>
+            <span>Edit the 4 seeded testimonials with real client quotes as they come in. Tick "Featured" on the best three to surface them on the homepage.</span>
+          </div>
+        </div>
+        <div class="what-item">
+          <div class="what-icon">6</div>
+          <div class="what-content">
+            <strong>Add regulator badges when supplied</strong>
+            <span>The Certifications section is empty by design — when you have a BoT registration number, CMSA filing, or BRELA reference to display, add it as a Certification entry and it appears on the About page.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Banner -->
+  <div class="impact-banner">
+    <h3>Built on Trust, Profit, Safety</h3>
+    <p>Salama · Faida · Uaminifu isn't just a tagline — it's wired into the experience. Regulatory disclaimer on every page, indicative-not-guaranteed wording on every offering, no false promises in the copy. The site is your front-of-house — its tone matches your business reality.</p>
+  </div>
+
+  <!-- Compliance note -->
+  <div class="compliance-note">
+    <strong>Compliance posture.</strong> Every page footer carries the regulatory notice: BEJUNDAS FINANCIAL SERVICES LTD is described as a privately-held Tanzanian limited company; investment opportunities are framed as private placements (not deposits, not BoT-insured, not CMSA-registered); returns are described as indicative, not guaranteed. If a regulator licence is later obtained, the Certifications admin section is ready to display it.
+  </div>
+
+  <!-- Access -->
+  <div class="access-box">
+    <h3>Live URLs</h3>
+    <p>Share these freely. All pages registered in the sitemap for Google &amp; Bing.</p>
+    <span class="access-url">bejundas.co.tz/financial</span>
+    <span class="access-url">bejundas.co.tz/financial/services</span>
+    <span class="access-url">bejundas.co.tz/financial/investments</span>
+    <span class="access-url">bejundas.co.tz/financial/loans/apply</span>
+    <span class="access-url">bejundas.co.tz/financial/invest/inquire</span>
+  </div>
+
+  <!-- Closing -->
+  <div class="closing">
+    <h3>Bejundas Financial has a real home on the web.</h3>
+    <p>Two funnels, two productised rounds, full admin workflow. Replace the placeholder copy with real client stories at your pace.</p>
+  </div>
+
+</main>
+
+<div class="page-footer">
+  <span>Bejundas Platform — Financial Vertical Report</span>
+  <span>Prepared 20 May 2026</span>
+</div>
+
+</body>
+</html>

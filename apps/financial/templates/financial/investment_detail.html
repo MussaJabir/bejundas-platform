@@ -1,0 +1,122 @@
+{% extends "financial/base_financial.html" %}
+{% load static %}
+
+{% block title %}{{ offering.reference_id }} — {{ offering.title }} — Bejundas Financial Services{% endblock %}
+{% block meta_description %}{{ offering.title }} — {{ offering.indicative_rate_pct }}% indicative p.a., {{ offering.tenure_months }}-month tenure. Reference {{ offering.reference_id }}. Private placement by BEJUNDAS FINANCIAL SERVICES LTD.{% endblock %}
+
+{% block content %}
+
+<section class="f-page-hero">
+  <div class="f-container">
+    <span class="f-eyebrow">{{ offering.reference_id }}</span>
+    <h1>{{ offering.title }}</h1>
+  </div>
+</section>
+
+<section class="f-section">
+  <div class="f-container">
+    <div class="f-row">
+      <div class="f-col-2">
+        <span class="f-eyebrow">Round Terms</span>
+        <h2 class="f-section-title" style="font-size:28px;">Key Terms</h2>
+
+        <table style="width:100%;border-collapse:collapse;margin-top:18px;">
+          <tbody>
+            <tr style="border-bottom:1px solid var(--fin-border);">
+              <td style="padding:14px 0;color:var(--fin-muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Reference</td>
+              <td style="padding:14px 0;color:var(--fin-primary);font-weight:700;text-align:right;">{{ offering.reference_id }}</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--fin-border);">
+              <td style="padding:14px 0;color:var(--fin-muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Indicative Rate</td>
+              <td style="padding:14px 0;color:var(--fin-primary);font-weight:700;text-align:right;">{{ offering.indicative_rate_pct }}% p.a.</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--fin-border);">
+              <td style="padding:14px 0;color:var(--fin-muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Tenure</td>
+              <td style="padding:14px 0;color:var(--fin-primary);font-weight:700;text-align:right;">{{ offering.tenure_months }} months</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--fin-border);">
+              <td style="padding:14px 0;color:var(--fin-muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Minimum Capital</td>
+              <td style="padding:14px 0;color:var(--fin-primary);font-weight:700;text-align:right;">TZS {{ offering.min_capital|floatformat:0 }}</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--fin-border);">
+              <td style="padding:14px 0;color:var(--fin-muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Payout Cadence</td>
+              <td style="padding:14px 0;color:var(--fin-primary);font-weight:700;text-align:right;">{{ offering.get_payout_cadence_display }}</td>
+            </tr>
+            {% if offering.opens_at %}
+            <tr style="border-bottom:1px solid var(--fin-border);">
+              <td style="padding:14px 0;color:var(--fin-muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Opens</td>
+              <td style="padding:14px 0;color:var(--fin-primary);font-weight:700;text-align:right;">{{ offering.opens_at|date:"d M Y" }}</td>
+            </tr>
+            {% endif %}
+            {% if offering.closes_at %}
+            <tr style="border-bottom:1px solid var(--fin-border);">
+              <td style="padding:14px 0;color:var(--fin-muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Closes</td>
+              <td style="padding:14px 0;color:var(--fin-primary);font-weight:700;text-align:right;">{{ offering.closes_at|date:"d M Y" }}</td>
+            </tr>
+            {% endif %}
+            {% if offering.settlement_date %}
+            <tr style="border-bottom:1px solid var(--fin-border);">
+              <td style="padding:14px 0;color:var(--fin-muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Principal Returned</td>
+              <td style="padding:14px 0;color:var(--fin-primary);font-weight:700;text-align:right;">{{ offering.settlement_date|date:"d M Y" }}</td>
+            </tr>
+            {% endif %}
+            <tr>
+              <td style="padding:14px 0;color:var(--fin-muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Status</td>
+              <td style="padding:14px 0;color:var(--fin-primary);font-weight:700;text-align:right;text-transform:uppercase;">{{ offering.get_status_display }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p style="margin-top:30px;">
+          <a href="{% url 'financial:invest_inquire' %}?offering={{ offering.slug }}" class="f-btn f-btn-primary">Inquire About This Round</a>
+        </p>
+      </div>
+
+      <div class="f-col-2">
+        <span class="f-eyebrow">About This Round</span>
+        <h2 class="f-section-title" style="font-size:28px;">Overview</h2>
+        {% if offering.description %}
+          <div style="font-size:15px;color:var(--fin-text);line-height:1.75;">{{ offering.description|linebreaks }}</div>
+        {% else %}
+          <p style="color:var(--fin-muted);">A {{ offering.tenure_months }}-month private placement round offered by BEJUNDAS FINANCIAL SERVICES LTD. Capital is deployed across the company's mixed business ventures (microfinance, agency banking, government securities, retail refinancing). Returns are paid {{ offering.get_payout_cadence_display|lower }}.</p>
+        {% endif %}
+
+        {% if offering.payout_calendar_notes %}
+          <div style="margin-top:30px;">
+            <h3 style="font-size:18px;color:var(--fin-primary);margin-bottom:14px;">Payout Calendar</h3>
+            <div style="background:var(--fin-blue-soft);padding:20px 24px;border-radius:6px;border-left:3px solid var(--fin-accent);">
+              <pre style="margin:0;font-family:inherit;font-size:14px;color:var(--fin-text);white-space:pre-wrap;line-height:1.75;">{{ offering.payout_calendar_notes }}</pre>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if related %}
+<section class="f-section f-section-soft">
+  <div class="f-container">
+    <div style="text-align:center;margin-bottom:40px;">
+      <span class="f-eyebrow">More Rounds</span>
+      <h2 class="f-section-title">Other Opportunities</h2>
+    </div>
+    <div class="f-row">
+      {% for r in related %}
+        <div class="f-col-3">
+          <div class="f-card">
+            <code style="font-size:11px;background:#fdf8e9;color:#a98a35;padding:2px 8px;border-radius:4px;display:inline-block;margin-bottom:10px;">{{ r.reference_id }}</code>
+            <h3>{{ r.title }}</h3>
+            <p style="font-size:13px;"><strong style="color:var(--fin-primary);">{{ r.indicative_rate_pct }}%</strong> p.a. · {{ r.tenure_months }} months</p>
+            <a href="{% url 'financial:investment_detail' slug=r.slug %}" class="f-btn f-btn-outline" style="padding:10px 20px;font-size:12px;">View</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% include "financial/_disclaimer.html" with variant="investment" %}
+
+{% endblock %}

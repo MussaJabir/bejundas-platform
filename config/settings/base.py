@@ -30,11 +30,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sitemaps",
+    "django.contrib.humanize",
     "widget_tweaks",
     "apps.core",
     "apps.hub",
     "apps.leads",
     "apps.construction",
+    "apps.financial",
 ]
 
 MIDDLEWARE = [
@@ -230,6 +232,43 @@ UNFOLD = {
                         "title": "Quote Requests",
                         "icon": "request_quote",
                         "link": reverse_lazy("admin:construction_quoterequest_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": "Financial",
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": "Services",
+                        "icon": "savings",
+                        "link": reverse_lazy("admin:financial_financialservice_changelist"),
+                    },
+                    {
+                        "title": "Investment Offerings",
+                        "icon": "trending_up",
+                        "link": reverse_lazy("admin:financial_investmentoffering_changelist"),
+                    },
+                    {
+                        "title": "Testimonials",
+                        "icon": "format_quote",
+                        "link": reverse_lazy("admin:financial_testimonial_changelist"),
+                    },
+                    {
+                        "title": "Certifications",
+                        "icon": "verified",
+                        "link": reverse_lazy("admin:financial_certification_changelist"),
+                    },
+                    {
+                        "title": "Loan Inquiries",
+                        "icon": "request_quote",
+                        "link": reverse_lazy("admin:financial_loaninquiry_changelist"),
+                    },
+                    {
+                        "title": "Investment Inquiries",
+                        "icon": "handshake",
+                        "link": reverse_lazy("admin:financial_investmentinquiry_changelist"),
                     },
                 ],
             },

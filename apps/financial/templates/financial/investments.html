@@ -1,0 +1,73 @@
+{% extends "financial/base_financial.html" %}
+{% load static %}
+
+{% block title %}Investment Opportunities — Bejundas Financial Services Ltd{% endblock %}
+{% block meta_description %}Private placement investment rounds offered by BEJUNDAS FINANCIAL SERVICES LTD — indicative rates and tenures for qualified Tanzanian investors. Not deposits. Not CMSA-registered.{% endblock %}
+
+{% block content %}
+
+<section class="f-page-hero">
+  <div class="f-container">
+    <span class="f-eyebrow">Capital Partnerships</span>
+    <h1>Investment Opportunities</h1>
+  </div>
+</section>
+
+<section class="f-section">
+  <div class="f-container">
+
+    <div class="f-filter-row" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:36px;">
+      <a href="{% url 'financial:investments' %}" class="f-filter-chip{% if not active_status %} active{% endif %}">All</a>
+      {% for code, label in status_choices %}
+        <a href="?status={{ code }}" class="f-filter-chip{% if active_status == code %} active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    {% if offerings %}
+      <div class="f-row">
+        {% for offering in offerings %}
+          <div class="f-col-3">
+            <div class="f-card">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                <code style="font-size:11px;background:#fdf8e9;color:#a98a35;padding:2px 8px;border-radius:4px;">{{ offering.reference_id }}</code>
+                {% if offering.status == 'open' %}
+                  <span style="font-size:11px;font-weight:700;color:#166534;background:#dcfce7;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.04em;">Open</span>
+                {% elif offering.status == 'upcoming' %}
+                  <span style="font-size:11px;font-weight:700;color:#1d4ed8;background:#dbeafe;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.04em;">Upcoming</span>
+                {% else %}
+                  <span style="font-size:11px;font-weight:700;color:#64748b;background:#f1f5f9;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.04em;">Closed</span>
+                {% endif %}
+              </div>
+              <h3>{{ offering.title }}</h3>
+              <p style="margin-bottom:14px;font-size:13px;">
+                <strong style="color:var(--fin-primary);font-size:18px;">{{ offering.indicative_rate_pct }}%</strong> indicative p.a. ·
+                <strong style="color:var(--fin-primary);">{{ offering.tenure_months }}</strong> months
+              </p>
+              <p style="margin-bottom:14px;font-size:13px;color:var(--fin-muted);">
+                Min capital <strong style="color:var(--fin-primary);">TZS {{ offering.min_capital|floatformat:0 }}</strong> · {{ offering.get_payout_cadence_display }}
+              </p>
+              <a href="{% url 'financial:investment_detail' slug=offering.slug %}" class="f-btn f-btn-outline" style="padding:10px 20px;font-size:12px;">View Terms</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div style="text-align:center;padding:60px 20px;color:var(--fin-muted);">
+        <p>No investment offerings match this filter yet.</p>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<style>
+  .f-filter-chip { display:inline-flex; padding:9px 18px; font-size:13px; font-weight:600;
+    border-radius:24px; border:1.5px solid var(--fin-border); color:var(--fin-primary);
+    background:#fff; text-decoration:none; transition:all .2s; }
+  .f-filter-chip:hover { border-color:var(--fin-accent); color:var(--fin-accent-d); }
+  .f-filter-chip.active { background:var(--fin-primary); color:#fff; border-color:var(--fin-primary); }
+</style>
+
+{% include "financial/_disclaimer.html" %}
+
+{% endblock %}

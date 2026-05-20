@@ -1,0 +1,120 @@
+{% extends "financial/base_financial.html" %}
+{% load static %}
+
+{% block title %}Inquire About Investing — Bejundas Financial Services Ltd{% endblock %}
+{% block meta_description %}Inquire about private investment partnership opportunities with BEJUNDAS FINANCIAL SERVICES LTD. Indicative rates, quarterly payouts, minimum TZS 250,000.{% endblock %}
+
+{% block content %}
+
+<section class="f-page-hero">
+  <div class="f-container">
+    <span class="f-eyebrow">Investment Partnership</span>
+    <h1>Inquire About Investing</h1>
+  </div>
+</section>
+
+<section class="f-section">
+  <div class="f-container" style="max-width:880px;">
+
+    {% if offering %}
+      <div style="background:var(--fin-blue-soft);border-left:4px solid var(--fin-accent);padding:18px 22px;border-radius:6px;margin-bottom:30px;">
+        <div style="font-size:11px;font-weight:700;color:var(--fin-accent-d);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Inquiring About</div>
+        <div style="font-size:16px;font-weight:700;color:var(--fin-primary);">{{ offering.reference_id }} — {{ offering.title }}</div>
+        <div style="font-size:13px;color:var(--fin-muted);margin-top:4px;">{{ offering.indicative_rate_pct }}% indicative p.a. · {{ offering.tenure_months }} months · From TZS {{ offering.min_capital|floatformat:0 }}</div>
+      </div>
+    {% endif %}
+
+    {% if sent %}
+      <div class="f-form-success">Thanks — your inquiry is in. Our team will reach out shortly to discuss your interest{% if offering %} in {{ offering.reference_id }}{% endif %}.</div>
+    {% else %}
+      <p class="f-section-sub" style="margin-bottom:30px;">Tell us a little about your investment intent. We will reach out via your preferred channel to discuss terms and next steps.</p>
+    {% endif %}
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div style="background:#fee2e2;border:1px solid #fecaca;color:#991b1b;padding:14px 18px;border-radius:6px;margin-bottom:20px;">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+
+      <!-- Section 1 — Prospect -->
+      <div style="background:#fff;border:1px solid var(--fin-border);border-radius:8px;padding:28px;margin-bottom:24px;">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
+          <span style="width:32px;height:32px;background:var(--fin-primary);color:#fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;">1</span>
+          <h2 style="font-size:20px;font-weight:700;color:var(--fin-primary);margin:0;">About You</h2>
+        </div>
+        <div class="f-form-field">
+          <label for="{{ form.full_name.id_for_label }}">Full Name *</label>
+          {{ form.full_name }}
+          {% if form.full_name.errors %}<div class="errors">{{ form.full_name.errors|join:", " }}</div>{% endif %}
+        </div>
+        <div class="f-form-grid cols-2" style="margin-top:18px;">
+          <div class="f-form-field">
+            <label for="{{ form.email.id_for_label }}">Email *</label>
+            {{ form.email }}
+            {% if form.email.errors %}<div class="errors">{{ form.email.errors|join:", " }}</div>{% endif %}
+          </div>
+          <div class="f-form-field">
+            <label for="{{ form.phone.id_for_label }}">Phone *</label>
+            {{ form.phone }}
+            {% if form.phone.errors %}<div class="errors">{{ form.phone.errors|join:", " }}</div>{% endif %}
+          </div>
+        </div>
+        <div class="f-form-field" style="margin-top:18px;">
+          <label for="{{ form.preferred_contact.id_for_label }}">Preferred Contact Channel *</label>
+          {{ form.preferred_contact }}
+          {% if form.preferred_contact.errors %}<div class="errors">{{ form.preferred_contact.errors|join:", " }}</div>{% endif %}
+        </div>
+      </div>
+
+      <!-- Section 2 — Investment Intent -->
+      <div style="background:#fff;border:1px solid var(--fin-border);border-radius:8px;padding:28px;margin-bottom:24px;">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
+          <span style="width:32px;height:32px;background:var(--fin-primary);color:#fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;">2</span>
+          <h2 style="font-size:20px;font-weight:700;color:var(--fin-primary);margin:0;">Investment Intent</h2>
+        </div>
+        <div class="f-form-grid cols-2">
+          <div class="f-form-field">
+            <label for="{{ form.capital_band.id_for_label }}">Capital Band *</label>
+            {{ form.capital_band }}
+            {% if form.capital_band.errors %}<div class="errors">{{ form.capital_band.errors|join:", " }}</div>{% endif %}
+          </div>
+          <div class="f-form-field">
+            <label for="{{ form.preferred_tenure.id_for_label }}">Preferred Tenure *</label>
+            {{ form.preferred_tenure }}
+            {% if form.preferred_tenure.errors %}<div class="errors">{{ form.preferred_tenure.errors|join:", " }}</div>{% endif %}
+          </div>
+        </div>
+        <div class="f-form-field" style="margin-top:18px;">
+          <label for="{{ form.funding_source.id_for_label }}">Source of Funds *</label>
+          {{ form.funding_source }}
+          {% if form.funding_source.errors %}<div class="errors">{{ form.funding_source.errors|join:", " }}</div>{% endif %}
+        </div>
+      </div>
+
+      <!-- Section 3 — Notes -->
+      <div style="background:#fff;border:1px solid var(--fin-border);border-radius:8px;padding:28px;margin-bottom:24px;">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
+          <span style="width:32px;height:32px;background:var(--fin-primary);color:#fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;">3</span>
+          <h2 style="font-size:20px;font-weight:700;color:var(--fin-primary);margin:0;">Notes (Optional)</h2>
+        </div>
+        <div class="f-form-field">
+          <label for="{{ form.notes.id_for_label }}">Anything Else We Should Know?</label>
+          {{ form.notes }}
+          {% if form.notes.errors %}<div class="errors">{{ form.notes.errors|join:", " }}</div>{% endif %}
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <button type="submit" class="f-btn f-btn-primary" style="padding:16px 36px;font-size:14px;">Submit Inquiry</button>
+      </div>
+    </form>
+
+  </div>
+</section>
+
+{% include "financial/_disclaimer.html" with variant="investment" %}
+
+{% endblock %}

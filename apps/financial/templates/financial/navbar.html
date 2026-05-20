@@ -2,27 +2,27 @@
 <header class="header style-default header-fixed">
     <div class="tf-container">
         <div class="header-inner">
-            <a href="{% url 'construction:home' %}" class="site-logo c-brand-legal" aria-label="{{ app_theme.legal_name }}">
-                <span class="c-brand-legal__name">BEJUS SERVICES</span>
-                <span class="c-brand-legal__sub">ENGINEERING &amp; CONSTRUCTION (T) LTD</span>
+            <a href="{% url 'financial:home' %}" class="site-logo f-brand-legal" aria-label="{{ app_theme.legal_name }}">
+                <span class="f-brand-legal__name">BEJUNDAS FINANCIAL</span>
+                <span class="f-brand-legal__sub">SERVICES LTD</span>
             </a>
 
             <nav class="main-menu">
                 <ul class="navigation">
                     <li class="text-menu{% if request.resolver_match.url_name == 'home' %} active{% endif %}">
-                        <a href="{% url 'construction:home' %}" class="toggle">Home</a>
+                        <a href="{% url 'financial:home' %}" class="toggle">Home</a>
                     </li>
                     <li class="text-menu{% if request.resolver_match.url_name == 'about' %} active{% endif %}">
-                        <a href="{% url 'construction:about' %}" class="toggle">About</a>
+                        <a href="{% url 'financial:about' %}" class="toggle">About</a>
                     </li>
                     <li class="text-menu{% if request.resolver_match.url_name == 'services' %} active{% endif %}">
-                        <a href="{% url 'construction:services' %}" class="toggle">Services</a>
+                        <a href="{% url 'financial:services' %}" class="toggle">Services</a>
                     </li>
-                    <li class="text-menu{% if 'project' in request.resolver_match.url_name %} active{% endif %}">
-                        <a href="{% url 'construction:projects' %}" class="toggle">Projects</a>
+                    <li class="text-menu{% if 'investment' in request.resolver_match.url_name %} active{% endif %}">
+                        <a href="{% url 'financial:investments' %}" class="toggle">Investments</a>
                     </li>
                     <li class="text-menu{% if request.resolver_match.url_name == 'contact' %} active{% endif %}">
-                        <a href="{% url 'construction:contact' %}" class="toggle">Contact</a>
+                        <a href="{% url 'financial:contact' %}" class="toggle">Contact</a>
                     </li>
                     <li class="text-menu">
                         <a href="{% url 'hub:home' %}" class="toggle" style="color:#94a3b8;font-size:13px;">&larr; Bejundas Group</a>
@@ -31,8 +31,8 @@
             </nav>
 
             <div class="header-right d-flex align-items-center gap_20">
-                <a href="{% url 'construction:quote_request' %}" class="tf-btn btn-hover-animate-2">
-                    <span>Request a Quote</span>
+                <a href="{% url 'financial:invest_inquire' %}" class="tf-btn btn-hover-animate-2">
+                    <span>Invest With Us</span>
                     <span class="bg-effect"></span>
                 </a>
                 <div class="mobile-button d-lg-none" data-bs-toggle="offcanvas"

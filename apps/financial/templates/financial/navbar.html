@@ -12,6 +12,18 @@
                     <li class="text-menu{% if request.resolver_match.url_name == 'home' %} active{% endif %}">
                         <a href="{% url 'financial:home' %}" class="toggle">Home</a>
                     </li>
+                    <li class="text-menu{% if request.resolver_match.url_name == 'about' %} active{% endif %}">
+                        <a href="{% url 'financial:about' %}" class="toggle">About</a>
+                    </li>
+                    <li class="text-menu{% if request.resolver_match.url_name == 'services' %} active{% endif %}">
+                        <a href="{% url 'financial:services' %}" class="toggle">Services</a>
+                    </li>
+                    <li class="text-menu{% if 'investment' in request.resolver_match.url_name %} active{% endif %}">
+                        <a href="{% url 'financial:investments' %}" class="toggle">Investments</a>
+                    </li>
+                    <li class="text-menu{% if request.resolver_match.url_name == 'contact' %} active{% endif %}">
+                        <a href="{% url 'financial:contact' %}" class="toggle">Contact</a>
+                    </li>
                     <li class="text-menu">
                         <a href="{% url 'hub:home' %}" class="toggle" style="color:#94a3b8;font-size:13px;">&larr; Bejundas Group</a>
                     </li>
@@ -19,7 +31,7 @@
             </nav>
 
             <div class="header-right d-flex align-items-center gap_20">
-                <a href="{% url 'financial:home' %}" class="tf-btn btn-hover-animate-2">
+                <a href="{% url 'financial:investments' %}" class="tf-btn btn-hover-animate-2">
                     <span>Invest With Us</span>
                     <span class="bg-effect"></span>
                 </a>

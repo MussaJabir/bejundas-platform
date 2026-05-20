@@ -13,33 +13,24 @@
     <h1>Your Financing <span class="accent">Solutions</span> Partner.</h1>
     <p class="lead">A privately-held Tanzanian financial services provider offering microfinance, mobile network &amp; banking agency, government securities access, and private investment partnerships — built on trust, profit, and safety.</p>
     <div class="cta-row">
-      <a href="#values" class="f-btn f-btn-primary">Discover Our Approach</a>
-      <a href="{% url 'hub:contact' %}" class="f-btn f-btn-ghost">Get In Touch</a>
+      <a href="{% url 'financial:investments' %}" class="f-btn f-btn-primary">Explore Investments</a>
+      <a href="{% url 'financial:contact' %}" class="f-btn f-btn-ghost">Get In Touch</a>
     </div>
   </div>
 </section>
 
-<!-- ── Values strip (Salama · Faida · Uaminifu) ───────────────────── -->
-<section class="f-values-strip" id="values">
+<!-- ── Values strip ───────────────────────────────────────────────── -->
+<section class="f-values-strip">
   <div class="f-container">
     <div class="f-row" style="justify-content:center;text-align:center;">
-      <div class="f-col-3 value">
-        <div class="sw">Salama</div>
-        <div class="en">Safety</div>
-      </div>
-      <div class="f-col-3 value">
-        <div class="sw">Faida</div>
-        <div class="en">Profit</div>
-      </div>
-      <div class="f-col-3 value">
-        <div class="sw">Uaminifu</div>
-        <div class="en">Trust</div>
-      </div>
+      <div class="f-col-3 value"><div class="sw">Salama</div><div class="en">Safety</div></div>
+      <div class="f-col-3 value"><div class="sw">Faida</div><div class="en">Profit</div></div>
+      <div class="f-col-3 value"><div class="sw">Uaminifu</div><div class="en">Trust</div></div>
     </div>
   </div>
 </section>
 
-<!-- ── Brief about ─────────────────────────────────────────────────── -->
+<!-- ── About snippet ──────────────────────────────────────────────── -->
 <section class="f-section">
   <div class="f-container">
     <div class="f-row">
@@ -49,18 +40,84 @@
       </div>
       <div class="f-col-2">
         <p class="f-section-sub">BEJUNDAS FINANCIAL SERVICES LTD is a private company headquartered at Msakuzi - Mbezi, Ubungo Municipality in Dar es Salaam. We fund mixed business ventures and offer microfinance, agency banking, government securities access, and private investment partnerships to clients across Tanzania.</p>
-        <p class="f-section-sub" style="margin-top:14px;">Our services, products, and rounds are detailed in the sections being added in the coming weeks. In the meantime, reach us directly using the contact details below.</p>
+        <p style="margin-top:16px;"><a href="{% url 'financial:about' %}" class="f-btn f-btn-outline">Learn More About Us</a></p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── Build-in-progress note ──────────────────────────────────────── -->
+<!-- ── Featured services ──────────────────────────────────────────── -->
+{% if featured_services %}
+<section class="f-section f-section-soft">
+  <div class="f-container">
+    <div style="text-align:center;margin-bottom:50px;">
+      <span class="f-eyebrow">What We Offer</span>
+      <h2 class="f-section-title">Featured Services</h2>
+      <p class="f-section-sub" style="margin:0 auto;">From microfinance to government securities and private investment partnerships.</p>
+    </div>
+    <div class="f-row">
+      {% for service in featured_services %}
+        <div class="f-col-4">
+          <div class="f-card">
+            {% if service.icon %}
+              <div class="f-card-icon"><span class="material-symbols-outlined">{{ service.icon }}</span></div>
+            {% else %}
+              <div class="f-card-icon">&#9733;</div>
+            {% endif %}
+            <h3>{{ service.name }}</h3>
+            <p>{{ service.summary }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div style="text-align:center;margin-top:40px;">
+      <a href="{% url 'financial:services' %}" class="f-btn f-btn-navy">See All Services</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ── Featured investment offerings ──────────────────────────────── -->
+{% if featured_offerings %}
+<section class="f-section">
+  <div class="f-container">
+    <div style="text-align:center;margin-bottom:50px;">
+      <span class="f-eyebrow">Current Rounds</span>
+      <h2 class="f-section-title">Featured Investment Offerings</h2>
+      <p class="f-section-sub" style="margin:0 auto;">Private placement opportunities open to qualified Tanzanian investors. Indicative returns — not guaranteed.</p>
+    </div>
+    <div class="f-row">
+      {% for offering in featured_offerings %}
+        <div class="f-col-3">
+          <div class="f-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <code style="font-size:11px;background:#fdf8e9;color:#a98a35;padding:2px 8px;border-radius:4px;">{{ offering.reference_id }}</code>
+              <span style="font-size:11px;font-weight:700;color:#166534;background:#dcfce7;padding:2px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.04em;">{{ offering.get_status_display }}</span>
+            </div>
+            <h3>{{ offering.title }}</h3>
+            <p style="margin-bottom:14px;">
+              <strong style="color:#0a2342;">{{ offering.indicative_rate_pct }}%</strong> p.a. indicative ·
+              <strong style="color:#0a2342;">{{ offering.tenure_months }}</strong> months ·
+              From <strong style="color:#0a2342;">TZS {{ offering.min_capital|floatformat:0 }}</strong>
+            </p>
+            <a href="{% url 'financial:investment_detail' slug=offering.slug %}" class="f-btn f-btn-outline" style="padding:10px 20px;font-size:12px;">View Terms</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div style="text-align:center;margin-top:40px;">
+      <a href="{% url 'financial:investments' %}" class="f-btn f-btn-primary">See All Rounds</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ── CTA banner ─────────────────────────────────────────────────── -->
 <section class="f-section f-section-soft">
   <div class="f-container">
     <div class="f-cta-banner">
-      <h2>Full Services Catalogue Coming Soon</h2>
-      <p>Loan products, investment offerings (BFS/IO/2026/01 &amp; /02), agency banking partnerships, and online applications are being added shortly. Speak with us directly today.</p>
+      <h2>Ready to Discuss a Partnership?</h2>
+      <p>Speak with us about loans, investment rounds, or agency banking. Direct WhatsApp or schedule a call back.</p>
       <a href="https://wa.me/255764764011" class="f-btn f-btn-primary" target="_blank" rel="noopener">WhatsApp 0764 76 40 11</a>
     </div>
   </div>

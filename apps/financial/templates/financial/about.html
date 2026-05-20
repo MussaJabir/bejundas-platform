@@ -1,0 +1,88 @@
+{% extends "financial/base_financial.html" %}
+{% load static %}
+
+{% block title %}About — Bejundas Financial Services Ltd{% endblock %}
+{% block meta_description %}About BEJUNDAS FINANCIAL SERVICES LTD — a privately-held Tanzanian financial services provider headquartered in Dar es Salaam. Salama, Faida, Uaminifu.{% endblock %}
+
+{% block content %}
+
+<section class="f-page-hero">
+  <div class="f-container">
+    <span class="f-eyebrow">About Us</span>
+    <h1>A Tanzanian Financial Services Provider, Privately Held.</h1>
+  </div>
+</section>
+
+<section class="f-section">
+  <div class="f-container">
+    <div class="f-row">
+      <div class="f-col-2">
+        <span class="f-eyebrow">Who We Are</span>
+        <h2 class="f-section-title">Built on Salama, Faida, Uaminifu.</h2>
+        <p class="f-section-sub">BEJUNDAS FINANCIAL SERVICES LTD is a privately-held Tanzanian limited company headquartered at Msakuzi - Mbezi, North Local Government Offices, Ubungo Municipality in Dar es Salaam.</p>
+        <p class="f-section-sub" style="margin-top:14px;">We are a financial services provider funding mixed business ventures including mobile network &amp; banking agency, banking branch franchising, mutual-fund investments, government treasury bills and bonds, stock market business at the Dar es Salaam Stock Exchange, microfinancing (personal, corporate, and group loans) at favourable and affordable rates with negotiable repayment schedules, and refinancing against retail businesses.</p>
+      </div>
+      <div class="f-col-2">
+        <div style="background:var(--fin-blue-soft);border-left:4px solid var(--fin-accent);padding:30px 28px;border-radius:8px;">
+          <h3 style="font-size:18px;color:var(--fin-primary);margin-bottom:18px;">Our Values</h3>
+          <ul style="list-style:none;padding:0;margin:0;display:grid;gap:18px;">
+            <li><strong style="color:var(--fin-accent-d);font-size:16px;">Salama —</strong> Safety in how we manage capital, partnerships, and client relationships.</li>
+            <li><strong style="color:var(--fin-accent-d);font-size:16px;">Faida —</strong> Profitability for our clients and the businesses we fund.</li>
+            <li><strong style="color:var(--fin-accent-d);font-size:16px;">Uaminifu —</strong> Trust earned through transparency and consistent delivery.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if certifications %}
+<section class="f-section f-section-soft">
+  <div class="f-container">
+    <div style="text-align:center;margin-bottom:40px;">
+      <span class="f-eyebrow">Registrations</span>
+      <h2 class="f-section-title">Registered &amp; Compliant</h2>
+    </div>
+    <div class="f-row" style="justify-content:center;">
+      {% for cert in certifications %}
+        <div class="f-col-3">
+          <div class="f-card" style="text-align:center;">
+            <h3>{{ cert.name }}</h3>
+            <p>{{ cert.issuer }}{% if cert.reference_number %} · Ref {{ cert.reference_number }}{% endif %}{% if cert.year_awarded %} · {{ cert.year_awarded }}{% endif %}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if testimonials %}
+<section class="f-section">
+  <div class="f-container">
+    <div style="text-align:center;margin-bottom:40px;">
+      <span class="f-eyebrow">Client Voices</span>
+      <h2 class="f-section-title">What Our Clients Say</h2>
+    </div>
+    <div class="f-row">
+      {% for t in testimonials %}
+        <div class="f-col-3">
+          <div class="f-card">
+            <p style="font-style:italic;color:var(--fin-text);margin-bottom:14px;">&ldquo;{{ t.quote }}&rdquo;</p>
+            <p style="margin:0;font-weight:700;color:var(--fin-primary);">{{ t.author_name }}{% if t.author_role %} <span style="color:var(--fin-muted);font-weight:400;">— {{ t.author_role }}</span>{% endif %}</p>
+            {% if t.organisation %}<p style="margin:4px 0 0;color:var(--fin-muted);font-size:13px;">{{ t.organisation }}</p>{% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<aside class="f-disclaimer">
+  <div class="f-container">
+    <p style="margin:0;"><strong>Regulatory notice.</strong> BEJUNDAS FINANCIAL SERVICES LTD is a privately-held Tanzanian limited company. Investment opportunities offered are private placements and are not deposits, are not insured by the Bank of Tanzania or the Deposit Insurance Board, and are not securities registered with the Capital Markets and Securities Authority. Projected returns are indicative, not guaranteed.</p>
+  </div>
+</aside>
+
+{% endblock %}

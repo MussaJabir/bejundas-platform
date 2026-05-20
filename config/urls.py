@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.urls import include, path
 
 from apps.construction.sitemaps import ConstructionStaticSitemap, ProjectSitemap
+from apps.financial.sitemaps import FinancialStaticSitemap, InvestmentOfferingSitemap
 from apps.hub.sitemaps import HubStaticSitemap, NewsSitemap
 
 sitemaps = {
@@ -12,6 +13,8 @@ sitemaps = {
     "news": NewsSitemap,
     "construction": ConstructionStaticSitemap,
     "construction_projects": ProjectSitemap,
+    "financial": FinancialStaticSitemap,
+    "financial_offerings": InvestmentOfferingSitemap,
 }
 
 

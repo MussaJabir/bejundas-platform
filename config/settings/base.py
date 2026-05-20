@@ -235,6 +235,43 @@ UNFOLD = {
                 ],
             },
             {
+                "title": "Financial",
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": "Services",
+                        "icon": "savings",
+                        "link": reverse_lazy("admin:financial_financialservice_changelist"),
+                    },
+                    {
+                        "title": "Investment Offerings",
+                        "icon": "trending_up",
+                        "link": reverse_lazy("admin:financial_investmentoffering_changelist"),
+                    },
+                    {
+                        "title": "Testimonials",
+                        "icon": "format_quote",
+                        "link": reverse_lazy("admin:financial_testimonial_changelist"),
+                    },
+                    {
+                        "title": "Certifications",
+                        "icon": "verified",
+                        "link": reverse_lazy("admin:financial_certification_changelist"),
+                    },
+                    {
+                        "title": "Loan Inquiries",
+                        "icon": "request_quote",
+                        "link": reverse_lazy("admin:financial_loaninquiry_changelist"),
+                    },
+                    {
+                        "title": "Investment Inquiries",
+                        "icon": "handshake",
+                        "link": reverse_lazy("admin:financial_investmentinquiry_changelist"),
+                    },
+                ],
+            },
+            {
                 "title": "Site Settings",
                 "separator": True,
                 "collapsible": True,

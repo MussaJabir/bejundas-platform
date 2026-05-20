@@ -117,10 +117,6 @@
 </section>
 {% endif %}
 
-<aside class="f-disclaimer">
-  <div class="f-container">
-    <p style="margin:0;"><strong>Regulatory notice.</strong> This is a private placement offered by BEJUNDAS FINANCIAL SERVICES LTD, a privately-held Tanzanian limited company. It is not a deposit, is not insured by the Bank of Tanzania or the Deposit Insurance Board, and is not a security registered with the Capital Markets and Securities Authority. The rate shown is indicative — actual returns depend on the performance of the underlying ventures and are not guaranteed. Speak with us before committing capital.</p>
-  </div>
-</aside>
+{% include "financial/_disclaimer.html" with variant="investment" %}
 
 {% endblock %}

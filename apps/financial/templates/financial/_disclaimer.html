@@ -1,0 +1,20 @@
+{% comment %}
+Regulatory disclaimer partial.
+Variants: default | investment | loan | services | contact.
+Use: {% include "financial/_disclaimer.html" with variant="investment" %}
+{% endcomment %}
+<aside class="f-disclaimer">
+  <div class="f-container">
+    {% if variant == "investment" %}
+      <p style="margin:0;"><strong>Regulatory notice.</strong> Investment opportunities offered by BEJUNDAS FINANCIAL SERVICES LTD are private placements. They are not deposits, are not insured by the Bank of Tanzania or the Deposit Insurance Board, and are not securities registered with the Capital Markets and Securities Authority. Projected returns are indicative, not guaranteed. Submitting an inquiry does not constitute a commitment.</p>
+    {% elif variant == "loan" %}
+      <p style="margin:0;"><strong>Regulatory notice.</strong> Submitting a loan application does not constitute approval. BEJUNDAS FINANCIAL SERVICES LTD reviews each application against internal due-diligence criteria. Indicative rates and tenures may change after review. KYC documentation will be requested separately.</p>
+    {% elif variant == "services" %}
+      <p style="margin:0;"><strong>Regulatory notice.</strong> BEJUNDAS FINANCIAL SERVICES LTD is a privately-held Tanzanian limited company. Loan, investment, and securities-related services are subject to internal due diligence and applicable Tanzanian law.</p>
+    {% elif variant == "contact" %}
+      <p style="margin:0;"><strong>Regulatory notice.</strong> BEJUNDAS FINANCIAL SERVICES LTD is a privately-held Tanzanian limited company. This form is for general enquiries — investment commitments and loan applications follow a separate workflow.</p>
+    {% else %}
+      <p style="margin:0;"><strong>Regulatory notice.</strong> BEJUNDAS FINANCIAL SERVICES LTD is a privately-held Tanzanian limited company. Investment opportunities offered are private placements and are not deposits, are not insured by the Bank of Tanzania or the Deposit Insurance Board, and are not securities registered with the Capital Markets and Securities Authority. Projected returns are indicative, not guaranteed.</p>
+    {% endif %}
+  </div>
+</aside>

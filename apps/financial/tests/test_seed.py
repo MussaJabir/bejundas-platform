@@ -10,14 +10,27 @@ from apps.financial.models import FinancialService, InvestmentOffering, Testimon
 
 @pytest.mark.django_db
 class TestSeededContent:
-    def test_9_services_seeded(self):
-        assert FinancialService.objects.count() == 9
+    def test_total_services_seeded(self):
+        # 9 from 0002 (loans / agency / securities / auto) + 15 from 0003 (insurance) = 24.
+        assert FinancialService.objects.count() == 24
 
-    def test_services_cover_four_categories(self):
+    def test_services_cover_five_categories(self):
         categories = set(FinancialService.objects.values_list("category", flat=True))
-        # Phase 5 seed covers loans / agency / securities / auto (no 'investments'
-        # service rows — that category points users at /financial/investments/).
-        assert categories == {"loans", "agency", "securities", "auto"}
+        # 'investments' is intentionally absent — that filter points users at /financial/investments/.
+        assert categories == {"loans", "agency", "securities", "auto", "insurance"}
+
+    def test_15_insurance_products_seeded(self):
+        assert FinancialService.objects.filter(category="insurance").count() == 15
+
+    def test_insurance_products_all_have_icons(self):
+        for service in FinancialService.objects.filter(category="insurance"):
+            assert service.icon, f"{service.name} is missing a Material Symbols icon"
+
+    def test_specific_insurance_product_seeded(self):
+        # Spot-check one entry matches the client poster verbatim.
+        assert FinancialService.objects.filter(
+            slug="motor-vehicle-insurance-and-goods-in-transit"
+        ).exists()
 
     def test_2_offerings_seeded(self):
         assert InvestmentOffering.objects.count() == 2

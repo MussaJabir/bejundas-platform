@@ -47,6 +47,7 @@ _CATEGORY_COLOURS = {
     "agency": ("#dcfce7", "#166534"),
     "securities": ("#e0e7ff", "#4338ca"),
     "auto": ("#fee2e2", "#b91c1c"),
+    "insurance": ("#cffafe", "#0e7490"),
 }
 
 

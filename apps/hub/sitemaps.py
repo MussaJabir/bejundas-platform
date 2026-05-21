@@ -11,7 +11,6 @@ STATIC_PAGES = [
     ("hub:team", 0.6, "monthly"),
     ("hub:contact", 0.8, "monthly"),
     ("leads:energies", 0.7, "monthly"),
-    ("leads:farming", 0.7, "monthly"),
     ("leads:investments", 0.7, "monthly"),
 ]
 

@@ -42,9 +42,9 @@ class TestRoutingHandoff:
             reverse("leads:financial")
 
     def test_other_coming_soon_routes_still_resolve(self):
-        """Sanity — energies/farming/investments are still in apps.leads."""
+        """Sanity — energies and investments are still in apps.leads.
+        (farming was moved out by its own Phase 1.)"""
         assert reverse("leads:energies") == "/energies/"
-        assert reverse("leads:farming") == "/farming/"
         assert reverse("leads:investments") == "/investments/"
 
 

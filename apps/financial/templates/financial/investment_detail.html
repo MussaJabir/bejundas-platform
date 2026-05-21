@@ -1,5 +1,6 @@
 {% extends "financial/base_financial.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}{{ offering.reference_id }} — {{ offering.title }} — Bejundas Financial Services{% endblock %}
 {% block meta_description %}{{ offering.title }} — {{ offering.indicative_rate_pct }}% indicative p.a., {{ offering.tenure_months }}-month tenure. Reference {{ offering.reference_id }}. Private placement by BEJUNDAS FINANCIAL SERVICES LTD.{% endblock %}
@@ -20,57 +21,137 @@
         <span class="f-eyebrow">Round Terms</span>
         <h2 class="f-section-title" style="font-size:28px;">Key Terms</h2>
 
-        <table style="width:100%;border-collapse:collapse;margin-top:18px;">
-          <tbody>
-            <tr style="border-bottom:1px solid var(--fin-border);">
-              <td style="padding:14px 0;color:var(--fin-muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Reference</td>
-              <td style="padding:14px 0;color:var(--fin-primary);font-weight:700;text-align:right;">{{ offering.reference_id }}</td>
-            </tr>
-            <tr style="border-bottom:1px solid var(--fin-border);">
-              <td style="padding:14px 0;color:var(--fin-muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Indicative Rate</td>
-              <td style="padding:14px 0;color:var(--fin-primary);font-weight:700;text-align:right;">{{ offering.indicative_rate_pct }}% p.a.</td>
-            </tr>
-            <tr style="border-bottom:1px solid var(--fin-border);">
-              <td style="padding:14px 0;color:var(--fin-muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Tenure</td>
-              <td style="padding:14px 0;color:var(--fin-primary);font-weight:700;text-align:right;">{{ offering.tenure_months }} months</td>
-            </tr>
-            <tr style="border-bottom:1px solid var(--fin-border);">
-              <td style="padding:14px 0;color:var(--fin-muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Minimum Capital</td>
-              <td style="padding:14px 0;color:var(--fin-primary);font-weight:700;text-align:right;">TZS {{ offering.min_capital|floatformat:0 }}</td>
-            </tr>
-            <tr style="border-bottom:1px solid var(--fin-border);">
-              <td style="padding:14px 0;color:var(--fin-muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Payout Cadence</td>
-              <td style="padding:14px 0;color:var(--fin-primary);font-weight:700;text-align:right;">{{ offering.get_payout_cadence_display }}</td>
-            </tr>
+        <!-- ── Hero stat strip (3 marketing-grade headline numbers) ── -->
+        <div class="f-terms-hero">
+          <div class="f-stat">
+            <div class="f-stat__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+            <div class="f-stat__lbl">Indicative Rate</div>
+            <div class="f-stat__val">{{ offering.indicative_rate_pct }}<span class="f-stat__suf">% p.a.</span></div>
+          </div>
+          <div class="f-stat">
+            <div class="f-stat__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="f-stat__lbl">Tenure</div>
+            <div class="f-stat__val">{{ offering.tenure_months }}<span class="f-stat__suf">months</span></div>
+          </div>
+          <div class="f-stat">
+            <div class="f-stat__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div class="f-stat__lbl">Min Capital</div>
+            <div class="f-stat__val f-stat__val--small">TZS {{ offering.min_capital|floatformat:0|intcomma }}</div>
+          </div>
+        </div>
+
+        <!-- ── Detail panel ── -->
+        <div class="f-terms-panel">
+          <dl class="f-terms-list">
+            <div class="f-terms-row">
+              <dt>Reference</dt>
+              <dd><code class="f-terms-ref">{{ offering.reference_id }}</code></dd>
+            </div>
+            <div class="f-terms-row">
+              <dt>Payout Cadence</dt>
+              <dd>{{ offering.get_payout_cadence_display }}</dd>
+            </div>
             {% if offering.opens_at %}
-            <tr style="border-bottom:1px solid var(--fin-border);">
-              <td style="padding:14px 0;color:var(--fin-muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Opens</td>
-              <td style="padding:14px 0;color:var(--fin-primary);font-weight:700;text-align:right;">{{ offering.opens_at|date:"d M Y" }}</td>
-            </tr>
+            <div class="f-terms-row">
+              <dt>Opens</dt>
+              <dd>{{ offering.opens_at|date:"d M Y" }}</dd>
+            </div>
             {% endif %}
             {% if offering.closes_at %}
-            <tr style="border-bottom:1px solid var(--fin-border);">
-              <td style="padding:14px 0;color:var(--fin-muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Closes</td>
-              <td style="padding:14px 0;color:var(--fin-primary);font-weight:700;text-align:right;">{{ offering.closes_at|date:"d M Y" }}</td>
-            </tr>
+            <div class="f-terms-row">
+              <dt>Capital Deadline</dt>
+              <dd>{{ offering.closes_at|date:"d M Y" }}</dd>
+            </div>
             {% endif %}
             {% if offering.settlement_date %}
-            <tr style="border-bottom:1px solid var(--fin-border);">
-              <td style="padding:14px 0;color:var(--fin-muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Principal Returned</td>
-              <td style="padding:14px 0;color:var(--fin-primary);font-weight:700;text-align:right;">{{ offering.settlement_date|date:"d M Y" }}</td>
-            </tr>
+            <div class="f-terms-row">
+              <dt>Principal Returned</dt>
+              <dd><strong>{{ offering.settlement_date|date:"d M Y" }}</strong></dd>
+            </div>
             {% endif %}
-            <tr>
-              <td style="padding:14px 0;color:var(--fin-muted);font-size:13px;text-transform:uppercase;letter-spacing:.04em;font-weight:600;">Status</td>
-              <td style="padding:14px 0;color:var(--fin-primary);font-weight:700;text-align:right;text-transform:uppercase;">{{ offering.get_status_display }}</td>
-            </tr>
-          </tbody>
-        </table>
+            <div class="f-terms-row">
+              <dt>Status</dt>
+              <dd>
+                {% if offering.status == 'open' %}
+                  <span class="f-status f-status--open">● Open</span>
+                {% elif offering.status == 'upcoming' %}
+                  <span class="f-status f-status--upcoming">● Upcoming</span>
+                {% else %}
+                  <span class="f-status f-status--closed">● Closed</span>
+                {% endif %}
+              </dd>
+            </div>
+          </dl>
+        </div>
 
         <p style="margin-top:30px;">
           <a href="{% url 'financial:invest_inquire' %}?offering={{ offering.slug }}" class="f-btn f-btn-primary">Inquire About This Round</a>
         </p>
       </div>
+
+      <style>
+        /* ── Hero stat strip ── */
+        .f-terms-hero { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+            margin-top: 22px; margin-bottom: 22px; }
+        .f-stat { background: linear-gradient(160deg, var(--fin-primary) 0%, var(--fin-primary-d) 100%);
+            color: #fff; padding: 22px 18px; border-radius: 10px; text-align: left;
+            position: relative; overflow: hidden; border-top: 3px solid var(--fin-accent); }
+        .f-stat::after { content: ''; position: absolute; right: -30px; bottom: -30px;
+            width: 90px; height: 90px; background: var(--fin-accent); opacity: .08; border-radius: 50%; }
+        .f-stat__icon { width: 32px; height: 32px; background: rgba(201, 168, 76, .15);
+            color: var(--fin-accent); border-radius: 8px; display: flex; align-items: center;
+            justify-content: center; margin-bottom: 14px; }
+        .f-stat__icon svg { width: 16px; height: 16px; }
+        .f-stat__lbl { font-size: 10.5px; font-weight: 700; letter-spacing: .12em;
+            text-transform: uppercase; color: #cbd5e1; margin-bottom: 6px; }
+        .f-stat__val { font-size: 28px; font-weight: 800; color: var(--fin-accent);
+            line-height: 1.1; letter-spacing: -.02em; }
+        .f-stat__val--small { font-size: 19px; }
+        .f-stat__suf { font-size: 13px; font-weight: 600; color: #cbd5e1;
+            margin-left: 4px; letter-spacing: 0; }
+
+        /* ── Detail panel ── */
+        .f-terms-panel { background: #fff; border: 1px solid var(--fin-border);
+            border-radius: 10px; padding: 4px 22px; }
+        .f-terms-list { margin: 0; padding: 0; }
+        .f-terms-row { display: flex; align-items: center; justify-content: space-between;
+            gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--fin-border); }
+        .f-terms-row:last-child { border-bottom: none; }
+        .f-terms-row dt { color: var(--fin-muted); font-size: 12.5px; font-weight: 600;
+            letter-spacing: .06em; text-transform: uppercase; margin: 0; }
+        .f-terms-row dd { color: var(--fin-primary); font-weight: 600; font-size: 14px;
+            text-align: right; margin: 0; }
+        .f-terms-row dd strong { font-weight: 800; }
+        .f-terms-ref { font-family: 'Courier New', monospace; font-size: 12px;
+            background: var(--fin-soft); color: var(--fin-accent-d);
+            padding: 4px 10px; border-radius: 4px; }
+
+        /* ── Status pill ── */
+        .f-status { display: inline-block; font-size: 11px; font-weight: 700;
+            letter-spacing: .08em; text-transform: uppercase; padding: 4px 12px;
+            border-radius: 12px; }
+        .f-status--open     { background: #dcfce7; color: #166534; }
+        .f-status--upcoming { background: #dbeafe; color: #1d4ed8; }
+        .f-status--closed   { background: #f1f5f9; color: #64748b; }
+
+        /* ── Mobile ── */
+        @media (max-width: 768px) {
+            .f-terms-hero { grid-template-columns: 1fr 1fr; }
+            .f-stat__val { font-size: 22px; }
+            .f-stat__val--small { font-size: 16px; }
+        }
+        @media (max-width: 480px) {
+            .f-terms-hero { grid-template-columns: 1fr; }
+            .f-terms-panel { padding: 4px 16px; }
+            .f-terms-row { padding: 12px 0; }
+        }
+      </style>
 
       <div class="f-col-2">
         <span class="f-eyebrow">About This Round</span>

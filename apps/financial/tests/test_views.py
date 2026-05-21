@@ -113,6 +113,55 @@ class TestInnerPages:
         assert "financial/investment_detail.html" in [t.name for t in response.templates]
         assert b"Test Detail Round" in response.content
 
+    def test_investment_detail_renders_hero_stats_with_intcomma(self):
+        """Phase-polish — Key Terms is now a 3-card hero stat strip;
+        TZS capital is formatted with thousands separators."""
+        offering = InvestmentOffering.objects.create(
+            reference_id="TEST/IO/2026/HERO",
+            title="Hero Stat Round",
+            tenure_months=24,
+            indicative_rate_pct=Decimal("18.00"),
+            min_capital=Decimal("1500000.00"),
+        )
+        response = Client().get(f"/financial/investments/{offering.slug}/")
+        body = response.content.decode()
+        # Hero stat strip elements present
+        assert "f-terms-hero" in body
+        assert "Indicative Rate" in body
+        assert "Tenure" in body
+        assert "Min Capital" in body
+        # intcomma formatting (1500000 → 1,500,000), not raw integer
+        assert "TZS 1,500,000" in body
+        assert "TZS 1500000" not in body
+
+    def test_investment_detail_status_pill_open(self):
+        offering = InvestmentOffering.objects.create(
+            reference_id="TEST/IO/2026/OPEN",
+            title="Open Round",
+            tenure_months=12,
+            indicative_rate_pct=Decimal("16.50"),
+            min_capital=Decimal("250000.00"),
+            status="open",
+        )
+        response = Client().get(f"/financial/investments/{offering.slug}/")
+        body = response.content.decode()
+        assert "f-status--open" in body
+        assert "● Open" in body
+
+    def test_investment_detail_status_pill_closed(self):
+        offering = InvestmentOffering.objects.create(
+            reference_id="TEST/IO/2026/CLOSE",
+            title="Closed Round",
+            tenure_months=12,
+            indicative_rate_pct=Decimal("16.50"),
+            min_capital=Decimal("250000.00"),
+            status="closed",
+        )
+        response = Client().get(f"/financial/investments/{offering.slug}/")
+        body = response.content.decode()
+        assert "f-status--closed" in body
+        assert "● Closed" in body
+
     def test_investment_detail_404_for_unknown_slug(self):
         response = Client().get("/financial/investments/does-not-exist/")
         assert response.status_code == 404

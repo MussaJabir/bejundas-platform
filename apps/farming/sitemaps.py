@@ -6,6 +6,7 @@ STATIC_PAGES = [
     ("farming:about", 0.7, "monthly"),
     ("farming:products", 0.8, "monthly"),
     ("farming:farms", 0.7, "monthly"),
+    ("farming:order", 0.8, "monthly"),
     ("farming:contact", 0.7, "monthly"),
 ]
 

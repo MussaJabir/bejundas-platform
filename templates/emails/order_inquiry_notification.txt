@@ -1,0 +1,27 @@
+NEW ORDER INQUIRY — Bejundas Farming
+=====================================
+
+Submitted: {{ inquiry.created_at|date:"d M Y, H:i" }}
+
+BUYER
+-----
+Name:               {{ inquiry.full_name }}
+{% if inquiry.organisation %}Organisation:       {{ inquiry.organisation }}
+{% endif %}Email:              {{ inquiry.email }}
+Phone:              {{ inquiry.phone }}
+Preferred contact:  {{ inquiry.get_preferred_contact_display }}
+
+ORDER
+-----
+Inquiry type:       {{ inquiry.get_inquiry_type_display }}
+Frequency:          {{ inquiry.get_frequency_display }}
+Products:           {{ inquiry.products_of_interest }}
+{% if inquiry.quantity %}Quantity:           {{ inquiry.quantity }}
+{% endif %}{% if inquiry.delivery_location %}Delivery location:  {{ inquiry.delivery_location }}
+{% endif %}
+{% if inquiry.notes %}NOTES
+-----
+{{ inquiry.notes }}
+{% endif %}
+---
+Review and respond in the admin: {{ site_url }}admin/farming/orderinquiry/{{ inquiry.id }}/change/

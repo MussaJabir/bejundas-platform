@@ -21,6 +21,9 @@
                     <li class="text-menu{% if request.resolver_match.url_name == 'farms' %} active{% endif %}">
                         <a href="{% url 'farming:farms' %}" class="toggle">Our Farms</a>
                     </li>
+                    <li class="text-menu{% if request.resolver_match.url_name == 'order' %} active{% endif %}">
+                        <a href="{% url 'farming:order' %}" class="toggle">Place an Order</a>
+                    </li>
                     <li class="text-menu{% if request.resolver_match.url_name == 'contact' %} active{% endif %}">
                         <a href="{% url 'farming:contact' %}" class="toggle">Contact</a>
                     </li>
@@ -31,8 +34,8 @@
             </nav>
 
             <div class="header-right d-flex align-items-center gap_20">
-                <a href="{% url 'farming:contact' %}" class="tf-btn btn-hover-animate-2">
-                    <span>Talk to Us</span>
+                <a href="{% url 'farming:order' %}" class="tf-btn btn-hover-animate-2">
+                    <span>Place an Order</span>
                     <span class="bg-effect"></span>
                 </a>
                 <div class="mobile-button d-lg-none" data-bs-toggle="offcanvas"

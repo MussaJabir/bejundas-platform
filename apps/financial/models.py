@@ -13,6 +13,7 @@ SERVICE_CATEGORY_CHOICES = [
     ("agency", "Agency & Franchising"),
     ("securities", "Government Securities & DSE"),
     ("auto", "Auto & Asset Services"),
+    ("insurance", "Insurance Products"),
 ]
 
 

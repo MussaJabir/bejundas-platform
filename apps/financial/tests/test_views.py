@@ -201,6 +201,47 @@ class TestServicesCategoryFilter:
 
 
 @pytest.mark.django_db
+class TestInsuranceCategory:
+    """The May 2026 client poster added a 6th category — insurance products."""
+
+    def test_insurance_chip_rendered(self):
+        response = Client().get("/financial/services/")
+        assert b"Insurance Products" in response.content
+
+    def test_insurance_filter_returns_seeded_15(self):
+        response = Client().get("/financial/services/?category=insurance")
+        assert response.context["active_category"] == "insurance"
+        assert len(response.context["services"]) == 15
+        for s in response.context["services"]:
+            assert s.category == "insurance"
+
+    def test_insurance_tailoring_tagline_shown_only_for_insurance(self):
+        tagline = b"All products can be tailored to individual client needs"
+        # Visible when insurance chip is active.
+        response = Client().get("/financial/services/?category=insurance")
+        assert tagline in response.content
+        # Hidden when no filter / a different category is active.
+        response = Client().get("/financial/services/")
+        assert tagline not in response.content
+        response = Client().get("/financial/services/?category=loans")
+        assert tagline not in response.content
+
+
+@pytest.mark.django_db
+class TestMaterialSymbolsFontLoaded:
+    """Without the Google Fonts stylesheet the icon ligatures render as literal text
+    ('person', 'business' ...) — the bug reported on 2026-05-21."""
+
+    def test_font_link_present_on_home(self):
+        response = Client().get("/financial/")
+        assert b"Material+Symbols+Outlined" in response.content
+
+    def test_font_link_present_on_services(self):
+        response = Client().get("/financial/services/")
+        assert b"Material+Symbols+Outlined" in response.content
+
+
+@pytest.mark.django_db
 class TestInvestmentsStatusFilter:
     """Investments list filter narrows by status deterministically."""
 

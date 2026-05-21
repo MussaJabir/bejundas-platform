@@ -40,7 +40,7 @@ def app_theme(request):
             "primary": "#2d5a27",
             "accent": "#8bc34a",
             "label": "Farming",
-            "legal_name": "",
+            "legal_name": "BEJUNDAS FARMING LTD",
         },
         "investments": {
             "primary": "#1a0533",

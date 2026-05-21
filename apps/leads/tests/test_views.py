@@ -4,9 +4,10 @@ from django.test import Client
 from apps.leads.models import Lead, VerticalPlaceholder
 
 # Phase-1 of the financial vertical moved /financial/ off the Coming Soon
-# view (now served by apps.financial). These tests now exercise the
-# remaining placeholder vertical /energies/ to verify the lead-capture
-# Coming Soon page still works.
+# view (now served by apps.financial). Phase-1 of farming did the same for
+# /farming/ (now served by apps.farming). These tests exercise the
+# remaining placeholder verticals /energies/ and /investments/ to verify
+# the lead-capture Coming Soon page still works.
 
 
 @pytest.fixture
@@ -29,12 +30,12 @@ class TestComingSoonView:
         assert response.context["placeholder"] == energies_placeholder
 
     def test_inactive_placeholder_not_shown(self, db):
-        VerticalPlaceholder.objects.filter(vertical="farming").update(is_active=False)
+        VerticalPlaceholder.objects.filter(vertical="investments").update(is_active=False)
         try:
-            response = Client().get("/farming/")
+            response = Client().get("/investments/")
             assert response.context["placeholder"] is None
         finally:
-            VerticalPlaceholder.objects.filter(vertical="farming").update(is_active=True)
+            VerticalPlaceholder.objects.filter(vertical="investments").update(is_active=True)
 
     def test_valid_form_creates_lead(self, energies_placeholder):
         Client().post(

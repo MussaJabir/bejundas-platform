@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.urls import include, path
 
 from apps.construction.sitemaps import ConstructionStaticSitemap, ProjectSitemap
+from apps.farming.sitemaps import FarmingStaticSitemap
 from apps.financial.sitemaps import FinancialStaticSitemap, InvestmentOfferingSitemap
 from apps.hub.sitemaps import HubStaticSitemap, NewsSitemap
 
@@ -15,6 +16,7 @@ sitemaps = {
     "construction_projects": ProjectSitemap,
     "financial": FinancialStaticSitemap,
     "financial_offerings": InvestmentOfferingSitemap,
+    "farming": FarmingStaticSitemap,
 }
 
 
@@ -38,6 +40,7 @@ urlpatterns = [
     path("robots.txt", robots_txt, name="robots_txt"),
     path("construction/", include("apps.construction.urls")),
     path("financial/", include("apps.financial.urls")),
+    path("farming/", include("apps.farming.urls")),
     path("", include("apps.leads.urls")),
     path("", include("apps.hub.urls")),
 ]

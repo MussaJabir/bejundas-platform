@@ -54,9 +54,15 @@ class TestAppThemeLegalName:
         theme = app_theme(req)["app_theme"]
         assert theme["label"] == "Bejundas Group"
 
+    def test_farming_returns_bfl_legal_entity(self):
+        theme = app_theme(_request_with_match(app_name="farming"))["app_theme"]
+        assert theme["legal_name"] == "BEJUNDAS FARMING LTD"
+        assert theme["primary"] == "#2d5a27"
+        assert theme["accent"] == "#8bc34a"
+
     @pytest.mark.parametrize(
         "vertical",
-        ["energies", "farming", "investments"],
+        ["energies", "investments"],
     )
     def test_other_verticals_have_legal_name_slot_for_later(self, vertical):
         """Slot exists but is empty until those verticals ship."""

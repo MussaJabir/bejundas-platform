@@ -1,0 +1,66 @@
+{% extends "farming/base_farming.html" %}
+{% load static %}
+
+{% block title %}Our Farms — Bejundas Farming Ltd{% endblock %}
+{% block meta_description %}Working farms operated by BEJUNDAS FARMING LTD across Tanzania — crop fields, poultry units, and processing locations.{% endblock %}
+
+{% block content %}
+
+<section class="g-page-hero">
+  <div class="g-container">
+    <span class="g-eyebrow">Where We Grow</span>
+    <h1>Our Farms</h1>
+  </div>
+</section>
+
+<section class="g-section">
+  <div class="g-container">
+
+    {% if farms %}
+      <div class="g-row">
+        {% for farm in farms %}
+          <div class="g-col-2" id="{{ farm.slug }}">
+            <div class="g-card" style="padding:0;overflow:hidden;">
+              {% if farm.cover_image %}
+                <img src="{{ farm.cover_image.url }}" alt="{{ farm.name }}"
+                     style="width:100%;height:240px;object-fit:cover;">
+              {% else %}
+                <div style="width:100%;height:240px;background:linear-gradient(135deg,var(--farm-primary) 0%,var(--farm-primary-d) 100%);display:flex;align-items:center;justify-content:center;color:var(--farm-accent);font-size:64px;">
+                  <span class="material-symbols-outlined" style="font-size:64px;">{% if farm.primary_activity == 'poultry' %}egg{% elif farm.primary_activity == 'processed' %}factory{% else %}agriculture{% endif %}</span>
+                </div>
+              {% endif %}
+              <div style="padding:28px;">
+                <span style="display:inline-block;background:var(--farm-soft);color:var(--farm-primary);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:3px;margin-bottom:12px;">{{ farm.get_primary_activity_display }}</span>
+                <h3 style="font-size:22px;font-weight:800;color:var(--farm-primary);margin-bottom:6px;">{{ farm.name }}</h3>
+                <p style="font-size:13px;color:var(--farm-muted);margin-bottom:14px;">
+                  <strong>{{ farm.region }}</strong>{% if farm.size_hectares %} · {{ farm.size_hectares }} ha{% endif %}
+                </p>
+                {% if farm.description %}
+                  <p style="font-size:14px;color:var(--farm-text);line-height:1.7;margin:0;">{{ farm.description|linebreaks }}</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div style="text-align:center;padding:60px 20px;color:var(--farm-muted);">
+        <p>Farm locations are being added to the admin. <a href="{% url 'farming:contact' %}" style="color:var(--farm-primary);font-weight:600;">Contact us</a> to learn where we operate.</p>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="g-section g-section-soft">
+  <div class="g-container">
+    <div class="g-cta-banner">
+      <h2>Visit, Partner, or Contract-Farm With Us</h2>
+      <p>Site visits welcome by appointment. Contract-farming partners and cooperative buyers — let's talk.</p>
+      <a href="{% url 'farming:contact' %}" class="g-btn g-btn-primary">Get in Touch</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

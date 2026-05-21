@@ -1,0 +1,152 @@
+{% extends "farming/base_farming.html" %}
+{% load static %}
+
+{% block title %}About — Bejundas Farming Ltd{% endblock %}
+{% block meta_description %}BEJUNDAS FARMING LTD — a Tanzanian agribusiness producing crops, eggs, and poultry from working farms. Part of Bejundas Group of Companies.{% endblock %}
+
+{% block content %}
+
+<section class="g-page-hero">
+  <div class="g-container">
+    <span class="g-eyebrow">About Us</span>
+    <h1>Tanzanian Farms, Honest Yield.</h1>
+  </div>
+</section>
+
+<!-- Who we are -->
+<section class="g-section">
+  <div class="g-container">
+    <div class="g-row" style="align-items:flex-start;">
+      <div class="g-col-2">
+        <span class="g-eyebrow">Our Story</span>
+        <h2 class="g-section-title">Built on Land, Grown by Hand.</h2>
+        <p class="g-section-sub">
+          BEJUNDAS FARMING LTD is the agribusiness arm of <a href="{% url 'hub:home' %}" style="color:var(--farm-primary);font-weight:600;">Bejundas Group of Companies</a> —
+          producing everyday staples and poultry for the Tanzanian market.
+          We grow crops, raise birds, and supply wholesalers, retailers,
+          restaurants, and institutional buyers.
+        </p>
+        <p class="g-section-sub" style="margin-top:14px;">
+          Our model is straightforward: own working land, run it well, and
+          keep the supply chain short. Buyers deal with the producer
+          directly — no middlemen, no opaque pricing, no surprises.
+        </p>
+      </div>
+      <div class="g-col-2">
+        <div style="background:var(--farm-soft);padding:36px;border-radius:8px;border-left:4px solid var(--farm-accent);">
+          <h3 style="font-size:18px;font-weight:700;color:var(--farm-primary);margin-bottom:14px;">What we focus on</h3>
+          <ul style="list-style:none;padding:0;margin:0;display:grid;gap:14px;">
+            <li style="display:flex;align-items:flex-start;gap:12px;">
+              <span style="width:24px;height:24px;border-radius:50%;background:var(--farm-accent);color:var(--farm-primary);display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;">1</span>
+              <div><strong style="color:var(--farm-primary);">Staple crops</strong> — maize, sunflower, beans, vegetables, fruits.</div>
+            </li>
+            <li style="display:flex;align-items:flex-start;gap:12px;">
+              <span style="width:24px;height:24px;border-radius:50%;background:var(--farm-accent);color:var(--farm-primary);display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;">2</span>
+              <div><strong style="color:var(--farm-primary);">Poultry</strong> — layer eggs, broilers, and kienyeji birds.</div>
+            </li>
+            <li style="display:flex;align-items:flex-start;gap:12px;">
+              <span style="width:24px;height:24px;border-radius:50%;background:var(--farm-accent);color:var(--farm-primary);display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;">3</span>
+              <div><strong style="color:var(--farm-primary);">Processed goods</strong> — sunflower oil and related farm output.</div>
+            </li>
+            <li style="display:flex;align-items:flex-start;gap:12px;">
+              <span style="width:24px;height:24px;border-radius:50%;background:var(--farm-accent);color:var(--farm-primary);display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;">4</span>
+              <div><strong style="color:var(--farm-primary);">Wholesale and partnerships</strong> — bulk supply contracts and contract farming relationships.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Values -->
+<section class="g-values-strip">
+  <div class="g-container">
+    <div class="g-row" style="text-align:center;">
+      <div class="g-col-3"><div class="value">
+        <div class="sw">Asili</div>
+        <div class="en">Natural</div>
+      </div></div>
+      <div class="g-col-3"><div class="value">
+        <div class="sw">Ubora</div>
+        <div class="en">Quality</div>
+      </div></div>
+      <div class="g-col-3"><div class="value">
+        <div class="sw">Uaminifu</div>
+        <div class="en">Trust</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Certifications -->
+<section class="g-section g-section-soft">
+  <div class="g-container">
+    <div style="text-align:center;max-width:680px;margin:0 auto 40px;">
+      <span class="g-eyebrow">Certifications &amp; Registrations</span>
+      <h2 class="g-section-title">Registered &amp; Compliant.</h2>
+      <p class="g-section-sub" style="margin:0 auto;">Food-safety, business, and operating licences governing our farming operations.</p>
+    </div>
+
+    {% if certifications %}
+      <div class="g-row" style="justify-content:center;">
+        {% for cert in certifications %}
+          <div style="background:#fff;border:1px solid var(--farm-border);padding:18px 24px;border-radius:6px;min-width:220px;text-align:center;">
+            {% if cert.certificate_image %}
+              <img src="{{ cert.certificate_image.url }}" alt="" style="height:36px;margin-bottom:8px;object-fit:contain;">
+            {% endif %}
+            <div style="font-size:14px;font-weight:700;color:var(--farm-primary);">{{ cert.name }}</div>
+            <div style="font-size:12px;color:var(--farm-muted);margin-top:4px;">{{ cert.issuer }}{% if cert.year_awarded %} · {{ cert.year_awarded }}{% endif %}</div>
+            {% if cert.reference_number %}<div style="font-size:11px;color:var(--farm-muted);margin-top:2px;">Ref: {{ cert.reference_number }}</div>{% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div style="text-align:center;background:#fff;border:1px dashed var(--farm-border);padding:40px;border-radius:6px;max-width:560px;margin:0 auto;">
+        <p style="color:var(--farm-muted);margin:0;">Operating licences are being uploaded to the admin. In the meantime, our compliance documents are available on request.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Testimonials -->
+{% if testimonials %}
+<section class="g-section">
+  <div class="g-container">
+    <div style="text-align:center;max-width:680px;margin:0 auto 40px;">
+      <span class="g-eyebrow">What Buyers Say</span>
+      <h2 class="g-section-title">In Their Words.</h2>
+    </div>
+    <div class="g-row">
+      {% for t in testimonials %}
+        <div class="g-col-3">
+          <div class="g-card">
+            <p style="font-style:italic;color:var(--farm-text);line-height:1.7;">"{{ t.quote }}"</p>
+            <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--farm-border);">
+              <div style="font-weight:700;color:var(--farm-primary);">{{ t.author_name }}</div>
+              {% if t.author_role or t.organisation %}
+                <div style="font-size:12px;color:var(--farm-muted);">
+                  {{ t.author_role }}{% if t.author_role and t.organisation %}, {% endif %}{{ t.organisation }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- CTA -->
+<section class="g-section g-section-soft">
+  <div class="g-container">
+    <div class="g-cta-banner">
+      <h2>Looking to Buy or Partner With Us?</h2>
+      <p>Wholesale enquiries, retail orders, and contract-farming proposals — start the conversation and we'll come back to you within two working days.</p>
+      <a href="{% url 'farming:contact' %}" class="g-btn g-btn-primary">Get in Touch</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

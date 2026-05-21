@@ -105,6 +105,20 @@ class TestInvestmentOffering:
         assert o.payout_cadence == "quarterly"
         assert o.get_payout_cadence_display() == "Quarterly (every 3 months)"
 
+    def test_get_absolute_url_powers_admin_view_on_site(self):
+        """get_absolute_url() must point at the public detail page so
+        the admin renders the View-on-site button for editors."""
+        o = InvestmentOffering.objects.create(
+            reference_id="TEST/IO/2026/URL",
+            title="TestPrefix URL",
+            tenure_months=12,
+            indicative_rate_pct=Decimal("16.50"),
+            min_capital=Decimal("250000.00"),
+        )
+        assert o.get_absolute_url() == f"/financial/investments/{o.slug}/"
+        # Slug actually slugifies the slashes in the reference id
+        assert o.get_absolute_url() == "/financial/investments/test-io-2026-url/"
+
 
 @pytest.mark.django_db
 class TestTestimonial:

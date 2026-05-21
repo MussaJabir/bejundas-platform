@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.text import slugify
 
 from apps.core.models import BaseModel
@@ -199,6 +200,11 @@ class InvestmentOffering(BaseModel):
 
     def __str__(self):
         return f"{self.reference_id} — {self.title}"
+
+    def get_absolute_url(self):
+        """Powers the Unfold admin "View on site" link so the client
+        can preview an offering after editing it."""
+        return reverse("financial:investment_detail", kwargs={"slug": self.slug})
 
     def save(self, *args, **kwargs):
         if not self.slug:

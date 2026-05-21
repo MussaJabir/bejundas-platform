@@ -1,0 +1,37 @@
+{% load static %}
+<header class="header style-default header-fixed">
+    <div class="tf-container">
+        <div class="header-inner">
+            <a href="{% url 'farming:home' %}" class="site-logo g-brand-legal" aria-label="{{ app_theme.legal_name }}">
+                <span class="g-brand-legal__name">BEJUNDAS FARMING</span>
+                <span class="g-brand-legal__sub">LTD</span>
+            </a>
+
+            <nav class="main-menu">
+                <ul class="navigation">
+                    <li class="text-menu{% if request.resolver_match.url_name == 'home' %} active{% endif %}">
+                        <a href="{% url 'farming:home' %}" class="toggle">Home</a>
+                    </li>
+                    <li class="text-menu">
+                        <a href="{% url 'hub:home' %}" class="toggle" style="color:#94a3b8;font-size:13px;">&larr; Bejundas Group</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="header-right d-flex align-items-center gap_20">
+                <a href="https://wa.me/255764764011" target="_blank" rel="noopener" class="tf-btn btn-hover-animate-2">
+                    <span>Talk to Us</span>
+                    <span class="bg-effect"></span>
+                </a>
+                <div class="mobile-button d-lg-none" data-bs-toggle="offcanvas"
+                    data-bs-target="#menu-mobile" aria-controls="menu-mobile">
+                    <div class="burger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

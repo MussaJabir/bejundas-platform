@@ -1,0 +1,77 @@
+{% extends "farming/base_farming.html" %}
+{% load static %}
+
+{% block title %}Bejundas Farming Ltd — Tanzanian Crops & Poultry{% endblock %}
+{% block meta_description %}BEJUNDAS FARMING LTD — Tanzanian agribusiness producing crops, eggs, and poultry across Mbeya and the Coast Region. Bulk buyers and partners welcome.{% endblock %}
+
+{% block content %}
+
+<!-- ── Hero ────────────────────────────────────────────────────────── -->
+<section class="g-hero">
+  <div class="g-container" style="position:relative;z-index:2;">
+    <span class="eyebrow">BEJUNDAS FARMING LTD</span>
+    <h1>Tanzanian <span class="accent">Soil.</span><br>Honest <span class="accent">Yield.</span></h1>
+    <p class="lead">A Tanzanian agribusiness producing crops, eggs, and poultry from our own farms — supplying wholesalers, retailers, restaurants, and partners across the country.</p>
+    <div class="cta-row">
+      <a href="https://wa.me/255764764011" target="_blank" rel="noopener" class="g-btn g-btn-primary">Talk to Us</a>
+      <a href="{% url 'hub:home' %}" class="g-btn g-btn-ghost">&larr; Bejundas Group</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Values strip: Asili · Ubora · Uaminifu ──────────────────────── -->
+<section class="g-values-strip">
+  <div class="g-container">
+    <div class="g-row" style="text-align:center;">
+      <div class="g-col-3"><div class="value">
+        <div class="sw">Asili</div>
+        <div class="en">Natural</div>
+      </div></div>
+      <div class="g-col-3"><div class="value">
+        <div class="sw">Ubora</div>
+        <div class="en">Quality</div>
+      </div></div>
+      <div class="g-col-3"><div class="value">
+        <div class="sw">Uaminifu</div>
+        <div class="en">Trust</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── About preview ───────────────────────────────────────────────── -->
+<section class="g-section g-section-soft">
+  <div class="g-container">
+    <div class="g-row" style="align-items:center;">
+      <div class="g-col-2">
+        <span class="g-eyebrow">Who We Are</span>
+        <h2 class="g-section-title">Farming the Tanzanian way — at scale.</h2>
+        <p class="g-section-sub">
+          Bejundas Farming Ltd operates working farms across the country, growing
+          everyday staples and rearing poultry for the Tanzanian market. We are
+          part of <a href="{% url 'hub:home' %}" style="color:var(--farm-primary);font-weight:600;">Bejundas Group of Companies</a> — bringing
+          the same trust pillar that runs through our financial and construction
+          arms into the agricultural value chain.
+        </p>
+        <p class="g-section-sub" style="margin-top:14px;">
+          The full site — products, farms, certifications, and order requests —
+          is being built out over the next few weeks. In the meantime, reach
+          us directly for wholesale, retail, or partnership inquiries.
+        </p>
+      </div>
+      <div class="g-col-2">
+        <div class="g-cta-banner">
+          <h2>Coming Soon</h2>
+          <p>
+            We are wiring up the product catalogue, farm locations, and an
+            online order request form. Talk to us in the meantime — we are
+            already supplying.
+          </p>
+          <a href="https://wa.me/255764764011" target="_blank" rel="noopener" class="g-btn g-btn-primary">WhatsApp Us</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

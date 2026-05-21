@@ -7,7 +7,6 @@ app_name = "leads"
 
 urlpatterns = [
     path("energies/", views.coming_soon, {"vertical": "energies"}, name="energies"),
-    path("farming/", views.coming_soon, {"vertical": "farming"}, name="farming"),
     path(
         "investments/",
         views.coming_soon,

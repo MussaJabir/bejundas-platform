@@ -1,0 +1,80 @@
+{% extends "farming/base_farming.html" %}
+{% load static %}
+
+{% block title %}Products — Bejundas Farming Ltd{% endblock %}
+{% block meta_description %}Crops, poultry, and processed goods produced by BEJUNDAS FARMING LTD across our Tanzanian farms. Wholesale and retail inquiries welcome.{% endblock %}
+
+{% block content %}
+
+<section class="g-page-hero">
+  <div class="g-container">
+    <span class="g-eyebrow">Our Products</span>
+    <h1>What We Grow &amp; Raise</h1>
+  </div>
+</section>
+
+<section class="g-section">
+  <div class="g-container">
+
+    <!-- Filter chips -->
+    <div class="g-filter-row">
+      <a href="{% url 'farming:products' %}" class="g-filter-chip{% if not active_category %} active{% endif %}">All</a>
+      {% for code, label in category_choices %}
+        <a href="?category={{ code }}" class="g-filter-chip{% if active_category == code %} active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    <p style="text-align:center;color:var(--farm-muted);font-size:14px;margin:0 0 28px;font-style:italic;">
+      Inquire for current pricing — commodity rates shift weekly.
+    </p>
+
+    {% if products %}
+      <div class="g-row">
+        {% for product in products %}
+          <div class="g-col-3">
+            <div class="g-card">
+              {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                     style="width:100%;height:160px;object-fit:cover;border-radius:6px;margin-bottom:16px;">
+              {% else %}
+                <div class="g-card-icon"><span class="material-symbols-outlined">{% if product.category == 'poultry' %}egg{% elif product.category == 'processed' %}local_drink{% else %}eco{% endif %}</span></div>
+              {% endif %}
+              <h3>{{ product.name }}</h3>
+              <p>{{ product.summary }}</p>
+              <p style="margin-top:10px;font-size:11px;font-weight:700;color:var(--farm-accent-d);text-transform:uppercase;letter-spacing:.06em;">
+                {{ product.get_category_display }} · per {{ product.get_unit_display }}
+              </p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div style="text-align:center;padding:60px 20px;color:var(--farm-muted);">
+        <p>No products listed in this category yet. <a href="{% url 'farming:contact' %}" style="color:var(--farm-primary);font-weight:600;">Contact us</a> for current availability.</p>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<!-- Tailoring note -->
+<section class="g-section g-section-leaf">
+  <div class="g-container">
+    <div class="g-cta-banner">
+      <h2>Need a Bulk Order or Recurring Supply?</h2>
+      <p>Wholesale buyers, restaurants, and institutional customers — we tailor quantities, schedules, and delivery to your operation.</p>
+      <a href="{% url 'farming:contact' %}" class="g-btn g-btn-primary">Request a Quote</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .g-filter-row { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:18px; }
+  .g-filter-chip { display:inline-flex; padding:9px 18px; font-size:13px; font-weight:600;
+    border-radius:24px; border:1.5px solid var(--farm-border); color:var(--farm-primary);
+    background:#fff; text-decoration:none; transition:all .2s; }
+  .g-filter-chip:hover { border-color:var(--farm-accent); color:var(--farm-accent-d); }
+  .g-filter-chip.active { background:var(--farm-primary); color:#fff; border-color:var(--farm-primary); }
+</style>
+
+{% endblock %}

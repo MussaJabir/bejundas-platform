@@ -6,4 +6,8 @@ app_name = "farming"
 
 urlpatterns = [
     path("", views.HomeView.as_view(), name="home"),
+    path("about/", views.AboutView.as_view(), name="about"),
+    path("products/", views.ProductsView.as_view(), name="products"),
+    path("farms/", views.FarmsView.as_view(), name="farms"),
+    path("contact/", views.ContactView.as_view(), name="contact"),
 ]

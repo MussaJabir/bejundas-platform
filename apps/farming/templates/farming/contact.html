@@ -1,0 +1,130 @@
+{% extends "farming/base_farming.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Contact — Bejundas Farming Ltd{% endblock %}
+{% block meta_description %}Get in touch with BEJUNDAS FARMING LTD — wholesale, retail, and partnership inquiries for Tanzanian crops, poultry, and processed goods.{% endblock %}
+
+{% block content %}
+
+<section class="g-page-hero">
+  <div class="g-container">
+    <span class="g-eyebrow">Talk to Us</span>
+    <h1>Start a Conversation</h1>
+  </div>
+</section>
+
+<section class="g-section">
+  <div class="g-container">
+    <div class="g-row">
+
+      <!-- Left: details -->
+      <div style="flex:1 1 320px;">
+        <span class="g-eyebrow">Get in Touch</span>
+        <h2 class="g-section-title">Wholesale, Retail, or Partnership.</h2>
+        <p class="g-section-sub">Tell us what you're after — staples, eggs, broilers, processed goods, or a contract-farming partnership — and we'll come back to you within two working days.</p>
+
+        <div style="margin-top:36px;display:grid;gap:18px;">
+          {% if company.phone %}
+          <div style="display:flex;align-items:flex-start;gap:14px;">
+            <div style="width:40px;height:40px;background:var(--farm-soft);color:var(--farm-primary);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">&#9742;</div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--farm-muted);text-transform:uppercase;letter-spacing:.08em;">Phone</div>
+              <a href="tel:{{ company.phone }}" style="font-size:15px;color:var(--farm-primary);text-decoration:none;font-weight:600;">{{ company.phone }}</a>
+            </div>
+          </div>
+          {% endif %}
+
+          {% if company.email %}
+          <div style="display:flex;align-items:flex-start;gap:14px;">
+            <div style="width:40px;height:40px;background:var(--farm-soft);color:var(--farm-primary);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">&#9993;</div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--farm-muted);text-transform:uppercase;letter-spacing:.08em;">Email</div>
+              <a href="mailto:{{ company.email }}" style="font-size:15px;color:var(--farm-primary);text-decoration:none;font-weight:600;">{{ company.email }}</a>
+            </div>
+          </div>
+          {% endif %}
+
+          <div style="display:flex;align-items:flex-start;gap:14px;">
+            <div style="width:40px;height:40px;background:var(--farm-accent);color:var(--farm-primary);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">&#9990;</div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--farm-muted);text-transform:uppercase;letter-spacing:.08em;">WhatsApp</div>
+              <a href="https://wa.me/255764764011" target="_blank" rel="noopener" style="font-size:15px;color:var(--farm-primary);text-decoration:none;font-weight:600;">+255 764 764 011</a>
+            </div>
+          </div>
+
+          {% if company.address %}
+          <div style="display:flex;align-items:flex-start;gap:14px;">
+            <div style="width:40px;height:40px;background:var(--farm-soft);color:var(--farm-primary);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">&#9873;</div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--farm-muted);text-transform:uppercase;letter-spacing:.08em;">Office</div>
+              <div style="font-size:14px;color:var(--farm-primary);line-height:1.6;">{{ company.address|linebreaksbr }}</div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Right: form -->
+      <div style="flex:1 1 480px;">
+        <div style="background:#fff;padding:36px;border-radius:8px;border:1px solid var(--farm-border);box-shadow:0 12px 32px rgba(45,90,39,.06);">
+
+          {% if sent %}
+            <div style="background:#dcfce7;border:1px solid #86efac;color:#166534;padding:16px 20px;border-radius:6px;margin-bottom:20px;font-size:14px;font-weight:600;">
+              &#10003; Thanks — we've received your message and will be in touch within two working days.
+            </div>
+          {% endif %}
+
+          <form method="post" novalidate>
+            {% csrf_token %}
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+              <div>
+                <label for="{{ form.name.id_for_label }}" style="display:block;font-size:13px;font-weight:600;color:var(--farm-primary);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;">Full Name</label>
+                {{ form.name|add_class:"g-input" }}
+                {% if form.name.errors %}<div style="color:#b91c1c;font-size:12px;margin-top:4px;">{{ form.name.errors|join:" " }}</div>{% endif %}
+              </div>
+              <div>
+                <label for="{{ form.email.id_for_label }}" style="display:block;font-size:13px;font-weight:600;color:var(--farm-primary);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;">Email Address</label>
+                {{ form.email|add_class:"g-input" }}
+                {% if form.email.errors %}<div style="color:#b91c1c;font-size:12px;margin-top:4px;">{{ form.email.errors|join:" " }}</div>{% endif %}
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px;">
+              <div>
+                <label for="{{ form.phone.id_for_label }}" style="display:block;font-size:13px;font-weight:600;color:var(--farm-primary);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;">Phone <span style="color:var(--farm-muted);font-weight:400;text-transform:none;">(optional)</span></label>
+                {{ form.phone|add_class:"g-input" }}
+              </div>
+              <div>
+                <label for="{{ form.subject.id_for_label }}" style="display:block;font-size:13px;font-weight:600;color:var(--farm-primary);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;">Subject</label>
+                {{ form.subject|add_class:"g-input" }}
+                {% if form.subject.errors %}<div style="color:#b91c1c;font-size:12px;margin-top:4px;">{{ form.subject.errors|join:" " }}</div>{% endif %}
+              </div>
+            </div>
+
+            <div style="margin-top:18px;">
+              <label for="{{ form.message.id_for_label }}" style="display:block;font-size:13px;font-weight:600;color:var(--farm-primary);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;">Message</label>
+              {{ form.message|add_class:"g-input g-textarea" }}
+              {% if form.message.errors %}<div style="color:#b91c1c;font-size:12px;margin-top:4px;">{{ form.message.errors|join:" " }}</div>{% endif %}
+            </div>
+
+            <div style="margin-top:24px;">
+              <button type="submit" class="g-btn g-btn-primary">Send Message</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .g-input { width:100%; padding:12px 14px; font-size:14px; border:1.5px solid var(--farm-border);
+    border-radius:4px; background:#fff; color:var(--farm-primary); font-family:inherit; }
+  .g-input:focus { outline:none; border-color:var(--farm-accent); }
+  .g-textarea { min-height:140px; resize:vertical; }
+</style>
+
+{% endblock %}

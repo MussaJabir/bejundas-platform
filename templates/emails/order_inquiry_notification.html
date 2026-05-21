@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>New Order Inquiry</title>
+</head>
+<body style="margin:0;padding:0;background:#f6f9f3;font-family:'Helvetica Neue',Arial,sans-serif;color:#1a1a1a;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f6f9f3;padding:24px 0;">
+  <tr><td align="center">
+    <table width="640" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border:1px solid #e0e8dc;border-radius:8px;overflow:hidden;">
+
+      <!-- Header -->
+      <tr><td style="background:#2d5a27;padding:24px 28px;">
+        <div style="font-size:11px;font-weight:700;color:#8bc34a;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;">Bejundas Farming Ltd</div>
+        <h1 style="font-size:22px;font-weight:800;color:#ffffff;margin:0;letter-spacing:-.01em;">New Order Inquiry</h1>
+        <div style="font-size:13px;color:#d8e4d4;margin-top:6px;">{{ inquiry.created_at|date:"d M Y, H:i" }}</div>
+      </td></tr>
+
+      <!-- Type pill strip -->
+      <tr><td style="padding:18px 28px;background:#f1f8e9;border-bottom:1px solid #e0e8dc;">
+        <span style="display:inline-block;background:#dbeafe;color:#1d4ed8;font-size:11px;font-weight:700;padding:4px 12px;border-radius:10px;text-transform:uppercase;letter-spacing:.04em;margin-right:6px;">{{ inquiry.get_inquiry_type_display }}</span>
+        <span style="display:inline-block;background:#fef3c7;color:#a16207;font-size:11px;font-weight:700;padding:4px 12px;border-radius:10px;text-transform:uppercase;letter-spacing:.04em;">{{ inquiry.get_frequency_display }}</span>
+      </td></tr>
+
+      <!-- Buyer -->
+      <tr><td style="padding:24px 28px;border-bottom:1px solid #e0e8dc;">
+        <div style="font-size:11px;font-weight:700;color:#6ca434;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Buyer</div>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size:14px;">
+          <tr><td width="160" style="padding:4px 0;color:#5b6d57;">Name</td><td style="padding:4px 0;font-weight:600;">{{ inquiry.full_name }}</td></tr>
+          {% if inquiry.organisation %}<tr><td style="padding:4px 0;color:#5b6d57;">Organisation</td><td style="padding:4px 0;font-weight:600;">{{ inquiry.organisation }}</td></tr>{% endif %}
+          <tr><td style="padding:4px 0;color:#5b6d57;">Email</td><td style="padding:4px 0;"><a href="mailto:{{ inquiry.email }}" style="color:#2d5a27;text-decoration:none;font-weight:600;">{{ inquiry.email }}</a></td></tr>
+          <tr><td style="padding:4px 0;color:#5b6d57;">Phone</td><td style="padding:4px 0;"><a href="tel:{{ inquiry.phone }}" style="color:#2d5a27;text-decoration:none;font-weight:600;">{{ inquiry.phone }}</a></td></tr>
+          <tr><td style="padding:4px 0;color:#5b6d57;">Preferred contact</td><td style="padding:4px 0;font-weight:600;">{{ inquiry.get_preferred_contact_display }}</td></tr>
+        </table>
+      </td></tr>
+
+      <!-- Order -->
+      <tr><td style="padding:24px 28px;border-bottom:1px solid #e0e8dc;">
+        <div style="font-size:11px;font-weight:700;color:#6ca434;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Order</div>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size:14px;">
+          {% if inquiry.quantity %}<tr><td width="160" style="padding:4px 0;color:#5b6d57;">Quantity</td><td style="padding:4px 0;font-weight:600;">{{ inquiry.quantity }}</td></tr>{% endif %}
+          {% if inquiry.delivery_location %}<tr><td width="160" style="padding:4px 0;color:#5b6d57;">Delivery location</td><td style="padding:4px 0;font-weight:600;">{{ inquiry.delivery_location }}</td></tr>{% endif %}
+        </table>
+        <div style="font-size:11px;font-weight:700;color:#5b6d57;letter-spacing:.08em;text-transform:uppercase;margin-top:18px;margin-bottom:8px;">Products of Interest</div>
+        <div style="font-size:14px;line-height:1.7;color:#1a1a1a;background:#f1f8e9;padding:14px 16px;border-radius:6px;border-left:3px solid #8bc34a;white-space:pre-wrap;">{{ inquiry.products_of_interest }}</div>
+      </td></tr>
+
+      <!-- Notes -->
+      {% if inquiry.notes %}
+      <tr><td style="padding:24px 28px;border-bottom:1px solid #e0e8dc;">
+        <div style="font-size:11px;font-weight:700;color:#6ca434;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Buyer's Notes</div>
+        <div style="font-size:14px;line-height:1.7;color:#1a1a1a;background:#fdfaf2;padding:14px 16px;border-radius:6px;border-left:3px solid #6ca434;white-space:pre-wrap;">{{ inquiry.notes }}</div>
+      </td></tr>
+      {% endif %}
+
+      <!-- Action -->
+      <tr><td style="padding:24px 28px;text-align:center;background:#f6f9f3;">
+        <a href="{{ site_url }}admin/farming/orderinquiry/{{ inquiry.id }}/change/"
+           style="display:inline-block;background:#8bc34a;color:#2d5a27;font-size:14px;font-weight:700;padding:12px 28px;border-radius:4px;text-decoration:none;text-transform:uppercase;letter-spacing:.04em;">
+          Review in Admin
+        </a>
+      </td></tr>
+
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>

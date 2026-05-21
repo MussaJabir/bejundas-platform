@@ -12,6 +12,21 @@
                     <li class="text-menu{% if request.resolver_match.url_name == 'home' %} active{% endif %}">
                         <a href="{% url 'farming:home' %}" class="toggle">Home</a>
                     </li>
+                    <li class="text-menu{% if request.resolver_match.url_name == 'about' %} active{% endif %}">
+                        <a href="{% url 'farming:about' %}" class="toggle">About</a>
+                    </li>
+                    <li class="text-menu{% if request.resolver_match.url_name == 'products' %} active{% endif %}">
+                        <a href="{% url 'farming:products' %}" class="toggle">Products</a>
+                    </li>
+                    <li class="text-menu{% if request.resolver_match.url_name == 'farms' %} active{% endif %}">
+                        <a href="{% url 'farming:farms' %}" class="toggle">Our Farms</a>
+                    </li>
+                    <li class="text-menu{% if request.resolver_match.url_name == 'order' %} active{% endif %}">
+                        <a href="{% url 'farming:order' %}" class="toggle">Place an Order</a>
+                    </li>
+                    <li class="text-menu{% if request.resolver_match.url_name == 'contact' %} active{% endif %}">
+                        <a href="{% url 'farming:contact' %}" class="toggle">Contact</a>
+                    </li>
                     <li class="text-menu">
                         <a href="{% url 'hub:home' %}" class="toggle" style="color:#94a3b8;font-size:13px;">&larr; Bejundas Group</a>
                     </li>
@@ -19,8 +34,8 @@
             </nav>
 
             <div class="header-right d-flex align-items-center gap_20">
-                <a href="https://wa.me/255764764011" target="_blank" rel="noopener" class="tf-btn btn-hover-animate-2">
-                    <span>Talk to Us</span>
+                <a href="{% url 'farming:order' %}" class="tf-btn btn-hover-animate-2">
+                    <span>Place an Order</span>
                     <span class="bg-effect"></span>
                 </a>
                 <div class="mobile-button d-lg-none" data-bs-toggle="offcanvas"

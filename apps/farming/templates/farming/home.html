@@ -13,13 +13,13 @@
     <h1>Tanzanian <span class="accent">Soil.</span><br>Honest <span class="accent">Yield.</span></h1>
     <p class="lead">A Tanzanian agribusiness producing crops, eggs, and poultry from our own farms — supplying wholesalers, retailers, restaurants, and partners across the country.</p>
     <div class="cta-row">
-      <a href="https://wa.me/255764764011" target="_blank" rel="noopener" class="g-btn g-btn-primary">Talk to Us</a>
-      <a href="{% url 'hub:home' %}" class="g-btn g-btn-ghost">&larr; Bejundas Group</a>
+      <a href="{% url 'farming:order' %}" class="g-btn g-btn-primary">Place an Order</a>
+      <a href="{% url 'farming:products' %}" class="g-btn g-btn-ghost">See Our Products</a>
     </div>
   </div>
 </section>
 
-<!-- ── Values strip: Asili · Ubora · Uaminifu ──────────────────────── -->
+<!-- ── Values strip ───────────────────────────────────────────────── -->
 <section class="g-values-strip">
   <div class="g-container">
     <div class="g-row" style="text-align:center;">
@@ -47,31 +47,115 @@
         <span class="g-eyebrow">Who We Are</span>
         <h2 class="g-section-title">Farming the Tanzanian way — at scale.</h2>
         <p class="g-section-sub">
-          Bejundas Farming Ltd operates working farms across the country, growing
-          everyday staples and rearing poultry for the Tanzanian market. We are
-          part of <a href="{% url 'hub:home' %}" style="color:var(--farm-primary);font-weight:600;">Bejundas Group of Companies</a> — bringing
-          the same trust pillar that runs through our financial and construction
-          arms into the agricultural value chain.
+          Bejundas Farming Ltd operates working farms across the country,
+          growing everyday staples and rearing poultry for the Tanzanian
+          market. We are part of <a href="{% url 'hub:home' %}" style="color:var(--farm-primary);font-weight:600;">Bejundas Group of Companies</a> — bringing
+          the same trust pillar that runs through our financial and
+          construction arms into the agricultural value chain.
         </p>
-        <p class="g-section-sub" style="margin-top:14px;">
-          The full site — products, farms, certifications, and order requests —
-          is being built out over the next few weeks. In the meantime, reach
-          us directly for wholesale, retail, or partnership inquiries.
-        </p>
+        <a href="{% url 'farming:about' %}" class="g-btn g-btn-outline" style="margin-top:24px;">Learn About Us</a>
       </div>
       <div class="g-col-2">
         <div class="g-cta-banner">
-          <h2>Coming Soon</h2>
-          <p>
-            We are wiring up the product catalogue, farm locations, and an
-            online order request form. Talk to us in the meantime — we are
-            already supplying.
-          </p>
-          <a href="https://wa.me/255764764011" target="_blank" rel="noopener" class="g-btn g-btn-primary">WhatsApp Us</a>
+          <h2>Bulk &amp; Recurring Orders</h2>
+          <p>Wholesalers, restaurants, institutions — we tailor quantities, schedules, and delivery to your operation.</p>
+          <a href="{% url 'farming:order' %}" class="g-btn g-btn-primary">Request a Quote</a>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<!-- ── Featured products ──────────────────────────────────────────── -->
+{% if featured_products %}
+<section class="g-section">
+  <div class="g-container">
+    <div style="text-align:center;max-width:680px;margin:0 auto 40px;">
+      <span class="g-eyebrow">From Our Farms</span>
+      <h2 class="g-section-title">What We Grow &amp; Raise</h2>
+      <p class="g-section-sub" style="margin:0 auto;">A sample of what we currently produce. <a href="{% url 'farming:products' %}" style="color:var(--farm-primary);font-weight:600;">View the full catalogue &rarr;</a></p>
+    </div>
+    <div class="g-row">
+      {% for product in featured_products %}
+        <div class="g-col-3">
+          <div class="g-card">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                   style="width:100%;height:160px;object-fit:cover;border-radius:6px;margin-bottom:16px;">
+            {% else %}
+              <div class="g-card-icon"><span class="material-symbols-outlined">{% if product.category == 'poultry' %}egg{% elif product.category == 'processed' %}local_drink{% else %}eco{% endif %}</span></div>
+            {% endif %}
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.summary }}</p>
+            <p style="margin-top:10px;font-size:11px;font-weight:700;color:var(--farm-accent-d);text-transform:uppercase;letter-spacing:.06em;">{{ product.get_category_display }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ── Featured farms ─────────────────────────────────────────────── -->
+{% if featured_farms %}
+<section class="g-section g-section-leaf">
+  <div class="g-container">
+    <div style="text-align:center;max-width:680px;margin:0 auto 40px;">
+      <span class="g-eyebrow">Where We Grow</span>
+      <h2 class="g-section-title">Our Farms</h2>
+    </div>
+    <div class="g-row">
+      {% for farm in featured_farms %}
+        <div class="g-col-2">
+          <a href="{% url 'farming:farms' %}#{{ farm.slug }}" style="text-decoration:none;">
+            <div class="g-card" style="padding:0;overflow:hidden;">
+              {% if farm.cover_image %}
+                <img src="{{ farm.cover_image.url }}" alt="{{ farm.name }}"
+                     style="width:100%;height:200px;object-fit:cover;">
+              {% else %}
+                <div style="width:100%;height:200px;background:linear-gradient(135deg,var(--farm-primary) 0%,var(--farm-primary-d) 100%);display:flex;align-items:center;justify-content:center;color:var(--farm-accent);font-size:64px;">
+                  <span class="material-symbols-outlined" style="font-size:64px;">{% if farm.primary_activity == 'poultry' %}egg{% else %}agriculture{% endif %}</span>
+                </div>
+              {% endif %}
+              <div style="padding:24px;">
+                <span style="display:inline-block;background:var(--farm-soft);color:var(--farm-primary);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:3px;margin-bottom:10px;">{{ farm.get_primary_activity_display }}</span>
+                <h3>{{ farm.name }}</h3>
+                <p style="font-size:13px;color:var(--farm-muted);margin:0;">{{ farm.region }}{% if farm.size_hectares %} · {{ farm.size_hectares }} ha{% endif %}</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ── Featured testimonials ──────────────────────────────────────── -->
+{% if featured_testimonials %}
+<section class="g-section">
+  <div class="g-container">
+    <div style="text-align:center;max-width:680px;margin:0 auto 40px;">
+      <span class="g-eyebrow">What Buyers Say</span>
+      <h2 class="g-section-title">Trusted by Buyers Across Tanzania</h2>
+    </div>
+    <div class="g-row">
+      {% for t in featured_testimonials %}
+        <div class="g-col-3">
+          <div class="g-card">
+            <p style="font-style:italic;color:var(--farm-text);line-height:1.7;">"{{ t.quote }}"</p>
+            <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--farm-border);">
+              <div style="font-weight:700;color:var(--farm-primary);">{{ t.author_name }}</div>
+              {% if t.author_role or t.organisation %}
+                <div style="font-size:12px;color:var(--farm-muted);">{{ t.author_role }}{% if t.author_role and t.organisation %}, {% endif %}{{ t.organisation }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
 
 {% endblock %}

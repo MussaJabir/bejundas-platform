@@ -73,11 +73,12 @@ class TestNavbarAndContent:
         body = response.content.decode()
         assert "Bejundas Group" in body
 
-    def test_whatsapp_cta_present(self):
-        """Until real forms ship in Phase 4, the public CTA is WhatsApp."""
+    def test_home_cta_points_at_contact_form(self):
+        """Phase 3 swapped the placeholder WhatsApp CTA for the new
+        /farming/contact/ form."""
         response = Client().get("/farming/")
         body = response.content.decode()
-        assert "wa.me" in body
+        assert "/farming/contact/" in body
 
 
 @pytest.mark.django_db

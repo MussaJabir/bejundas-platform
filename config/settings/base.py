@@ -274,6 +274,38 @@ UNFOLD = {
                 ],
             },
             {
+                "title": "Farming",
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": "Products",
+                        "icon": "agriculture",
+                        "link": reverse_lazy("admin:farming_farmingproduct_changelist"),
+                    },
+                    {
+                        "title": "Farms",
+                        "icon": "yard",
+                        "link": reverse_lazy("admin:farming_farm_changelist"),
+                    },
+                    {
+                        "title": "Testimonials",
+                        "icon": "format_quote",
+                        "link": reverse_lazy("admin:farming_testimonial_changelist"),
+                    },
+                    {
+                        "title": "Certifications",
+                        "icon": "verified",
+                        "link": reverse_lazy("admin:farming_certification_changelist"),
+                    },
+                    {
+                        "title": "Order Inquiries",
+                        "icon": "local_shipping",
+                        "link": reverse_lazy("admin:farming_orderinquiry_changelist"),
+                    },
+                ],
+            },
+            {
                 "title": "Site Settings",
                 "separator": True,
                 "collapsible": True,

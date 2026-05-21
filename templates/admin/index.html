@@ -163,28 +163,30 @@
 
   {# ── Leads by Vertical ─────────────────────────────────── #}
   <div class="rounded-xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-sm p-5">
-    <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center gap-2">
+    <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-5 flex items-center gap-2">
       <span class="material-symbols-outlined text-primary-500" style="font-size:18px">bar_chart</span>
       Leads by Vertical
     </h2>
 
     {% if leads_by_vertical %}
-    <div class="space-y-3">
+    <div class="divide-y divide-gray-100 dark:divide-gray-800">
       {% for v in leads_by_vertical %}
-      <div class="flex items-center gap-3">
-        <div class="w-32 shrink-0 flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-full" style="background-color:{{ v.primary_color }};"></span>
-          <span class="text-sm font-medium {% if v.is_active %}text-gray-700 dark:text-gray-200{% else %}text-gray-400{% endif %}">{{ v.label }}</span>
+      <a href="{% url 'admin:leads_lead_changelist' %}?vertical__exact={{ v.vertical }}"
+         class="flex items-center gap-4 py-3.5 px-2 -mx-2 rounded hover:bg-gray-50 dark:hover:bg-gray-800 transition group">
+        <div class="w-36 shrink-0 flex items-center gap-2.5">
+          <span class="w-3 h-3 rounded-full ring-2 ring-white dark:ring-gray-900 shrink-0" style="background-color:{{ v.primary_color }};"></span>
+          <span class="text-sm font-medium {% if v.is_active %}text-gray-800 dark:text-gray-100{% else %}text-gray-400{% endif %} group-hover:text-primary-600">{{ v.label }}</span>
         </div>
         <div class="flex-1 bg-gray-100 dark:bg-gray-800 rounded-full h-2 overflow-hidden">
           {% if v.count > 0 and max_vertical_count > 0 %}
           <div class="h-2 rounded-full" style="background-color:{{ v.primary_color }};width:{% widthratio v.count max_vertical_count 100 %}%"></div>
           {% endif %}
         </div>
-        <span class="w-10 text-right text-sm font-semibold text-gray-700 dark:text-gray-200">{{ v.count }}</span>
-      </div>
+        <span class="w-12 text-right text-sm font-bold {% if v.count > 0 %}text-gray-800 dark:text-gray-100{% else %}text-gray-400{% endif %}">{{ v.count }}</span>
+      </a>
       {% endfor %}
     </div>
+    <p class="mt-4 text-xs text-gray-400">Click any row to filter leads by vertical.</p>
     {% else %}
     <p class="text-sm text-gray-400 text-center py-6">No verticals configured yet.</p>
     {% endif %}

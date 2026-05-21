@@ -3,7 +3,7 @@ import logging
 from django.shortcuts import render
 from django.views import View
 
-from apps.farming.forms import ContactForm
+from apps.farming.forms import ContactForm, OrderInquiryForm
 from apps.farming.models import (
     PRODUCT_CATEGORY_CHOICES,
     Certification,
@@ -71,3 +71,25 @@ class ContactView(View):
                 logger.exception("Failed to send farming contact email")
             return render(request, "farming/contact.html", {"form": ContactForm(), "sent": True})
         return render(request, "farming/contact.html", {"form": form})
+
+
+class OrderInquireView(View):
+    def get(self, request):
+        return render(request, "farming/order.html", {"form": OrderInquiryForm()})
+
+    def post(self, request):
+        form = OrderInquiryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            try:
+                form.send_notification(request=request)
+            except Exception:
+                # Row is saved; an SMTP failure shouldn't show the
+                # buyer a 500. Log and carry on (per PR #55 lesson).
+                logger.exception("Failed to send farming order inquiry email")
+            return render(
+                request,
+                "farming/order.html",
+                {"form": OrderInquiryForm(), "sent": True},
+            )
+        return render(request, "farming/order.html", {"form": form})

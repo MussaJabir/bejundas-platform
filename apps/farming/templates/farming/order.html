@@ -1,0 +1,155 @@
+{% extends "farming/base_farming.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Place an Order — Bejundas Farming Ltd{% endblock %}
+{% block meta_description %}Submit a wholesale, retail, or partnership order inquiry to BEJUNDAS FARMING LTD. We respond within two working days.{% endblock %}
+
+{% block content %}
+
+<section class="g-page-hero">
+  <div class="g-container">
+    <span class="g-eyebrow">Order Inquiry</span>
+    <h1>Tell Us What You Need</h1>
+  </div>
+</section>
+
+<section class="g-section">
+  <div class="g-container" style="max-width:920px;">
+
+    {% if sent %}
+      <div style="background:#dcfce7;border:1px solid #86efac;color:#166534;padding:20px 24px;border-radius:8px;margin-bottom:28px;font-size:15px;font-weight:600;">
+        &#10003; Thanks — your order inquiry is in. Our sales team will reach out within two working days.
+      </div>
+    {% endif %}
+
+    <p style="color:var(--farm-muted);font-size:15px;line-height:1.7;margin-bottom:32px;">
+      Tell us what you're after — staples, eggs, broilers, processed goods, or a contract-farming partnership — and we'll come back to you with availability, pricing, and delivery options. All fields marked <span style="color:#b91c1c;">*</span> are required.
+    </p>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      <!-- ── Section 1: Buyer ──────────────────────────────────── -->
+      <div class="g-form-section">
+        <h2 class="g-form-section-title">1. About You</h2>
+        <p class="g-form-section-help">Who we'll be talking to and how to reach you.</p>
+
+        <div class="g-form-grid cols-2">
+          <div class="g-form-field">
+            <label for="{{ form.full_name.id_for_label }}">Full Name <span style="color:#b91c1c;">*</span></label>
+            {{ form.full_name|add_class:"g-input" }}
+            {% if form.full_name.errors %}<div class="g-errors">{{ form.full_name.errors|join:" " }}</div>{% endif %}
+          </div>
+          <div class="g-form-field">
+            <label for="{{ form.organisation.id_for_label }}">Organisation <span style="color:var(--farm-muted);font-weight:400;text-transform:none;">(optional)</span></label>
+            {{ form.organisation|add_class:"g-input" }}
+            {% if form.organisation.errors %}<div class="g-errors">{{ form.organisation.errors|join:" " }}</div>{% endif %}
+          </div>
+        </div>
+
+        <div class="g-form-grid cols-2" style="margin-top:18px;">
+          <div class="g-form-field">
+            <label for="{{ form.email.id_for_label }}">Email <span style="color:#b91c1c;">*</span></label>
+            {{ form.email|add_class:"g-input" }}
+            {% if form.email.errors %}<div class="g-errors">{{ form.email.errors|join:" " }}</div>{% endif %}
+          </div>
+          <div class="g-form-field">
+            <label for="{{ form.phone.id_for_label }}">Phone <span style="color:#b91c1c;">*</span></label>
+            {{ form.phone|add_class:"g-input" }}
+            {% if form.phone.errors %}<div class="g-errors">{{ form.phone.errors|join:" " }}</div>{% endif %}
+          </div>
+        </div>
+
+        <div class="g-form-field" style="margin-top:18px;max-width:320px;">
+          <label for="{{ form.preferred_contact.id_for_label }}">Preferred contact method</label>
+          {{ form.preferred_contact|add_class:"g-input" }}
+        </div>
+      </div>
+
+      <!-- ── Section 2: Order Details ─────────────────────────── -->
+      <div class="g-form-section">
+        <h2 class="g-form-section-title">2. Order Details</h2>
+        <p class="g-form-section-help">What you'd like to buy, how much, and how often.</p>
+
+        <div class="g-form-grid cols-2">
+          <div class="g-form-field">
+            <label for="{{ form.inquiry_type.id_for_label }}">Inquiry Type <span style="color:#b91c1c;">*</span></label>
+            {{ form.inquiry_type|add_class:"g-input" }}
+            {% if form.inquiry_type.errors %}<div class="g-errors">{{ form.inquiry_type.errors|join:" " }}</div>{% endif %}
+          </div>
+          <div class="g-form-field">
+            <label for="{{ form.frequency.id_for_label }}">Frequency</label>
+            {{ form.frequency|add_class:"g-input" }}
+          </div>
+        </div>
+
+        <div class="g-form-field" style="margin-top:18px;">
+          <label for="{{ form.products_of_interest.id_for_label }}">Products of Interest <span style="color:#b91c1c;">*</span></label>
+          {{ form.products_of_interest|add_class:"g-input g-textarea" }}
+          <div class="g-help-text">List the products you're interested in — be specific (e.g. "200 trays layer eggs, 30 broilers weekly").</div>
+          {% if form.products_of_interest.errors %}<div class="g-errors">{{ form.products_of_interest.errors|join:" " }}</div>{% endif %}
+        </div>
+
+        <div class="g-form-grid cols-2" style="margin-top:18px;">
+          <div class="g-form-field">
+            <label for="{{ form.quantity.id_for_label }}">Approximate Quantity / Volume</label>
+            {{ form.quantity|add_class:"g-input" }}
+            <div class="g-help-text">e.g. "500 kg", "20 trays", "2 tonnes / month".</div>
+          </div>
+          <div class="g-form-field">
+            <label for="{{ form.delivery_location.id_for_label }}">Delivery Location</label>
+            {{ form.delivery_location|add_class:"g-input" }}
+            <div class="g-help-text">Where you'd like delivery (region / city).</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Section 3: Notes ──────────────────────────────────── -->
+      <div class="g-form-section">
+        <h2 class="g-form-section-title">3. Additional Notes</h2>
+        <p class="g-form-section-help">Anything else we should know — timelines, special requirements, or context.</p>
+
+        <div class="g-form-field">
+          <label for="{{ form.notes.id_for_label }}" style="display:none;">Notes</label>
+          {{ form.notes|add_class:"g-input g-textarea" }}
+          {% if form.notes.errors %}<div class="g-errors">{{ form.notes.errors|join:" " }}</div>{% endif %}
+        </div>
+      </div>
+
+      <div style="margin-top:28px;text-align:right;">
+        <button type="submit" class="g-btn g-btn-primary">Submit Inquiry</button>
+      </div>
+    </form>
+
+  </div>
+</section>
+
+<style>
+  .g-form-section { background:#fff; border:1px solid var(--farm-border); border-radius:8px;
+    padding:32px; margin-bottom:24px; box-shadow:0 8px 24px rgba(45,90,39,.04); }
+  .g-form-section-title { font-size:18px; font-weight:700; color:var(--farm-primary);
+    margin:0 0 4px; }
+  .g-form-section-help { font-size:13px; color:var(--farm-muted); margin:0 0 22px; }
+
+  .g-form-grid { display:grid; gap:18px; }
+  .g-form-grid.cols-2 { grid-template-columns:1fr 1fr; }
+
+  .g-form-field label { display:block; font-size:13px; font-weight:600; color:var(--farm-primary);
+    margin-bottom:6px; text-transform:uppercase; letter-spacing:.04em; }
+
+  .g-input { width:100%; padding:12px 14px; font-size:14px; border:1.5px solid var(--farm-border);
+    border-radius:4px; background:#fff; color:var(--farm-primary); font-family:inherit; }
+  .g-input:focus { outline:none; border-color:var(--farm-accent); }
+  .g-textarea { resize:vertical; }
+
+  .g-help-text { font-size:12px; color:var(--farm-muted); margin-top:4px; line-height:1.5; }
+  .g-errors { color:#b91c1c; font-size:12px; margin-top:4px; font-weight:600; }
+
+  @media (max-width:640px) {
+    .g-form-grid.cols-2 { grid-template-columns:1fr; }
+    .g-form-section { padding:24px 20px; }
+  }
+</style>
+
+{% endblock %}

@@ -1,3 +1,5 @@
+import logging
+
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 
@@ -9,6 +11,8 @@ from apps.construction.models import (
     Project,
     Testimonial,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class HomeView(View):
@@ -73,7 +77,12 @@ class ContactView(View):
     def post(self, request):
         form = ContactForm(request.POST)
         if form.is_valid():
-            form.send_email()
+            try:
+                form.send_email()
+            except Exception:
+                # Email is best-effort. Don't show a 500 because SMTP
+                # is down — log and continue.
+                logger.exception("Failed to send construction contact email")
             return render(
                 request, "construction/contact.html", {"form": ContactForm(), "sent": True}
             )
@@ -88,7 +97,12 @@ class QuoteRequestView(View):
         form = QuoteRequestForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            form.send_notification(request=request)
+            try:
+                form.send_notification(request=request)
+            except Exception:
+                # Quote row + attachments are saved; an SMTP failure
+                # shouldn't show the requester a 500. Log and carry on.
+                logger.exception("Failed to send construction quote notification email")
             return render(
                 request,
                 "construction/quote_request.html",

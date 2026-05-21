@@ -1,3 +1,5 @@
+import logging
+
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 
@@ -10,6 +12,8 @@ from apps.financial.models import (
     InvestmentOffering,
     Testimonial,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class HomeView(View):
@@ -89,7 +93,12 @@ class ContactView(View):
     def post(self, request):
         form = ContactForm(request.POST)
         if form.is_valid():
-            form.send_email()
+            try:
+                form.send_email()
+            except Exception:
+                # Email is best-effort. Don't bounce the visitor to a 500
+                # because SMTP is down — log and continue.
+                logger.exception("Failed to send financial contact email")
             return render(
                 request,
                 "financial/contact.html",
@@ -110,7 +119,12 @@ class LoanApplyView(View):
         form = LoanInquiryForm(request.POST)
         if form.is_valid():
             form.save()
-            form.send_notification(request=request)
+            try:
+                form.send_notification(request=request)
+            except Exception:
+                # Row is saved; an SMTP failure shouldn't show the
+                # applicant a 500. Log for follow-up and carry on.
+                logger.exception("Failed to send loan inquiry notification email")
             return render(
                 request,
                 "financial/loan_apply.html",
@@ -144,7 +158,12 @@ class InvestmentInquireView(View):
             inquiry = form.save(commit=False)
             inquiry.offering = offering
             inquiry.save()
-            form.send_notification(request=request)
+            try:
+                form.send_notification(request=request)
+            except Exception:
+                # Row is saved; an SMTP failure shouldn't show the
+                # prospect a 500. Log for follow-up and carry on.
+                logger.exception("Failed to send investment inquiry notification email")
             return render(
                 request,
                 "financial/investment_inquire.html",
